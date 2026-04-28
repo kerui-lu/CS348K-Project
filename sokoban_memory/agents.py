@@ -8,7 +8,7 @@ from typing import Any
 
 from sokoban_memory.types import Action
 
-DEFAULT_LLM_MODEL = "gpt-5.4-mini"
+DEFAULT_LLM_MODEL = "gpt-5-nano"
 DEFAULT_API_KEY_ENV = "OPENAI_API_KEY"
 PLACEHOLDER_OPENAI_API_KEY = "PLACEHOLDER_OPENAI_API_KEY"
 DEFAULT_DOTENV_PATH = Path(__file__).resolve().parents[1] / ".env"

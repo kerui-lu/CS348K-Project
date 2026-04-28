@@ -62,15 +62,21 @@ def test_cli_accepts_llm_model_and_api_key_env_args():
             "--agent",
             "llm",
             "--model",
-            "gpt-5.4-mini",
+            "gpt-5-nano",
             "--api_key_env",
             "OPENAI_API_KEY",
         ]
     )
 
     assert args.agent == "llm"
-    assert args.model == "gpt-5.4-mini"
+    assert args.model == "gpt-5-nano"
     assert args.api_key_env == "OPENAI_API_KEY"
+
+
+def test_cli_defaults_to_low_cost_llm_model():
+    args = build_parser().parse_args(["--agent", "llm"])
+
+    assert args.model == "gpt-5-nano"
 
 
 def test_load_dotenv_sets_missing_values_without_overriding_existing_env(tmp_path, monkeypatch):
