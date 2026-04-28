@@ -1,0 +1,56 @@
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+from typing import Any, Literal
+
+Action = Literal["Up", "Down", "Left", "Right"]
+EpisodeStatus = Literal["success", "deadlock", "timeout", "failure"]
+
+
+@dataclass(frozen=True, order=True)
+class Position:
+    row: int
+    col: int
+
+    def moved(self, dr: int, dc: int) -> "Position":
+        return Position(self.row + dr, self.col + dc)
+
+
+@dataclass
+class Level:
+    level_id: str
+    width: int
+    height: int
+    walls: set[Position]
+    targets: set[Position]
+    boxes: set[Position]
+    player: Position
+
+
+@dataclass
+class StepResult:
+    state_text: str
+    next_state_text: str
+    action: str
+    parsed_action: Action | None
+    reward: float
+    done: bool
+    info: dict[str, Any]
+
+
+@dataclass
+class EpisodeResult:
+    level_id: str
+    agent_type: str
+    seed: int
+    status: EpisodeStatus
+    step_count: int
+    invalid_move_count: int
+    total_reward: float
+    llm_call_count: int
+    token_cost: float
+    trajectory: list[dict[str, Any]]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
