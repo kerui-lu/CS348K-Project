@@ -70,5 +70,8 @@ def level_metadata(levels: list[Any]) -> dict[str, Any]:
         "level_ids": [level.level_id for level in levels],
         "level_splits": {level.level_id: getattr(level, "split", "unspecified") for level in levels},
         "level_tags": {level.level_id: list(getattr(level, "tags", [])) for level in levels},
+        "level_optimal_steps": {
+            level.level_id: getattr(level, "optimal_steps", None)
+            for level in levels
+        },
     }
-

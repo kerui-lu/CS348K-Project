@@ -22,12 +22,15 @@ def _parse_level(raw: dict[str, Any]) -> Level:
     grid = raw["grid"]
     tags = raw.get("tags", [])
     split = str(raw.get("split", "unspecified"))
+    optimal_steps = raw.get("optimal_steps")
     if not grid or not all(isinstance(row, str) for row in grid):
         raise ValueError(f"{level_id}: grid must be a non-empty list of strings.")
     if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
         raise ValueError(f"{level_id}: tags must be a list of strings.")
     if split not in {"train", "eval", "unspecified"}:
         raise ValueError(f"{level_id}: split must be train, eval, or unspecified.")
+    if optimal_steps is not None and (not isinstance(optimal_steps, int) or optimal_steps <= 0):
+        raise ValueError(f"{level_id}: optimal_steps must be a positive integer when provided.")
 
     height = len(grid)
     width = len(grid[0])
@@ -80,6 +83,7 @@ def _parse_level(raw: dict[str, Any]) -> Level:
         player=player,
         tags=tags,
         split=split,
+        optimal_steps=optimal_steps,
     )
 
 

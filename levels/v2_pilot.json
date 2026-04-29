@@ -4,6 +4,7 @@
       "level_id": "simple_001",
       "split": "train",
       "tags": ["easy_simple_push"],
+      "optimal_steps": 1,
       "grid": [
         "#######",
         "#     #",
@@ -18,6 +19,7 @@
       "level_id": "corner_trap_001",
       "split": "train",
       "tags": ["corner_trap"],
+      "optimal_steps": 5,
       "grid": [
         "#######",
         "#     #",
@@ -32,6 +34,7 @@
       "level_id": "wall_push_001",
       "split": "eval",
       "tags": ["wall_trap", "requires_repositioning"],
+      "optimal_steps": 4,
       "grid": [
         "########",
         "#      #",

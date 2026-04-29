@@ -35,6 +35,7 @@ class Level:
     player: Position
     tags: list[str] = field(default_factory=list)
     split: str = "unspecified"
+    optimal_steps: int | None = None
 
 
 @dataclass
@@ -69,6 +70,9 @@ class EpisodeResult:
     temperature: float | None = None
     max_output_tokens: int | None = None
     cache_namespace: str | None = None
+    level_split: str = "unspecified"
+    level_tags: list[str] = field(default_factory=list)
+    optimal_steps: int | None = None
     cache_hits: int = 0
     cache_misses: int = 0
     budget_exhausted: bool = False

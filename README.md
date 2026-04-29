@@ -141,6 +141,60 @@ For a memory-budget sweep, repeat the raw/reflection eval commands with `--max_m
 
 Use cache-enabled `cache_namespace=main` runs for auditable main experiments. For stochastic robustness checks, disable cache or use a separate namespace such as `--cache_namespace robustness_seed_1`.
 
+## Week 6 Evaluation Checkpoint
+
+The evaluation pipeline is automatic and tested. It covers success/failure checking, deadlock accounting, solve rate, and solution efficiency.
+
+Outcome checks:
+
+- `success`: all boxes are on targets; the final trajectory step must have `info.solved == true`.
+- `deadlock`: the environment detects a non-target corner deadlock; the final step must have `info.deadlocked == true`.
+- `timeout`: the episode reaches `--max_steps` without success or detected deadlock.
+- `budget_exhausted`, `api_error`, and `invalid_failure`: tracked separately from gameplay failures.
+
+Metrics:
+
+- `solve_rate = success_count / episodes`
+- `deadlock_count`, `timeout_count`, and rates for all outcome categories
+- `average_success_steps`
+- `solution_efficiency = optimal_steps / actual_steps` for successful episodes only
+- `average_solution_efficiency`, `median_solution_efficiency`, and `steps_over_optimal_average`
+- per-level attempts, successes, deadlocks, timeouts, solve rate, average steps, and average efficiency
+
+`optimal_steps` is stored in level metadata for the pilot suite. Episodes without a reference length are skipped for efficiency metrics and counted in `solution_efficiency_skipped_count`.
+
+Generate a consolidated evaluation report from one or more result directories:
+
+```bash
+python3 evaluate_results.py \
+  --results_dir results/v2_no_memory \
+  --results_dir results/v2_raw \
+  --results_dir results/v2_reflection \
+  --levels levels/v2_pilot.json \
+  --output results/evaluation_summary.json \
+  --fail_on_validation_error
+```
+
+Before any real API run, first run local evaluation sanity checks:
+
+```bash
+python3 run_experiment.py \
+  --agent rule_based \
+  --levels levels/v2_pilot.json \
+  --level_split eval \
+  --episodes 3 \
+  --max_steps 50 \
+  --results_dir results/eval_sanity_rule_based
+
+python3 evaluate_results.py \
+  --results_dir results/eval_sanity_rule_based \
+  --levels levels/v2_pilot.json \
+  --output results/eval_sanity_rule_based/evaluation_summary.json \
+  --fail_on_validation_error
+```
+
+Only move to live LLM smoke tests after `pytest` and the local evaluation report pass.
+
 ## Verified Results
 
 Verified locally on April 29, 2026:
