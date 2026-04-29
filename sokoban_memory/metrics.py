@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import Any
+
 from sokoban_memory.types import EpisodeResult
 
 
-def summarize_results(results: list[EpisodeResult]) -> dict[str, float | int]:
+def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
     episodes = len(results)
     total_steps = sum(r.step_count for r in results)
     invalid_moves = sum(r.invalid_move_count for r in results)
@@ -13,6 +15,9 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, float | int]:
             "solve_rate": 0.0,
             "deadlock_rate": 0.0,
             "timeout_rate": 0.0,
+            "budget_exhausted_rate": 0.0,
+            "api_error_rate": 0.0,
+            "invalid_failure_rate": 0.0,
             "failure_rate": 0.0,
             "average_steps": 0.0,
             "average_reward": 0.0,
@@ -21,12 +26,18 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, float | int]:
             "average_invalid_moves_per_episode": 0.0,
             "llm_call_count": 0,
             "token_cost": 0.0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "budget_exhaustion_count": 0,
         }
     return {
         "episodes": episodes,
         "solve_rate": _rate(results, "success"),
         "deadlock_rate": _rate(results, "deadlock"),
         "timeout_rate": _rate(results, "timeout"),
+        "budget_exhausted_rate": _rate(results, "budget_exhausted"),
+        "api_error_rate": _rate(results, "api_error"),
+        "invalid_failure_rate": _rate(results, "invalid_failure"),
         "failure_rate": _rate(results, "failure"),
         "average_steps": total_steps / episodes,
         "average_reward": sum(r.total_reward for r in results) / episodes,
@@ -35,9 +46,11 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, float | int]:
         "average_invalid_moves_per_episode": invalid_moves / episodes,
         "llm_call_count": sum(r.llm_call_count for r in results),
         "token_cost": sum(r.token_cost for r in results),
+        "cache_hits": sum(r.cache_hits for r in results),
+        "cache_misses": sum(r.cache_misses for r in results),
+        "budget_exhaustion_count": sum(1 for r in results if r.budget_exhausted),
     }
 
 
 def _rate(results: list[EpisodeResult], status: str) -> float:
     return sum(1 for r in results if r.status == status) / len(results)
-

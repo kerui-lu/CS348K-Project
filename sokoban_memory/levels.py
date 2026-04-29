@@ -20,8 +20,14 @@ def load_levels(path: str | Path) -> list[Level]:
 def _parse_level(raw: dict[str, Any]) -> Level:
     level_id = str(raw["level_id"])
     grid = raw["grid"]
+    tags = raw.get("tags", [])
+    split = str(raw.get("split", "unspecified"))
     if not grid or not all(isinstance(row, str) for row in grid):
         raise ValueError(f"{level_id}: grid must be a non-empty list of strings.")
+    if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
+        raise ValueError(f"{level_id}: tags must be a list of strings.")
+    if split not in {"train", "eval", "unspecified"}:
+        raise ValueError(f"{level_id}: split must be train, eval, or unspecified.")
 
     height = len(grid)
     width = len(grid[0])
@@ -72,10 +78,11 @@ def _parse_level(raw: dict[str, Any]) -> Level:
         targets=targets,
         boxes=boxes,
         player=player,
+        tags=tags,
+        split=split,
     )
 
 
 def _ensure_single_player(level_id: str, player: Position | None) -> None:
     if player is not None:
         raise ValueError(f"{level_id}: expected exactly one player.")
-

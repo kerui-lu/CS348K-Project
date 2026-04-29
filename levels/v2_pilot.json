@@ -1,0 +1,45 @@
+{
+  "levels": [
+    {
+      "level_id": "simple_001",
+      "split": "train",
+      "tags": ["easy_simple_push"],
+      "grid": [
+        "#######",
+        "#     #",
+        "# @$. #",
+        "#     #",
+        "#     #",
+        "#     #",
+        "#######"
+      ]
+    },
+    {
+      "level_id": "corner_trap_001",
+      "split": "train",
+      "tags": ["corner_trap"],
+      "grid": [
+        "#######",
+        "#     #",
+        "# @   #",
+        "# $   #",
+        "#    .#",
+        "#     #",
+        "#######"
+      ]
+    },
+    {
+      "level_id": "wall_push_001",
+      "split": "eval",
+      "tags": ["wall_trap", "requires_repositioning"],
+      "grid": [
+        "########",
+        "#      #",
+        "#  @   #",
+        "#  $ . #",
+        "#      #",
+        "########"
+      ]
+    }
+  ]
+}
