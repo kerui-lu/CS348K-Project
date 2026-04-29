@@ -163,6 +163,51 @@ Metrics:
 
 `optimal_steps` is stored in level metadata for the pilot suite. Episodes without a reference length are skipped for efficiency metrics and counted in `solution_efficiency_skipped_count`.
 
+A complete evaluation report should be read in this order:
+
+1. Check `validation_error_count == 0`. If validation fails, the reported metrics are not trusted.
+2. Check non-gameplay failure rates: `budget_exhausted_rate`, `api_error_rate`, and `invalid_failure_rate`.
+3. Compare `solve_rate` as the primary task-success metric.
+4. Compare `deadlock_rate` to measure whether the agent avoids irreversible Sokoban mistakes.
+5. Compare `average_solution_efficiency` and `average_success_steps` to measure how efficient successful solutions are.
+6. Inspect `per_level` to see which challenge types produce improvements or failures.
+
+For the main research question, compare the three agents under identical eval levels, seeds, model, prompt version, memory budget, and API settings:
+
+- `no_memory`: baseline LLM agent with no prior experience.
+- `raw_trajectory_memory`: tests whether factual replay of failed trajectories helps.
+- `reflection_heuristic`: tests whether abstracted failure rules help more than raw trajectory replay.
+
+The strongest evidence for reflection memory would be higher `solve_rate`, lower `deadlock_rate`, and equal or better `average_solution_efficiency` than raw trajectory memory across the same held-out eval levels.
+
+Report shape:
+
+```json
+{
+  "overall": {
+    "solve_rate": 0.0,
+    "deadlock_count": 3,
+    "average_success_steps": 0.0,
+    "average_solution_efficiency": 0.0
+  },
+  "by_agent": {
+    "no_memory": {},
+    "raw_trajectory_memory": {},
+    "reflection_heuristic": {}
+  },
+  "per_level": {
+    "wall_push_001": {
+      "attempts": 3,
+      "successes": 0,
+      "deadlocks": 3,
+      "solve_rate": 0.0,
+      "average_efficiency": 0.0
+    }
+  },
+  "validation_errors": []
+}
+```
+
 Generate a consolidated evaluation report from one or more result directories:
 
 ```bash
