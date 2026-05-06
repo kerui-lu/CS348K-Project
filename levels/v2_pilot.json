@@ -3,8 +3,13 @@
     {
       "level_id": "simple_001",
       "split": "train",
-      "tags": ["easy_simple_push"],
+      "tags": [
+        "easy_simple_push"
+      ],
       "optimal_steps": 1,
+      "reference_solution": [
+        "Right"
+      ],
       "grid": [
         "#######",
         "#     #",
@@ -18,8 +23,19 @@
     {
       "level_id": "corner_trap_001",
       "split": "train",
-      "tags": ["corner_trap"],
-      "optimal_steps": 5,
+      "tags": [
+        "corner_trap",
+        "requires_repositioning"
+      ],
+      "optimal_steps": 6,
+      "reference_solution": [
+        "Down",
+        "Left",
+        "Down",
+        "Right",
+        "Right",
+        "Right"
+      ],
       "grid": [
         "#######",
         "#     #",
@@ -31,10 +47,196 @@
       ]
     },
     {
+      "level_id": "two_box_basic_001",
+      "split": "train",
+      "tags": [
+        "two_box_basic"
+      ],
+      "optimal_steps": 6,
+      "reference_solution": [
+        "Up",
+        "Right",
+        "Down",
+        "Up",
+        "Right",
+        "Down"
+      ],
+      "grid": [
+        "########",
+        "#      #",
+        "# @$$  #",
+        "#  ..  #",
+        "#      #",
+        "########"
+      ]
+    },
+    {
+      "level_id": "boxoban_train_000_000",
+      "split": "train",
+      "tags": [
+        "narrow_corridor",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 38,
+      "reference_solution": [
+        "Down",
+        "Down",
+        "Right",
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Down",
+        "Right",
+        "Down",
+        "Down",
+        "Left",
+        "Left",
+        "Up",
+        "Right",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Up",
+        "Up",
+        "Right",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Left",
+        "Up",
+        "Up",
+        "Right",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Left",
+        "Up",
+        "Up"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/train/000.txt#0",
+      "grid": [
+        "##########",
+        "#@ #######",
+        "#.$#######",
+        "#   ######",
+        "#.$ ######",
+        "#  #######",
+        "# $ ######",
+        "#$ . #####",
+        "# .  #####",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_train_000_002",
+      "split": "train",
+      "tags": [
+        "multi_box_optional",
+        "requires_repositioning"
+      ],
+      "optimal_steps": 19,
+      "reference_solution": [
+        "Down",
+        "Down",
+        "Right",
+        "Down",
+        "Left",
+        "Up",
+        "Up",
+        "Left",
+        "Up",
+        "Right",
+        "Up",
+        "Left",
+        "Down",
+        "Left",
+        "Down",
+        "Left",
+        "Down",
+        "Left",
+        "Up"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/train/000.txt#2",
+      "grid": [
+        "##########",
+        "#####   ##",
+        "#####   ##",
+        "####.    #",
+        "# .  $@ ##",
+        "# $ $ $ ##",
+        "#   .   ##",
+        "#####.   #",
+        "######   #",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_train_000_004",
+      "split": "train",
+      "tags": [
+        "corner_trap",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 24,
+      "reference_solution": [
+        "Right",
+        "Right",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Right",
+        "Right",
+        "Down",
+        "Right",
+        "Up",
+        "Left",
+        "Down",
+        "Down",
+        "Left",
+        "Down",
+        "Right",
+        "Right",
+        "Down",
+        "Left"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/train/000.txt#4",
+      "grid": [
+        "##########",
+        "#   .  ###",
+        "# $    ###",
+        "###$   ###",
+        "#  @ $.###",
+        "#    . ###",
+        "# .$  ####",
+        "####  ####",
+        "##########",
+        "##########"
+      ]
+    },
+    {
       "level_id": "wall_push_001",
       "split": "eval",
-      "tags": ["wall_trap", "requires_repositioning"],
+      "tags": [
+        "wall_trap",
+        "requires_repositioning"
+      ],
       "optimal_steps": 4,
+      "reference_solution": [
+        "Left",
+        "Down",
+        "Right",
+        "Right"
+      ],
       "grid": [
         "########",
         "#      #",
@@ -42,6 +244,253 @@
         "#  $ . #",
         "#      #",
         "########"
+      ]
+    },
+    {
+      "level_id": "boxoban_eval_000_000",
+      "split": "eval",
+      "tags": [
+        "wall_trap",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 23,
+      "reference_solution": [
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Down",
+        "Down",
+        "Down",
+        "Right",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Right",
+        "Down",
+        "Right",
+        "Up",
+        "Left",
+        "Up",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Right"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/test/000.txt#0",
+      "grid": [
+        "##########",
+        "###    . #",
+        "## .   $.#",
+        "##    .$ #",
+        "#####    #",
+        "####   ###",
+        "##### $###",
+        "#####$ ###",
+        "#####@####",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_eval_000_002",
+      "split": "eval",
+      "tags": [
+        "narrow_corridor",
+        "requires_repositioning",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 21,
+      "reference_solution": [
+        "Up",
+        "Left",
+        "Down",
+        "Up",
+        "Left",
+        "Down",
+        "Left",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Right",
+        "Right",
+        "Right",
+        "Down",
+        "Left",
+        "Left",
+        "Down",
+        "Left",
+        "Up"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/test/000.txt#2",
+      "grid": [
+        "##########",
+        "#####. ###",
+        "#####.   #",
+        "#####  $ #",
+        "##### $###",
+        "##### .# #",
+        "###   $  #",
+        "###    $@#",
+        "##     .##",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_eval_000_003",
+      "split": "eval",
+      "tags": [
+        "corner_trap",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 30,
+      "reference_solution": [
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Up",
+        "Right",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Left",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Down",
+        "Left",
+        "Down",
+        "Right",
+        "Right"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/test/000.txt#3",
+      "grid": [
+        "##########",
+        "#   . #. #",
+        "#.$  ##$ #",
+        "# $  ##  #",
+        "#    ### #",
+        "#   .### #",
+        "##    ##@#",
+        "##    $  #",
+        "###    ###",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_eval_000_006",
+      "split": "eval",
+      "tags": [
+        "narrow_corridor",
+        "wall_trap",
+        "multi_box_optional"
+      ],
+      "optimal_steps": 29,
+      "reference_solution": [
+        "Left",
+        "Left",
+        "Down",
+        "Down",
+        "Right",
+        "Up",
+        "Left",
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Down",
+        "Right",
+        "Right"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/test/000.txt#6",
+      "grid": [
+        "##########",
+        "#    .@###",
+        "#$$#$$####",
+        "#  #  ####",
+        "#  #.#####",
+        "#   ######",
+        "#     ####",
+        "#   . ####",
+        "#. #######",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_eval_000_009",
+      "split": "eval",
+      "tags": [
+        "multi_box_optional",
+        "requires_repositioning"
+      ],
+      "optimal_steps": 22,
+      "reference_solution": [
+        "Right",
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Down",
+        "Left",
+        "Left",
+        "Right",
+        "Right",
+        "Right",
+        "Down",
+        "Right",
+        "Up",
+        "Left",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Left",
+        "Down"
+      ],
+      "source": "google-deepmind/boxoban-levels unfiltered/test/000.txt#9",
+      "grid": [
+        "##########",
+        "#        #",
+        "#   $. $ #",
+        "#  #.  @.#",
+        "#  . $ $ #",
+        "#  #     #",
+        "##########",
+        "##########",
+        "##########",
+        "##########"
       ]
     }
   ]
