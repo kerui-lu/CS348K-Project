@@ -1,0 +1,39 @@
+{
+  "schema_version": "reflection_heuristic_memory_v2",
+  "source_metadata": {
+    "source_raw_memory_hash": "d6f04107c0f45751bafbc4f2746a51f9850a5350f2211670767673fa1412ee3f",
+    "reflection_model": "gpt-4.1-mini",
+    "reflection_prompt_version": "reflection_v2",
+    "generated_at_utc": "2026-05-06T20:53:19Z",
+    "source_train_level_ids": [
+      "simple_001",
+      "corner_trap_001",
+      "two_box_basic_001",
+      "boxoban_train_000_000",
+      "boxoban_train_000_002",
+      "boxoban_train_000_004"
+    ],
+    "temperature": 0.0,
+    "max_output_tokens": 256,
+    "cache_namespace": "memory_refresh_2",
+    "prompt_hash": "2be96950bd11b7e90189c142cf534dacbad065f454dafafe1139837c7712e611",
+    "cache_hit": false,
+    "cache_key": "e26d8a259864d79f7beebfc691d0742ebc3c12e21170f94dc7e8faa08c747459",
+    "memory_caps": {
+      "max_memory_items": 3,
+      "max_steps_per_memory": 6,
+      "max_memory_chars": 4000
+    }
+  },
+  "memory_item_count": 8,
+  "heuristics": [
+    "Avoid repeated back-and-forth moves that do not push boxes, as they waste steps and lead to timeouts.",
+    "Do not move the player away from boxes or goals without pushing a box, especially when close to a box or goal.",
+    "Prioritize pushing boxes towards goals rather than moving around without progress.",
+    "Avoid getting stuck in loops of moving up and down or left and right without changing box positions.",
+    "When multiple boxes are present, avoid oscillating between positions without pushing any box closer to a goal.",
+    "Do not push boxes into corners or against walls unless the box can be placed on a goal, to prevent deadlocks.",
+    "Plan moves to ensure each push advances a box towards a goal, avoiding unnecessary player movements.",
+    "Avoid wasting moves when no box is pushed; every move should contribute to solving the puzzle or repositioning boxes effectively."
+  ]
+}
