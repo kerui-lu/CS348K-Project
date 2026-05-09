@@ -8,6 +8,8 @@ V2 adds the main research comparison: controlled one-step LLM agents with no mem
 
 ## Current Status
 
+For week 6 checkpoint information look at docs/week6_checkpoint.md
+
 Completed in v1:
 
 - Deterministic grid-based Sokoban environment with movement, pushing, wall collision, two-box blocking, solved-state detection, and simple corner deadlock detection.

@@ -173,6 +173,8 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     reflection_prompt = reflection_client.responses.calls[0]["input"]
     assert "Condition: none" in no_memory_prompt
     assert "No past experience is available" in no_memory_prompt
+    assert "Decision checklist (apply for this single move):" in no_memory_prompt
+    assert "Progress: prefer pushes that move a box closer to a target." in no_memory_prompt
     assert "Prior trajectory records" in raw_prompt
     assert "executed_action: Right" in raw_prompt
     assert "raw_action" not in raw_prompt.split("Memory context:", 1)[1]
