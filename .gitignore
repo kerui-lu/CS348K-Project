@@ -196,9 +196,12 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Local experiment artifacts
-results/
-memory_banks/
+# Local experiment artifacts (track only canonical summaries + frozen memory banks)
+results/*
+!results/v2_task3_large_evaluation_summary.json
+memory_banks/*
+!memory_banks/raw_failures.json
+!memory_banks/reflection_heuristics.json
 .llm_cache/
 
 # Cursor

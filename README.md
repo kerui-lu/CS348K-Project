@@ -8,6 +8,8 @@ V2 adds the main research comparison: controlled one-step LLM agents with no mem
 
 ## Current Status
 
+For week 6 checkpoint information look at docs/week6_checkpoint.md
+
 Completed in v1:
 
 - Deterministic grid-based Sokoban environment with movement, pushing, wall collision, two-box blocking, solved-state detection, and simple corner deadlock detection.
@@ -35,6 +37,8 @@ Memory conditions supported by the CLI:
 - `reflection_heuristic`
 
 `rule_based` remains available as a cheap non-LLM baseline and debugging agent.
+
+The checked-in `levels/v2_pilot.json` now contains a 12-level evaluation suite with 6 `train` and 6 `eval` levels. It mixes small local calibration puzzles with a curated subset of levels adapted from DeepMind's Boxoban dataset, and each level includes `tags`, `optimal_steps`, and `reference_solution`.
 
 ## Quick Start
 

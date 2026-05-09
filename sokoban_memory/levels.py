@@ -6,6 +6,8 @@ from typing import Any
 
 from sokoban_memory.types import Level, Position
 
+VALID_ACTIONS = {"Up", "Down", "Left", "Right"}
+
 
 def load_levels(path: str | Path) -> list[Level]:
     with Path(path).open("r", encoding="utf-8") as f:
@@ -23,6 +25,7 @@ def _parse_level(raw: dict[str, Any]) -> Level:
     tags = raw.get("tags", [])
     split = str(raw.get("split", "unspecified"))
     optimal_steps = raw.get("optimal_steps")
+    reference_solution = raw.get("reference_solution")
     if not grid or not all(isinstance(row, str) for row in grid):
         raise ValueError(f"{level_id}: grid must be a non-empty list of strings.")
     if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
@@ -31,6 +34,14 @@ def _parse_level(raw: dict[str, Any]) -> Level:
         raise ValueError(f"{level_id}: split must be train, eval, or unspecified.")
     if optimal_steps is not None and (not isinstance(optimal_steps, int) or optimal_steps <= 0):
         raise ValueError(f"{level_id}: optimal_steps must be a positive integer when provided.")
+    if reference_solution is not None:
+        if not isinstance(reference_solution, list) or not all(isinstance(action, str) for action in reference_solution):
+            raise ValueError(f"{level_id}: reference_solution must be a list of action strings when provided.")
+        invalid_actions = [action for action in reference_solution if action not in VALID_ACTIONS]
+        if invalid_actions:
+            raise ValueError(f"{level_id}: reference_solution contains unsupported actions: {invalid_actions}.")
+        if optimal_steps is not None and len(reference_solution) != optimal_steps:
+            raise ValueError(f"{level_id}: reference_solution length must match optimal_steps.")
 
     height = len(grid)
     width = len(grid[0])
@@ -84,6 +95,7 @@ def _parse_level(raw: dict[str, Any]) -> Level:
         tags=tags,
         split=split,
         optimal_steps=optimal_steps,
+        reference_solution=reference_solution,
     )
 
 

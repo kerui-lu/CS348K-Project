@@ -36,6 +36,7 @@ class Level:
     tags: list[str] = field(default_factory=list)
     split: str = "unspecified"
     optimal_steps: int | None = None
+    reference_solution: list[Action] | None = None
 
 
 @dataclass
