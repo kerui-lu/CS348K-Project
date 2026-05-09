@@ -8,7 +8,9 @@ V2 adds the main research comparison: controlled one-step LLM agents with no mem
 
 ## Current Status
 
-For week 6 checkpoint information look at docs/week6_checkpoint.md
+### Week 6 checkpoint
+
+See [`docs/week6_checkpoint.md`](docs/week6_checkpoint.md).
 
 Completed in v1:
 
