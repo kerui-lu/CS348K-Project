@@ -47,6 +47,19 @@ def test_evaluate_result_dirs_reports_agent_and_level_metrics(tmp_path):
     assert report["per_level"]["simple_001"]["successes"] == 1
 
 
+def test_evaluate_result_dirs_accepts_full_path_statuses(tmp_path):
+    results_dir = tmp_path / "results"
+    results_dir.mkdir()
+    write_episode(results_dir / "invalid.json", "simple_001", "agent_a", "invalid_plan", 0)
+    write_episode(results_dir / "exhausted.json", "simple_001", "agent_a", "plan_exhausted", 3)
+
+    report = evaluate_result_dirs([results_dir], levels_path=None)
+
+    assert report["validation_error_count"] == 0
+    assert report["overall"]["invalid_plan_count"] == 1
+    assert report["overall"]["plan_exhausted_count"] == 1
+
+
 def test_evaluate_result_dirs_uses_level_reference_lengths(tmp_path):
     results_dir = tmp_path / "results"
     levels_path = tmp_path / "levels.json"
@@ -121,4 +134,3 @@ def test_evaluate_results_cli_writes_report(tmp_path):
     report = json.loads(output_path.read_text(encoding="utf-8"))
     assert report["overall"]["solve_rate"] == 1.0
     assert "per_level" in report
-

@@ -2,12 +2,20 @@
 
 We are going to build a Sokoban gameplay framework for LLM agents and compare two ways of using past experience: raw trajectory memory versus failure reflection plus heuristic extraction. We will demonstrate success using trajectory visualizations, extracted failure rules, and plots comparing solve rate, number of deadlocks, and solution efficiency across the two memory schemes. Our approach is to let the agent play repeated Sokoban levels, collect trajectories of both successful and failed attempts, and test whether abstracted strategic knowledge is more useful than directly replaying raw past trajectories.
 
+## Full-path branch note
+
+Branch `full_path_kerui` replaces the old one-step LLM policy with full-path push-intent planning. LLM-backed agents now output JSON push plans such as `{"box": [3, 4], "push": "Right"}`, and local code verifies each intended push by using BFS to reach the push position before executing primitive Sokoban actions. The Week 6 one-step artifacts mentioned below are historical context from `main`; regenerate memory banks and evaluation summaries on this branch before making full-path performance claims.
+
+## Week 7 update
+
+See `docs/week7_update.md` for the current branch status. In short, Week 7 added an optional verifier-guided repair loop and tested several prompt variants. The active prompt is now back to `full_path_v2` because the indexed-box trace prompt and one-attempt repair sanity run did not improve train success. The main current problem is semantic invalidity: many LLM plans still propose blocked pushes, stale box coordinates, partial plans, or deadlock-causing pushes.
+
 ## Our evaluation pipeline
 
-We first run a no_memory agent on the train split to collect failed trajectories, then use those same failures to build two memory banks: raw trajectory memories and reflection-generated heuristics. We then use these memories and evaluate three agents: no_memory, raw_trajectory_memory, and reflection_heuristic on the held-out eval split using the same levels, seed, model, temperature, output cap, horizon, and memory budget. Each episode is automatically labeled as success, deadlock, timeout, budget_exhausted, api_error, or invalid_failure, and we generate both per-episode trajectory logs and aggregate summaries. For this checkpoint, the main goal is to show that this evaluation protocol runs cleanly end-to-end: our current run produced 60 valid episode logs with no validation errors, API errors, budget exhaustion, or invalid-failure contamination. Since all agents currently have zero solve rate, we interpret these results as an evaluation milestone rather than a final performance result; the pipeline is now in place to study whether raw trajectories or reflection heuristics lead to fewer deadlocks, fewer timeouts, and eventually higher solve rates.
+We first run a no_memory agent on the train split to collect failed trajectories, then use those same failures to build two memory banks: raw trajectory memories and reflection-generated heuristics. We then use these memories and evaluate three agents: no_memory, raw_trajectory_memory, and reflection_heuristic on the held-out eval split using the same levels, seed, model, temperature, output cap, horizon, and memory budget. Each full-path episode is automatically labeled as success, deadlock, timeout, invalid_plan, plan_exhausted, budget_exhausted, api_error, or invalid_failure, and we generate both per-episode trajectory logs and aggregate summaries.
 
 ## Checkpoint artifact:
-The level split used for this checkpoint is saved in levels/v2_pilot.json, with train levels used for memory construction and eval levels used for comparison. The generated memory artifacts are saved in memory_banks/raw_failures.json and memory_banks/reflection_heuristics.json. The three eval result directories are results/v2_task3_large_no_memory, results/v2_task3_large_raw, and results/v2_task3_large_reflection, and the consolidated comparison summary is saved in results/v2_task3_large_evaluation_summary.json. The relevant code is in the Sokoban gameplay/evaluation pipeline, including the agent implementations for no_memory, raw_trajectory_memory, and reflection_heuristic, the episode outcome labeling logic, and the summary-generation scripts.
+The level split used for this checkpoint is saved in levels/v2_pilot.json, with train levels used for memory construction and eval levels used for comparison. On this branch, generated full-path memory artifacts should be written to memory_banks/raw_failures.json and memory_banks/reflection_heuristics.json, then evaluated with fresh result directories. The old one-step v2_task3_large result artifacts from `main` are obsolete here.
 
 
 ## What kinds of heuristics do we think are important?
@@ -43,7 +51,7 @@ We evaluate success using automatic episode outcomes and aggregate metrics.
 - api_error_rate
 - Budget_exhausted_rate
 
-A clean evaluation should first check that validation_error_count == 0, then compare agents under identical eval levels, seeds, model, prompt version, memory budget, temperature, and max output tokens.
+A clean evaluation should first check that validation_error_count == 0, then compare agents under identical eval levels, seeds, model, prompt version, memory budget, temperature, and max output tokens. Reference plans are not required for evaluation; efficiency metrics are only interpreted for levels that still have `optimal_steps`.
 
 ## What is our hypothesis?
 
@@ -51,17 +59,19 @@ Reflection-based memory will help the LLM agent avoid repeated Sokoban mistakes 
 
 ## When could we define the situation as a deadlock?
 
-**Current:** prefers false negatives over false positives. We only label an episode as deadlocked when the detected pattern is highly likely to be irreversible. The current implementation covers non-target corner deadlocks. Future extensions will add static dead-square detection, conservative wall deadlocks, and 2x2 freeze patterns.
+**Current branch:** prefers false negatives over false positives. We only label an episode as deadlocked when the detected pattern is locally explainable and highly likely to be irreversible. The original Week 6 checkpoint covered non-target corner deadlocks. Branch `full_path_kerui` upgrades this with conservative local checks and does not use static dead-square precomputation.
 
-**Future:**
+**Implemented deadlock checks on this branch:**
 
 1. corner deadlock
-2. static dead squares
+2. wall deadlock with no target and no exit
 3. 2x2 wall/box freeze pattern
-4. wall deadlock with no target and no exit
-5. tunnel trap
-6. two-box freeze
-7. multi-box recursive freeze
+4. conservative two-box freeze
+
+**Later possible work:**
+
+1. narrow tunnel/corridor traps
+2. multi-box recursive freeze
 
 ## Do we have to create novel data? Was this boxoban included in pre-training
 

@@ -15,6 +15,8 @@ from sokoban_memory.agents import (
     DEFAULT_TEMPERATURE,
     LLMBudgetExceeded,
     _load_dotenv,
+    reasoning_config,
+    responses_create_kwargs,
 )
 from sokoban_memory.llm_cache import LLMResponseCache, text_hash
 from sokoban_memory.memory import (
@@ -63,6 +65,9 @@ def generate_reflection_memory(
         "task": "failure_reflection",
         "cache_namespace": cache_namespace,
     }
+    reasoning = reasoning_config(model)
+    if reasoning is not None:
+        request["reasoning"] = reasoning
     cache = LLMResponseCache(llm_cache_path, namespace=cache_namespace)
     cache_key = cache.make_key(request)
     cached = cache.get(cache_key)
@@ -75,10 +80,12 @@ def generate_reflection_memory(
             raise LLMBudgetExceeded("Reflection LLM call budget exhausted before generation.")
         llm_client = client if client is not None else _make_openai_client(api_key_env)
         response = llm_client.responses.create(
-            model=model,
-            input=prompt,
-            temperature=temperature,
-            max_output_tokens=max_output_tokens,
+            **responses_create_kwargs(
+                model=model,
+                input_text=prompt,
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+            )
         )
         output_text = _extract_text(response).strip()
         cache.set(
@@ -118,7 +125,8 @@ def build_reflection_prompt(raw_memory: RawTrajectoryMemory, config: MemoryRende
     return (
         "You are analyzing failed Sokoban trajectories.\n"
         f"Prompt version: {REFLECTION_PROMPT_VERSION}\n\n"
-        "Goal: distill concise heuristic rules that could help a future one-step Sokoban agent avoid similar failures.\n"
+        "Goal: distill concise heuristic rules that could help a future full-path push planner avoid similar failures.\n"
+        "The future planner outputs JSON push intents such as {\"box\": [3, 4], \"push\": \"Right\"}; a local verifier expands reachable walking paths.\n"
         "Use prescriptive rules. Do not replay the trajectories.\n"
         "Return a JSON array of strings only.\n\n"
         f"Failed trajectory memory:\n{raw_memory.render(config)}"

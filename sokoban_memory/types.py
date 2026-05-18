@@ -8,6 +8,8 @@ EpisodeStatus = Literal[
     "success",
     "deadlock",
     "timeout",
+    "invalid_plan",
+    "plan_exhausted",
     "budget_exhausted",
     "api_error",
     "invalid_failure",
@@ -37,6 +39,8 @@ class Level:
     split: str = "unspecified"
     optimal_steps: int | None = None
     reference_solution: list[Action] | None = None
+    source: str | None = None
+    grid: list[str] = field(default_factory=list)
 
 
 @dataclass

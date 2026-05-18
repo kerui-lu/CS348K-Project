@@ -8,7 +8,7 @@ from typing import Any
 from sokoban_memory.llm_cache import stable_hash
 from sokoban_memory.types import EpisodeResult, Level
 
-RAW_MEMORY_SCHEMA_VERSION = "raw_trajectory_memory_v2"
+RAW_MEMORY_SCHEMA_VERSION = "full_path_raw_trajectory_memory_v1"
 HEURISTIC_MEMORY_SCHEMA_VERSION = "reflection_heuristic_memory_v2"
 RAW_RENDER_BANNED_WORDS = ("lesson", "heuristic", "should", "avoid", "must", "key mistake")
 
@@ -70,7 +70,7 @@ class RawTrajectoryMemory:
             json.dump(self.to_dict(), f, indent=2)
 
     def add_episode(self, episode: EpisodeResult) -> None:
-        self.episodes.append(compress_episode(episode))
+        self.episodes.append(compress_episode(episode, max_steps=None))
         self.memory_hash = self.compute_hash()
 
     def render(self, config: MemoryRenderConfig) -> str:
@@ -163,7 +163,7 @@ class HeuristicMemory:
 def build_raw_memory_bank(
     episodes: list[EpisodeResult | dict[str, Any]],
     source_metadata: dict[str, Any] | None = None,
-    max_steps_per_memory: int = 6,
+    max_steps_per_memory: int | None = None,
 ) -> RawTrajectoryMemory:
     metadata = dict(source_metadata or {})
     metadata.setdefault(
@@ -181,12 +181,20 @@ def build_raw_memory_bank(
 def compress_episode(episode: EpisodeResult | dict[str, Any], max_steps: int | None = None) -> dict[str, Any]:
     data = episode.to_dict() if isinstance(episode, EpisodeResult) else episode
     trajectory = list(data.get("trajectory", []))
+    metadata = dict(data.get("metadata", {}))
     selected_steps = _select_steps(trajectory, max_steps)
     return {
         "level_id": data.get("level_id"),
         "status": data.get("status"),
         "step_count": data.get("step_count", len(trajectory)),
         "total_reward": data.get("total_reward"),
+        "policy_mode": data.get("policy_mode"),
+        "raw_plan_response": metadata.get("raw_plan_response"),
+        "planned_pushes": metadata.get("planned_pushes", []),
+        "expanded_actions": metadata.get("expanded_actions", []),
+        "push_execution_log": metadata.get("push_execution_log", []),
+        "failure_reason": metadata.get("failure_reason"),
+        "failure_push_index": metadata.get("failure_push_index"),
         "steps": [_compress_step(step) for step in selected_steps],
     }
 
@@ -218,6 +226,9 @@ def _compress_step(step: dict[str, Any]) -> dict[str, Any]:
         "pushed_box": info.get("pushed_box"),
         "deadlocked": info.get("deadlocked"),
         "solved": info.get("solved"),
+        "semantic_phase": info.get("semantic_phase"),
+        "push_index": info.get("push_index"),
+        "planned_push": info.get("planned_push"),
         "next_state": step.get("next_state"),
     }
 
@@ -229,7 +240,12 @@ def _render_episode_summary(index: int, episode: dict[str, Any], max_steps: int)
         f"final_status: {episode.get('status')}",
         f"step_count: {episode.get('step_count')}",
         f"total_reward: {episode.get('total_reward')}",
+        f"failure_reason: {episode.get('failure_reason')}",
+        f"planned_pushes: {episode.get('planned_pushes', [])}",
+        f"expanded_actions: {episode.get('expanded_actions', [])}",
     ]
+    for push_log in list(episode.get("push_execution_log", []))[:max_steps]:
+        lines.append(f"push_log: {push_log}")
     for step in _select_steps(list(episode.get("steps", [])), max_steps):
         lines.extend(
             [
@@ -242,7 +258,9 @@ def _render_episode_summary(index: int, episode: dict[str, Any], max_steps: int)
                     "outcome: "
                     f"pushed_box={step.get('pushed_box')}, "
                     f"deadlocked={step.get('deadlocked')}, "
-                    f"solved={step.get('solved')}"
+                    f"solved={step.get('solved')}, "
+                    f"phase={step.get('semantic_phase')}, "
+                    f"push_index={step.get('push_index')}"
                 ),
                 "next_state:",
                 str(step.get("next_state")),

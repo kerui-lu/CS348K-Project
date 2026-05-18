@@ -9,6 +9,8 @@ STATUSES = (
     "success",
     "deadlock",
     "timeout",
+    "invalid_plan",
+    "plan_exhausted",
     "budget_exhausted",
     "api_error",
     "invalid_failure",
@@ -22,6 +24,15 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
     invalid_moves = sum(r.invalid_move_count for r in results)
     status_counts = _status_counts(results)
     success_results = [r for r in results if r.status == "success"]
+    planned_push_counts = [_metadata_int(r, "planned_push_count") for r in results]
+    executed_push_counts = [_metadata_int(r, "executed_push_count") for r in results]
+    expanded_step_counts = [_metadata_int(r, "expanded_primitive_step_count") for r in results]
+    repair_attempt_counts = [_metadata_int(r, "repair_attempt_count") for r in results]
+    success_after_repair_count = sum(1 for r in results if r.metadata.get("success_after_repair") is True)
+    success_without_repair_count = sum(1 for r in results if r.metadata.get("success_without_repair") is True)
+    first_attempt_invalid_plan_count = sum(
+        1 for r in results if r.metadata.get("first_attempt_status") == "invalid_plan"
+    )
     efficiency_values = [_solution_efficiency(r) for r in success_results]
     efficiency_values = [value for value in efficiency_values if value is not None]
     steps_over_optimal = [_steps_over_optimal(r) for r in success_results]
@@ -47,6 +58,16 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
             "cache_hits": 0,
             "cache_misses": 0,
             "budget_exhaustion_count": 0,
+            "planned_push_count": 0,
+            "executed_push_count": 0,
+            "expanded_primitive_step_count": 0,
+            "average_planned_pushes_per_episode": 0.0,
+            "average_executed_pushes_per_episode": 0.0,
+            "repair_attempt_count": 0,
+            "average_repair_attempts_per_episode": 0.0,
+            "success_after_repair_count": 0,
+            "success_without_repair_count": 0,
+            "first_attempt_invalid_plan_count": 0,
             "per_level": {},
         }
 
@@ -71,6 +92,16 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
         "cache_hits": sum(r.cache_hits for r in results),
         "cache_misses": sum(r.cache_misses for r in results),
         "budget_exhaustion_count": status_counts["budget_exhausted_count"],
+        "planned_push_count": sum(planned_push_counts),
+        "executed_push_count": sum(executed_push_counts),
+        "expanded_primitive_step_count": sum(expanded_step_counts),
+        "average_planned_pushes_per_episode": sum(planned_push_counts) / episodes,
+        "average_executed_pushes_per_episode": sum(executed_push_counts) / episodes,
+        "repair_attempt_count": sum(repair_attempt_counts),
+        "average_repair_attempts_per_episode": sum(repair_attempt_counts) / episodes,
+        "success_after_repair_count": success_after_repair_count,
+        "success_without_repair_count": success_without_repair_count,
+        "first_attempt_invalid_plan_count": first_attempt_invalid_plan_count,
         "per_level": summarize_by_level(results),
     }
 
@@ -99,6 +130,21 @@ def summarize_by_level(results: list[EpisodeResult]) -> dict[str, dict[str, Any]
             "average_efficiency": _average(efficiency_values),
             "solution_efficiency_count": len(efficiency_values),
             "solution_efficiency_skipped_count": len(success_results) - len(efficiency_values),
+            "planned_push_count": sum(_metadata_int(r, "planned_push_count") for r in level_results),
+            "executed_push_count": sum(_metadata_int(r, "executed_push_count") for r in level_results),
+            "expanded_primitive_step_count": sum(
+                _metadata_int(r, "expanded_primitive_step_count") for r in level_results
+            ),
+            "repair_attempt_count": sum(_metadata_int(r, "repair_attempt_count") for r in level_results),
+            "success_after_repair_count": sum(
+                1 for r in level_results if r.metadata.get("success_after_repair") is True
+            ),
+            "success_without_repair_count": sum(
+                1 for r in level_results if r.metadata.get("success_without_repair") is True
+            ),
+            "first_attempt_invalid_plan_count": sum(
+                1 for r in level_results if r.metadata.get("first_attempt_status") == "invalid_plan"
+            ),
         }
     return per_level
 
@@ -131,3 +177,7 @@ def _steps_over_optimal(result: EpisodeResult) -> int | None:
 def _average(values: list[float | int]) -> float:
     return sum(values) / len(values) if values else 0.0
 
+
+def _metadata_int(result: EpisodeResult, key: str) -> int:
+    value = result.metadata.get(key, 0)
+    return value if isinstance(value, int) and not isinstance(value, bool) else 0

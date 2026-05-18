@@ -224,6 +224,132 @@
       ]
     },
     {
+      "level_id": "boxoban_medium_train_000_000",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#0",
+      "grid": [
+        "##########",
+        "##########",
+        "#######  #",
+        "### .# #.#",
+        "#     .  #",
+        "# #  $ $ #",
+        "# #####  #",
+        "##### $$.#",
+        "### @    #",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_001",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#1",
+      "grid": [
+        "##########",
+        "# .@######",
+        "#$$#######",
+        "#  #######",
+        "#  #######",
+        "# ########",
+        "#   ######",
+        "#.$  .####",
+        "# . $ ####",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_002",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#2",
+      "grid": [
+        "##########",
+        "# ########",
+        "#  #######",
+        "# ########",
+        "# ########",
+        "# . ######",
+        "#  $ #####",
+        "# $$.#####",
+        "# .$ @. ##",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_003",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#3",
+      "grid": [
+        "##########",
+        "#  .  $@ #",
+        "#    $  ##",
+        "# #  #####",
+        "# ########",
+        "# $   .  #",
+        "#.  # # .#",
+        "####### $#",
+        "######   #",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_004",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#4",
+      "grid": [
+        "##########",
+        "##       #",
+        "## $ . $ #",
+        "#######  #",
+        "###   .  #",
+        "##.@$ ####",
+        "#  $ #####",
+        "#.  ######",
+        "#   ######",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_005",
+      "split": "train",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/train/000.txt#5",
+      "grid": [
+        "##########",
+        "####  . ##",
+        "###  . . #",
+        "#####   ##",
+        "##### $ ##",
+        "#####$.###",
+        "##### $###",
+        "##### $@##",
+        "#####  ###",
+        "##########"
+      ]
+    },
+    {
       "level_id": "wall_push_001",
       "split": "eval",
       "tags": [
@@ -490,6 +616,132 @@
         "##########",
         "##########",
         "##########",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_000",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#0",
+      "grid": [
+        "##########",
+        "#       ##",
+        "# $    ###",
+        "#. ## . ##",
+        "# ####  ##",
+        "#   #   ##",
+        "#$$ #. ###",
+        "# # # $@##",
+        "# .    ###",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_001",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#1",
+      "grid": [
+        "##########",
+        "#.########",
+        "#  #######",
+        "# $  $@###",
+        "# . . ####",
+        "# # $$ . #",
+        "# #    ###",
+        "# ##### ##",
+        "#        #",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_002",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#2",
+      "grid": [
+        "##########",
+        "###@$ .  #",
+        "##### $ .#",
+        "##### $  #",
+        "######..$#",
+        "#######  #",
+        "##########",
+        "##########",
+        "##########",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_003",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#3",
+      "grid": [
+        "##########",
+        "##### @ ##",
+        "#####.$$ #",
+        "###### . #",
+        "#######  #",
+        "#######$.#",
+        "#######. #",
+        "#######$ #",
+        "#######  #",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_004",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#4",
+      "grid": [
+        "##########",
+        "#  .   $ #",
+        "# $  $   #",
+        "# $@###. #",
+        "# .####. #",
+        "#  #######",
+        "# ########",
+        "# ########",
+        "# ########",
+        "##########"
+      ]
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_005",
+      "split": "eval",
+      "tags": [
+        "boxoban_medium",
+        "multi_box"
+      ],
+      "source": "google-deepmind/boxoban-levels medium/valid/000.txt#5",
+      "grid": [
+        "##########",
+        "##########",
+        "##########",
+        "#.   #####",
+        "# $ $#####",
+        "#  . #####",
+        "# $$ #####",
+        "#  # #####",
+        "# .    @.#",
         "##########"
       ]
     }

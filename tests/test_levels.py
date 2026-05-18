@@ -1,12 +1,9 @@
 import json
 
-import pytest
-
-from sokoban_memory.env import SokobanEnv
 from sokoban_memory.levels import load_levels
 
 
-def test_reference_solution_is_parsed(tmp_path):
+def test_reference_solution_is_preserved_without_validation(tmp_path):
     level_path = tmp_path / "levels.json"
     level_path.write_text(
         json.dumps(
@@ -16,33 +13,6 @@ def test_reference_solution_is_parsed(tmp_path):
                         "level_id": "ref_001",
                         "split": "train",
                         "tags": ["easy_simple_push"],
-                        "optimal_steps": 1,
-                        "reference_solution": ["Right"],
-                        "grid": [
-                            "#####",
-                            "#@$.#",
-                            "#####",
-                        ],
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-
-    level = load_levels(level_path)[0]
-
-    assert level.reference_solution == ["Right"]
-
-
-def test_reference_solution_rejects_invalid_actions(tmp_path):
-    level_path = tmp_path / "levels.json"
-    level_path.write_text(
-        json.dumps(
-            {
-                "levels": [
-                    {
-                        "level_id": "bad_ref_001",
                         "optimal_steps": 1,
                         "reference_solution": ["Jump"],
                         "grid": [
@@ -57,26 +27,31 @@ def test_reference_solution_rejects_invalid_actions(tmp_path):
         encoding="utf-8",
     )
 
-    with pytest.raises(ValueError, match="reference_solution contains unsupported actions"):
-        load_levels(level_path)
+    level = load_levels(level_path)[0]
+
+    assert level.reference_solution == ["Jump"]
 
 
-def test_v2_pilot_levels_have_balanced_splits_and_valid_reference_solutions():
+def test_v2_pilot_levels_have_expanded_splits_and_no_duplicate_grids():
     levels = load_levels("levels/v2_pilot.json")
     train_levels = [level for level in levels if level.split == "train"]
     eval_levels = [level for level in levels if level.split == "eval"]
+    level_ids = [level.level_id for level in levels]
+    grid_keys = ["\n".join(level.grid) for level in levels]
 
-    assert len(train_levels) >= 6
-    assert len(eval_levels) >= 6
+    assert len(train_levels) >= 12
+    assert len(eval_levels) >= 12
+    assert len(levels) >= 24
+    assert len(level_ids) == len(set(level_ids))
+    assert len(grid_keys) == len(set(grid_keys))
 
-    for level in levels:
-        assert level.reference_solution is not None
-        assert len(level.reference_solution) == level.optimal_steps
+    imported = [level for level in levels if "boxoban_medium" in level.tags]
+    assert len([level for level in imported if level.split == "train"]) == 6
+    assert len([level for level in imported if level.split == "eval"]) == 6
 
-        env = SokobanEnv(level)
-        env.reset()
-        for action in level.reference_solution:
-            step = env.step(action)
-        assert env.is_solved(), level.level_id
-        assert step.done is True
-        assert step.info["solved"] is True
+    for level in imported:
+        assert level.width == 10
+        assert level.height == 10
+        assert level.optimal_steps is None
+        assert level.reference_solution is None
+        assert level.source.startswith("google-deepmind/boxoban-levels medium/")

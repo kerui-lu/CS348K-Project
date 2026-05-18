@@ -33,6 +33,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--levels", default="levels/simple.json")
     parser.add_argument("--level_split", default=None, choices=["train", "eval", "unspecified"])
     parser.add_argument("--max_steps", type=int, default=100)
+    parser.add_argument("--max_repair_attempts", type=int, default=0)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--results_dir", default="results")
     parser.add_argument("--memory_path", default=None)
@@ -94,6 +95,7 @@ def main() -> None:
         max_steps=args.max_steps,
         seed=args.seed,
         results_dir=Path(args.results_dir),
+        max_repair_attempts=args.max_repair_attempts,
     )
     print(json.dumps(summary, indent=2))
 

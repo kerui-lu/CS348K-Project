@@ -27,6 +27,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--episodes", type=int, default=5)
     parser.add_argument("--levels", default="levels/v2_pilot.json")
     parser.add_argument("--max_steps", type=int, default=100)
+    parser.add_argument("--max_repair_attempts", type=int, default=0)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--results_dir", default="results/v2_memory_build")
     parser.add_argument("--raw_memory_path", default="memory_banks/raw_failures.json")
@@ -84,7 +85,13 @@ def run_memory_bank_build(
     for episode_idx in range(args.episodes):
         level = levels[episode_idx % len(levels)]
         episode_seed = args.seed + episode_idx
-        result = run_episode(SokobanEnv(level, seed=episode_seed), agent, args.max_steps, episode_seed)
+        result = run_episode(
+            SokobanEnv(level, seed=episode_seed),
+            agent,
+            args.max_steps,
+            episode_seed,
+            max_repair_attempts=args.max_repair_attempts,
+        )
         save_episode(result, results_dir)
         results.append(result)
         if result.budget_exhausted:
@@ -106,9 +113,10 @@ def run_memory_bank_build(
             "requested_episodes": args.episodes,
             "completed_episodes": len(results),
             "max_steps": args.max_steps,
+            "max_repair_attempts": args.max_repair_attempts,
             "memory_caps": memory_config.to_dict(),
         },
-        max_steps_per_memory=args.max_steps_per_memory,
+        max_steps_per_memory=None,
     )
     raw_path = Path(args.raw_memory_path)
     raw_memory.save(raw_path)
@@ -158,6 +166,7 @@ def run_memory_bank_build(
             "source_train_level_ids": source_train_level_ids,
             "seed": args.seed,
             "max_steps": args.max_steps,
+            "max_repair_attempts": args.max_repair_attempts,
             "max_llm_calls": args.max_llm_calls,
             "raw_memory_path": str(raw_path),
             "raw_memory_hash": raw_memory.memory_hash,

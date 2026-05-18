@@ -133,3 +133,104 @@ def test_box_on_target_corner_is_not_deadlock():
     ]))
     assert env.is_deadlocked() == (False, None)
 
+
+def test_wall_segment_with_no_target_and_no_exit_is_deadlock():
+    env = SokobanEnv(make_level([
+        "#######",
+        "# @$  #",
+        "#     #",
+        "#     #",
+        "#######",
+    ]))
+
+    assert env.is_deadlocked() == (
+        True,
+        "box_against_wall_no_target_no_exit:1,3,wall=Up",
+    )
+
+
+def test_wall_segment_with_target_is_not_deadlock():
+    env = SokobanEnv(make_level([
+        "#######",
+        "# @$ .#",
+        "#     #",
+        "#     #",
+        "#######",
+    ]))
+
+    assert env.is_deadlocked() == (False, None)
+
+
+def test_wall_segment_with_exit_away_from_wall_is_not_deadlock():
+    env = SokobanEnv(make_level([
+        "#### ##",
+        "# @$  #",
+        "#     #",
+        "#     #",
+        "#######",
+    ]))
+
+    assert env.is_deadlocked() == (False, None)
+
+
+def test_box_on_target_along_wall_is_not_deadlock():
+    env = SokobanEnv(make_level([
+        "#######",
+        "# @*  #",
+        "#  $ .#",
+        "#     #",
+        "#######",
+    ]))
+
+    assert env.is_deadlocked() == (False, None)
+
+
+def test_2x2_wall_box_freeze_with_non_target_box_is_deadlock():
+    env = SokobanEnv(make_level([
+        "######",
+        "# @  #",
+        "# $$ #",
+        "# $$ #",
+        "#  . #",
+        "######",
+    ]))
+
+    assert env.is_deadlocked() == (True, "box_in_2x2_freeze:2,2")
+
+
+def test_2x2_target_satisfied_boxes_are_not_deadlock():
+    env = SokobanEnv(make_level([
+        "########",
+        "# @    #",
+        "# **   #",
+        "# ** $ #",
+        "#     .#",
+        "########",
+    ]))
+
+    assert env.is_deadlocked() == (False, None)
+
+
+def test_two_box_freeze_detects_mutually_pinned_boxes():
+    env = SokobanEnv(make_level([
+        "######",
+        "# ## #",
+        "# $$@#",
+        "#    #",
+        "######",
+    ]))
+
+    assert env._two_box_freeze() == "two_box_freeze:2,2;2,3"
+
+
+def test_two_box_freeze_ignores_adjacent_boxes_with_escape_push():
+    env = SokobanEnv(make_level([
+        "######",
+        "#    #",
+        "# $$@#",
+        "#    #",
+        "######",
+    ]))
+
+    assert env.is_deadlocked() == (False, None)
+    assert env._two_box_freeze() is None

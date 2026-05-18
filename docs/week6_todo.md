@@ -2,6 +2,8 @@
 
 This document summarizes what is already complete for the first checkpoint and what still needs to be done before the project has a complete evaluation package.
 
+Week 7 status is now summarized in `docs/week7_update.md`. The branch currently uses the `full_path_v2` prompt again, with an optional verifier-guided repair loop available through `--max_repair_attempts`.
+
 ## Current State
 
 The evaluation framework is mostly in place, but the project still needs enough experimental material and actual evaluation data.
@@ -33,21 +35,14 @@ Already completed:
 
 ### 1. Expand the Level Suite
 
-The current `levels/v2_pilot.json` has only:
+The current `levels/v2_pilot.json` has:
 
-- 2 train levels
-- 1 eval level
+- 12 train levels
+- 12 eval levels
 
-This is enough to test the pipeline, but not enough for meaningful agent comparison.
+This is enough for a stronger pilot comparison than the original checkpoint, while still small enough for low-cost LLM runs.
 
-Recommended target:
-
-```text
-train: 6-8 levels
-eval: 6-8 levels
-```
-
-The level suite should cover tags such as:
+The suite covers tags such as:
 
 ```text
 easy_simple_push
@@ -57,21 +52,17 @@ narrow_corridor
 requires_repositioning
 two_box_basic
 multi_box_optional
+boxoban_medium
 ```
 
-Each level should include:
+Each level should include at minimum:
 
 ```json
 "split": "train or eval",
-"tags": ["..."],
-"optimal_steps": 4
+"tags": ["..."]
 ```
 
-Ideally, each level should also include:
-
-```json
-"reference_solution": ["Right", "Down"]
-```
+Reference solutions are no longer required or validated. Some older calibration levels still include `optimal_steps` and historical `reference_solution` metadata, while imported Boxoban medium levels intentionally omit both.
 
 ### 2. Build Enough Memory Data
 
@@ -130,43 +121,32 @@ average_success_steps
 invalid_move_rate
 ```
 
-### 4. Improve Deadlock Detection Later
+### 4. Improve Deadlock Detection
 
-The current deadlock detector mainly catches:
+The original Week 6 detector mainly caught:
 
 ```text
 box in a non-target corner
 ```
 
-This is acceptable for the Week 6 checkpoint because it is automatic and tested.
+On branch `full_path_kerui`, this has been upgraded with conservative local checks:
 
-Later, we may want to add more Sokoban deadlock patterns:
+- box against a wall segment with no target and no exit away from the wall
+- 2x2 wall/box freeze pattern
+- conservative two-box freeze
 
-- box against a wall with no target on that wall
-- two boxes stuck together
-- frozen box pattern
-- tunnel trap
+We intentionally do not add static dead-square detection on this branch.
 
-This is a later improvement, not a blocker for the first checkpoint.
+Later possible work:
 
-### 5. Make Solution Efficiency More Reliable
+- narrow tunnel/corridor trap
+- multi-box recursive freeze
 
-Right now, `optimal_steps` is manually written in the level file.
+### 5. Treat Solution Efficiency As Optional
 
-This works for an initial evaluation, but a stronger version would add:
+Some older calibration levels have manually written `optimal_steps`, but newly imported Boxoban medium levels do not.
 
-```json
-"reference_solution": ["Right", "Down"]
-```
-
-Then automatically check:
-
-```text
-len(reference_solution) == optimal_steps
-reference_solution actually solves the level
-```
-
-This would make solution efficiency more trustworthy.
+Primary evaluation should rely on solve rate and failure-type rates. Efficiency metrics remain opportunistic and are computed only when `optimal_steps` exists.
 
 ### 6. Create a Clear Week 6 Checkpoint Artifact
 
@@ -193,16 +173,12 @@ Since `results/` is ignored, it is better to include key numbers in a markdown s
 
 ## Recommended Next Steps
 
-1. Expand the level suite to around 12 levels:
-   - 6 train
-   - 6 eval
-2. Add `reference_solution` and automatic validation for levels.
-3. Run local rule-based evaluation sanity checks without API calls.
-4. Generate an evaluation summary using `evaluate_results.py`.
-5. Write a Week 6 checkpoint summary document.
-6. Only after those pass, run a real LLM smoke test.
-7. Then build memory banks.
-8. Finally run the three-agent comparison:
+1. Run local rule-based evaluation sanity checks without API calls.
+2. Generate an evaluation summary using `evaluate_results.py`.
+3. Write or refresh the checkpoint summary document.
+4. Only after those pass, run a real LLM smoke test.
+5. Then build memory banks.
+6. Finally run the three-agent comparison:
 
 ```text
 NoMemoryAgent vs RawTrajectoryMemoryAgent vs ReflectionHeuristicAgent

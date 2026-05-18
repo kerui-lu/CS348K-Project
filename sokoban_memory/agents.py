@@ -9,18 +9,18 @@ from typing import Any
 
 from sokoban_memory.llm_cache import LLMResponseCache, text_hash
 from sokoban_memory.memory import HeuristicMemory, MemoryRenderConfig, RawTrajectoryMemory
-from sokoban_memory.prompts import render_one_step_prompt
+from sokoban_memory.prompts import render_full_path_prompt
 from sokoban_memory.types import Action
 
 DEFAULT_LLM_MODEL = "gpt-5-nano"
 DEFAULT_API_KEY_ENV = "OPENAI_API_KEY"
 DEFAULT_TEMPERATURE = 0.0
-DEFAULT_MAX_OUTPUT_TOKENS = 8
+DEFAULT_MAX_OUTPUT_TOKENS = 4096
 DEFAULT_CACHE_NAMESPACE = "main"
 PLACEHOLDER_OPENAI_API_KEY = "PLACEHOLDER_OPENAI_API_KEY"
 DEFAULT_DOTENV_PATH = Path(__file__).resolve().parents[1] / ".env"
-PROMPT_VERSION = "one_step_v2"
-POLICY_MODE_ONE_STEP = "one_step"
+PROMPT_VERSION = "full_path_v2"
+POLICY_MODE_FULL_PATH = "full_path"
 POLICY_MODE_NON_LLM = "non_llm"
 
 
@@ -77,10 +77,10 @@ class RuleBasedAgent(BaseAgent):
         return self.rng.choice(legal_actions)
 
 
-class OneStepLLMAgent(BaseAgent):
-    agent_type = "one_step_llm"
+class FullPathLLMAgent(BaseAgent):
+    agent_type = "full_path_llm"
     memory_condition = "none"
-    policy_mode = POLICY_MODE_ONE_STEP
+    policy_mode = POLICY_MODE_FULL_PATH
     prompt_version = PROMPT_VERSION
 
     def __init__(
@@ -112,6 +112,9 @@ class OneStepLLMAgent(BaseAgent):
         self.client = client if client is not None else self._make_openai_client(api_key_env)
 
     def select_action(self, state_text: str, context: dict[str, Any]) -> str:
+        return self.select_plan(state_text, context)
+
+    def select_plan(self, state_text: str, context: dict[str, Any]) -> str:
         prompt, memory_text, non_memory_template = self._build_prompt(state_text, context)
         prompt_hash = text_hash(prompt)
         request = {
@@ -123,6 +126,9 @@ class OneStepLLMAgent(BaseAgent):
             "policy_mode": self.policy_mode,
             "cache_namespace": self.cache_namespace,
         }
+        reasoning = reasoning_config(self.model)
+        if reasoning is not None:
+            request["reasoning"] = reasoning
         cache_key = self.cache.make_key(request)
         cached = self.cache.get(cache_key)
         if cached is not None:
@@ -145,10 +151,12 @@ class OneStepLLMAgent(BaseAgent):
             )
 
         response = self.client.responses.create(
-            model=self.model,
-            input=prompt,
-            temperature=self.temperature,
-            max_output_tokens=self.max_output_tokens,
+            **responses_create_kwargs(
+                model=self.model,
+                input_text=prompt,
+                temperature=self.temperature,
+                max_output_tokens=self.max_output_tokens,
+            )
         )
         self.llm_call_count += 1
         self.cache_misses += 1
@@ -181,18 +189,17 @@ class OneStepLLMAgent(BaseAgent):
         return self.memory_config.to_dict()
 
     def _build_prompt(self, state_text: str, context: dict[str, Any]) -> tuple[str, str, str]:
-        legal_actions = context.get("legal_actions", [])
-        push_actions = context.get("push_actions", [])
         memory_text = self._render_memory()
-        rendered = render_one_step_prompt(
+        rendered = render_full_path_prompt(
             policy_mode=self.policy_mode,
             prompt_version=self.prompt_version,
             rules=context.get("rules", ""),
             state_text=state_text,
-            legal_actions=legal_actions,
-            push_actions=push_actions,
+            state_summary=context.get("state_summary", {}),
+            max_steps=int(context.get("max_steps", 0)),
             memory_condition=self.memory_condition,
             memory_text=memory_text,
+            repair_feedback=context.get("repair_feedback"),
         )
         return rendered.prompt, rendered.memory_text, rendered.non_memory_template
 
@@ -263,7 +270,7 @@ class OneStepLLMAgent(BaseAgent):
         return _jsonable(usage) if usage is not None else {}
 
 
-class NoMemoryAgent(OneStepLLMAgent):
+class NoMemoryAgent(FullPathLLMAgent):
     agent_type = "no_memory"
     memory_condition = "none"
 
@@ -271,12 +278,12 @@ class NoMemoryAgent(OneStepLLMAgent):
         super().__init__(memory_store=None, **kwargs)
 
 
-class RawTrajectoryMemoryAgent(OneStepLLMAgent):
+class RawTrajectoryMemoryAgent(FullPathLLMAgent):
     agent_type = "raw_trajectory_memory"
     memory_condition = "raw_trajectory_memory"
 
 
-class ReflectionHeuristicAgent(OneStepLLMAgent):
+class ReflectionHeuristicAgent(FullPathLLMAgent):
     agent_type = "reflection_heuristic"
     memory_condition = "reflection_heuristic"
 
@@ -313,6 +320,32 @@ def _jsonable(value: Any) -> Any:
     if hasattr(value, "__dict__"):
         return _jsonable(vars(value))
     return str(value)
+
+
+def responses_create_kwargs(
+    *,
+    model: str,
+    input_text: str,
+    temperature: float,
+    max_output_tokens: int,
+) -> dict[str, Any]:
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "input": input_text,
+        "max_output_tokens": max_output_tokens,
+    }
+    if not model.startswith("gpt-5"):
+        kwargs["temperature"] = temperature
+    reasoning = reasoning_config(model)
+    if reasoning is not None:
+        kwargs["reasoning"] = reasoning
+    return kwargs
+
+
+def reasoning_config(model: str) -> dict[str, str] | None:
+    if model.startswith("gpt-5"):
+        return {"effort": "minimal"}
+    return None
 
 
 def make_agent(

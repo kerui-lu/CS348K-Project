@@ -1,4 +1,10 @@
-# Week 6 Checkpoint (Evaluation Focus)
+# Week 6 Checkpoint Results (Historical One-Step Run)
+
+This document records the historical Week 6 one-step evaluation from `main`.
+On branch `full_path_kerui`, those checked-in memory/result artifacts are obsolete because LLM agents now use full-path push-intent planning and must be rerun before making performance claims.
+Post-checkpoint branch work has also upgraded deadlock detection with conservative wall/no-target/no-exit, 2x2 freeze, and two-box freeze checks. Static dead-square detection is intentionally not included.
+
+Week 7 status is tracked in `docs/week7_update.md`. The current branch keeps the full-path executor and optional repair loop, but reverts the active prompt to `full_path_v2` after later prompt variants failed to improve valid-plan rate.
 
 This checkpoint documents the current evaluation status for the Sokoban memory project.  
 Scope is evaluation pipeline quality and controlled comparison setup, not final model performance.
@@ -15,7 +21,7 @@ Scope is evaluation pipeline quality and controlled comparison setup, not final 
 
 ## Step Status (Week 6 TODO)
 
-- Step 1 (expand level suite): **done** (`levels/v2_pilot.json` includes 6 train + 6 eval levels)
+- Step 1 (expand level suite): **done** historically with 6 train + 6 eval levels; branch `full_path_kerui` now expands `levels/v2_pilot.json` to 12 train + 12 eval levels with imported Boxoban medium puzzles.
 - Step 2 (build memory data): **done**
   - `memory_banks/raw_failures.json` (16 failure records from train runs)
   - `memory_banks/reflection_heuristics.json` (8 generated heuristics from the same raw failures)
@@ -87,10 +93,10 @@ Overall note: no agent solved eval levels in this checkpoint run, so this snapsh
 
 ## Deferred Work (By Request)
 
-The following were intentionally skipped for now and remain open:
+The following were intentionally skipped in the historical checkpoint run:
 
-- Step 4: richer deadlock pattern detection beyond current corner-based checks
-- Step 5: stronger solution-efficiency reliability checks tied to validated reference solutions
+- Step 4: richer deadlock pattern detection beyond current corner-based checks; implemented post-checkpoint on branch `full_path_kerui` without static dead-square detection
+- Step 5: stronger solution-efficiency reliability checks; current branch no longer requires or validates reference solutions, so efficiency is reported only where `optimal_steps` is present.
 
 ## Checkpoint Conclusion
 

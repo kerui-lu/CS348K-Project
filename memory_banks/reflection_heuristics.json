@@ -1,39 +1,42 @@
 {
   "schema_version": "reflection_heuristic_memory_v2",
   "source_metadata": {
-    "source_raw_memory_hash": "d6f04107c0f45751bafbc4f2746a51f9850a5350f2211670767673fa1412ee3f",
-    "reflection_model": "gpt-4.1-mini",
+    "source_raw_memory_hash": "99d1438549b1560619f5c5296a411295adcd085b7ed5c1f560134746ddcf12c5",
+    "reflection_model": "gpt-5-nano",
     "reflection_prompt_version": "reflection_v2",
-    "generated_at_utc": "2026-05-06T20:53:19Z",
+    "generated_at_utc": "2026-05-18T07:58:06Z",
     "source_train_level_ids": [
       "simple_001",
       "corner_trap_001",
       "two_box_basic_001",
       "boxoban_train_000_000",
       "boxoban_train_000_002",
-      "boxoban_train_000_004"
+      "boxoban_train_000_004",
+      "boxoban_medium_train_000_000",
+      "boxoban_medium_train_000_001",
+      "boxoban_medium_train_000_002",
+      "boxoban_medium_train_000_003",
+      "boxoban_medium_train_000_004",
+      "boxoban_medium_train_000_005"
     ],
     "temperature": 0.0,
-    "max_output_tokens": 256,
-    "cache_namespace": "memory_refresh_2",
-    "prompt_hash": "2be96950bd11b7e90189c142cf534dacbad065f454dafafe1139837c7712e611",
+    "max_output_tokens": 512,
+    "cache_namespace": "full_path_pilot",
+    "prompt_hash": "31d9beae99f2add2f4de6e738c200a6c0dda8e7f24531c390e1c6e68cd4b26dd",
     "cache_hit": false,
-    "cache_key": "e26d8a259864d79f7beebfc691d0742ebc3c12e21170f94dc7e8faa08c747459",
+    "cache_key": "23e9a3df11369c0e5ddf3ec5f7ce4451b4f292dfb2754ebfff0d040f259f6ee4",
     "memory_caps": {
       "max_memory_items": 3,
       "max_steps_per_memory": 6,
       "max_memory_chars": 4000
     }
   },
-  "memory_item_count": 8,
+  "memory_item_count": 5,
   "heuristics": [
-    "Avoid repeated back-and-forth moves that do not push boxes, as they waste steps and lead to timeouts.",
-    "Do not move the player away from boxes or goals without pushing a box, especially when close to a box or goal.",
-    "Prioritize pushing boxes towards goals rather than moving around without progress.",
-    "Avoid getting stuck in loops of moving up and down or left and right without changing box positions.",
-    "When multiple boxes are present, avoid oscillating between positions without pushing any box closer to a goal.",
-    "Do not push boxes into corners or against walls unless the box can be placed on a goal, to prevent deadlocks.",
-    "Plan moves to ensure each push advances a box towards a goal, avoiding unnecessary player movements.",
-    "Avoid wasting moves when no box is pushed; every move should contribute to solving the puzzle or repositioning boxes effectively."
+    "Avoid planning a push when the box is adjacent to a corner or wall that creates an immediate deadlock after the push; ensure a clear, unobstructed path exists for the box to move to a non-blocking area before attempting a push.",
+    "If a push requires the player to take a long detour around obstacles (long path_to_push) that increases the chance of intermediate deadlocks, prefer alternative pushes that minimize required walking distance to the push position.",
+    "Do not sequence pushes that result in the target box occupying a corner or encapsulated area with walls or boxes on two sides; prefer pushes that leave the box with at least one free perpendicular escape route.",
+    "When multiple boxes are in play, confirm that the destination cell for the moving box is currently free and will not trap another box immediately after the move; avoid synchronized pushes that create cascading blockages.",
+    "Limit push attempts to situations where the required_player_position is reachable without crossing through a space that is simultaneously needed to reposition other boxes; avoid blocking the agent\u2019s own path during the approach to a push."
   ]
 }

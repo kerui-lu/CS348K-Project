@@ -1,11 +1,12 @@
 import os
 
 from run_experiment import build_parser
-from sokoban_memory.action_parser import parse_action
 from sokoban_memory.agents import (
     DEFAULT_LLM_MODEL,
+    DEFAULT_MAX_OUTPUT_TOKENS,
     LLMAgent,
     NoMemoryAgent,
+    PROMPT_VERSION,
     RawTrajectoryMemoryAgent,
     ReflectionHeuristicAgent,
     _load_dotenv,
@@ -28,40 +29,42 @@ class FakeClient:
         self.responses = FakeResponses(output_text)
 
 
-def test_llm_agent_returns_response_text_and_tracks_call_count():
-    client = FakeClient("Right")
+def test_llm_agent_returns_full_path_response_text_and_tracks_call_count():
+    client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
     agent = LLMAgent(client=client)
 
-    action = agent.select_action(
+    plan = agent.select_plan(
         "#####\n#@$.#\n#####",
         {
             "rules": "Move Up/Down/Left/Right.",
-            "legal_actions": ["Right"],
-            "push_actions": ["Right"],
+            "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+            "max_steps": 20,
             "memory": None,
         },
     )
 
-    assert action == "Right"
+    assert plan == '[{"box": [1, 2], "push": "Right"}]'
     assert agent.llm_call_count == 1
     assert client.responses.calls[0]["model"] == DEFAULT_LLM_MODEL
     assert "Current board" in client.responses.calls[0]["input"]
+    assert f"Prompt version: {PROMPT_VERSION}" in client.responses.calls[0]["input"]
+    assert "Return JSON only" in client.responses.calls[0]["input"]
 
 
-def test_llm_agent_natural_language_output_still_uses_existing_parser():
-    agent = LLMAgent(client=FakeClient("I choose Up"))
+def test_llm_agent_select_action_aliases_full_path_plan():
+    agent = LLMAgent(client=FakeClient('[{"box": [1, 2], "push": "Right"}]'))
 
-    raw_action = agent.select_action(
+    raw_plan = agent.select_action(
         "#####\n# @ #\n#####",
         {
             "rules": "Move Up/Down/Left/Right.",
-            "legal_actions": ["Up"],
-            "push_actions": [],
+            "state_summary": {"player": [1, 2], "boxes": [], "targets": []},
+            "max_steps": 20,
             "memory": None,
         },
     )
 
-    assert parse_action(raw_action) == "Up"
+    assert raw_plan == '[{"box": [1, 2], "push": "Right"}]'
 
 
 def test_cli_accepts_llm_model_and_api_key_env_args():
@@ -126,9 +129,9 @@ def test_cli_defaults_to_low_cost_llm_model():
 
 
 def test_v2_agent_prompts_differ_only_by_memory_condition():
-    no_memory_client = FakeClient("Right")
-    raw_client = FakeClient("Right")
-    reflection_client = FakeClient("Right")
+    no_memory_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    raw_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    reflection_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
     raw_memory = RawTrajectoryMemory(
         episodes=[
             {
@@ -136,6 +139,8 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
                 "status": "deadlock",
                 "step_count": 1,
                 "total_reward": -5.1,
+                "planned_pushes": [{"box": [1, 2], "push": "Right"}],
+                "expanded_actions": ["Right"],
                 "steps": [
                     {
                         "step": 0,
@@ -157,8 +162,8 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     heuristic_memory = HeuristicMemory(["Do not push a box into a non-target corner."])
     context = {
         "rules": "Move Up/Down/Left/Right.",
-        "legal_actions": ["Right"],
-        "push_actions": ["Right"],
+        "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+        "max_steps": 20,
     }
 
     NoMemoryAgent(client=no_memory_client).select_action("#@$.#", context)
@@ -173,8 +178,16 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     reflection_prompt = reflection_client.responses.calls[0]["input"]
     assert "Condition: none" in no_memory_prompt
     assert "No past experience is available" in no_memory_prompt
-    assert "Decision checklist (apply for this single move):" in no_memory_prompt
-    assert "Progress: prefer pushes that move a box closer to a target." in no_memory_prompt
+    assert "Planning checklist:" in no_memory_prompt
+    assert "until every box is on a target" in no_memory_prompt
+    assert "Do not stop after one push" in no_memory_prompt
+    assert "use the box's updated coordinate" in no_memory_prompt
+    assert '"box": [row, col]' in no_memory_prompt
+    assert '"box_id": 0' not in no_memory_prompt
+    assert '"player_after": [row, col]' not in no_memory_prompt
+    assert '"box_after": [row, col]' not in no_memory_prompt
+    assert "Return JSON only" in no_memory_prompt
+    assert '{"box": [4, 4], "push": "Right"}' in no_memory_prompt
     assert "Prior trajectory records" in raw_prompt
     assert "executed_action: Right" in raw_prompt
     assert "raw_action" not in raw_prompt.split("Memory context:", 1)[1]
@@ -182,13 +195,31 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert "Reflection heuristics distilled" in reflection_prompt
     assert "Do not push a box into a non-target corner." in reflection_prompt
     assert "state:" not in reflection_prompt.split("Memory context:", 1)[1]
-    assert no_memory_client.responses.calls[0]["temperature"] == 0.0
-    assert no_memory_client.responses.calls[0]["max_output_tokens"] == 8
+    assert "temperature" not in no_memory_client.responses.calls[0]
+    assert no_memory_client.responses.calls[0]["reasoning"] == {"effort": "minimal"}
+    assert no_memory_client.responses.calls[0]["max_output_tokens"] == DEFAULT_MAX_OUTPUT_TOKENS
+
+
+def test_non_gpt5_llm_agent_sends_temperature():
+    client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    agent = LLMAgent(client=client, model="gpt-4.1-mini", temperature=0.2)
+
+    agent.select_plan(
+        "#####\n#@$.#\n#####",
+        {
+            "rules": "Move Up/Down/Left/Right.",
+            "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+            "max_steps": 20,
+            "memory": None,
+        },
+    )
+
+    assert client.responses.calls[0]["temperature"] == 0.2
 
 
 def test_v2_prompts_share_non_memory_template():
-    raw_client = FakeClient("Right")
-    reflection_client = FakeClient("Right")
+    raw_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    reflection_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
     raw_memory = RawTrajectoryMemory(
         episodes=[
             {
@@ -201,7 +232,11 @@ def test_v2_prompts_share_non_memory_template():
         ]
     )
     heuristic_memory = HeuristicMemory(["Do not push a box into a non-target corner."])
-    context = {"rules": "Move.", "legal_actions": ["Right"], "push_actions": ["Right"]}
+    context = {
+        "rules": "Move.",
+        "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+        "max_steps": 20,
+    }
 
     raw_agent = RawTrajectoryMemoryAgent(memory_store=raw_memory, client=raw_client)
     reflection_agent = ReflectionHeuristicAgent(memory_store=heuristic_memory, client=reflection_client)

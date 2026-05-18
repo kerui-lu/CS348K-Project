@@ -1,13 +1,13 @@
 {
-  "schema_version": "raw_trajectory_memory_v2",
+  "schema_version": "full_path_raw_trajectory_memory_v1",
   "source_metadata": {
     "builder": "build_memory_bank.py",
     "source_agent": "no_memory",
-    "policy_mode": "one_step",
-    "model": "gpt-4.1-mini",
+    "policy_mode": "full_path",
+    "model": "gpt-5-nano",
     "temperature": 0.0,
-    "max_output_tokens": 256,
-    "cache_namespace": "memory_refresh_2",
+    "max_output_tokens": 512,
+    "cache_namespace": "full_path_pilot",
     "levels": "levels/v2_pilot.json",
     "source_train_level_ids": [
       "simple_001",
@@ -15,11 +15,17 @@
       "two_box_basic_001",
       "boxoban_train_000_000",
       "boxoban_train_000_002",
-      "boxoban_train_000_004"
+      "boxoban_train_000_004",
+      "boxoban_medium_train_000_000",
+      "boxoban_medium_train_000_001",
+      "boxoban_medium_train_000_002",
+      "boxoban_medium_train_000_003",
+      "boxoban_medium_train_000_004",
+      "boxoban_medium_train_000_005"
     ],
     "seed": 42,
-    "requested_episodes": 20,
-    "completed_episodes": 20,
+    "requested_episodes": 12,
+    "completed_episodes": 12,
     "max_steps": 100,
     "memory_caps": {
       "max_memory_items": 3,
@@ -27,56 +33,80 @@
       "max_memory_chars": 4000
     }
   },
-  "memory_item_count": 16,
+  "memory_item_count": 11,
   "episodes": [
     {
       "level_id": "corner_trap_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
+      "status": "plan_exhausted",
+      "step_count": 3,
+      "total_reward": -0.30000000000000004,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[{\"box\": [3, 2], \"push\": \"Right\"}]",
+      "planned_pushes": [
+        {
+          "box": [
+            3,
+            2
+          ],
+          "push": "Right"
+        }
+      ],
+      "expanded_actions": [
+        "Left",
+        "Down",
+        "Right"
+      ],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              3,
+              2
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 2
+          },
+          "boxes_before": [
+            {
+              "row": 3,
+              "col": 2
+            }
+          ],
+          "required_player_position": {
+            "row": 3,
+            "col": 1
+          },
+          "box_destination": {
+            "row": 3,
+            "col": 3
+          },
+          "path_to_push": [
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 3,
+            "col": 2
+          },
+          "boxes_after": [
+            {
+              "row": 3,
+              "col": 3
+            }
+          ]
+        }
+      ],
+      "failure_reason": "plan_exhausted",
+      "failure_push_index": null,
       "steps": [
         {
-          "step": 94,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 95,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
-          "raw_action": "Right",
-          "parsed_action": "Right",
-          "executed_action": "Right",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 96,
-          "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######"
-        },
-        {
-          "step": 97,
-          "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+          "step": 0,
+          "state": "#######\n#     #\n# @   #\n# $   #\n#    .#\n#     #\n#######",
           "raw_action": "Left",
           "parsed_action": "Left",
           "executed_action": "Left",
@@ -85,44 +115,203 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              3,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "#######\n#     #\n#@    #\n# $   #\n#    .#\n#     #\n#######"
         },
         {
-          "step": 98,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
+          "step": 1,
+          "state": "#######\n#     #\n#@    #\n# $   #\n#    .#\n#     #\n#######",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
           "reward": -0.1,
           "invalid_reason": null,
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              3,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "#######\n#     #\n#     #\n#@$   #\n#    .#\n#     #\n#######"
         },
         {
-          "step": 99,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+          "step": 2,
+          "state": "#######\n#     #\n#     #\n#@$   #\n#    .#\n#     #\n#######",
           "raw_action": "Right",
           "parsed_action": "Right",
           "executed_action": "Right",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": false,
+          "pushed_box": true,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              3,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "#######\n#     #\n#     #\n# @$  #\n#    .#\n#     #\n#######"
         }
       ]
     },
     {
       "level_id": "two_box_basic_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
+      "status": "plan_exhausted",
+      "step_count": 6,
+      "total_reward": 0.4,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[{\"box\":[2,3],\"push\":\"Down\"},{\"box\":[3,3],\"push\":\"Right\"}]",
+      "planned_pushes": [
+        {
+          "box": [
+            2,
+            3
+          ],
+          "push": "Down"
+        },
+        {
+          "box": [
+            3,
+            3
+          ],
+          "push": "Right"
+        }
+      ],
+      "expanded_actions": [
+        "Up",
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Right"
+      ],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Down"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 2
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 4
+            }
+          ],
+          "required_player_position": {
+            "row": 1,
+            "col": 3
+          },
+          "box_destination": {
+            "row": 3,
+            "col": 3
+          },
+          "path_to_push": [
+            "Up",
+            "Right"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 2,
+            "col": 3
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            }
+          ]
+        },
+        {
+          "push_index": 1,
+          "intent": {
+            "box": [
+              3,
+              3
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 3
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 3,
+            "col": 2
+          },
+          "box_destination": {
+            "row": 3,
+            "col": 4
+          },
+          "path_to_push": [
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 3,
+            "col": 3
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 4
+            }
+          ]
+        }
+      ],
+      "failure_reason": "plan_exhausted",
+      "failure_push_index": null,
       "steps": [
         {
-          "step": 94,
+          "step": 0,
           "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
           "raw_action": "Up",
           "parsed_action": "Up",
@@ -132,11 +321,86 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Down"
+          },
           "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
         },
         {
-          "step": 95,
+          "step": 1,
           "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Down"
+          },
+          "next_state": "########\n#  @   #\n#  $$  #\n#  ..  #\n#      #\n########"
+        },
+        {
+          "step": 2,
+          "state": "########\n#  @   #\n#  $$  #\n#  ..  #\n#      #\n########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": 0.9,
+          "invalid_reason": null,
+          "pushed_box": true,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Down"
+          },
+          "next_state": "########\n#      #\n#  @$  #\n#  *.  #\n#      #\n########"
+        },
+        {
+          "step": 3,
+          "state": "########\n#      #\n#  @$  #\n#  *.  #\n#      #\n########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              3,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "########\n#      #\n# @ $  #\n#  *.  #\n#      #\n########"
+        },
+        {
+          "step": 4,
+          "state": "########\n#      #\n# @ $  #\n#  *.  #\n#      #\n########",
           "raw_action": "Down",
           "parsed_action": "Down",
           "executed_action": "Down",
@@ -145,955 +409,2201 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              3,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "########\n#      #\n#   $  #\n# @*.  #\n#      #\n########"
         },
         {
-          "step": 96,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
+          "step": 5,
+          "state": "########\n#      #\n#   $  #\n# @*.  #\n#      #\n########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": false,
+          "pushed_box": true,
           "deadlocked": false,
           "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 97,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 98,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 99,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "semantic_phase": "push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              3,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "########\n#      #\n#   $  #\n#  +*  #\n#      #\n########"
         }
       ]
     },
     {
       "level_id": "boxoban_train_000_000",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
+      "status": "invalid_plan",
+      "step_count": 0,
+      "total_reward": 0.0,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [2, 2], \"push\": \"Right\"},\n  {\"box\": [2, 1], \"push\": \"Down\"},\n  {\"box\": [4, 2], \"push\": \"Up\"},\n  {\"box\": [4, 1], \"push\": \"Down\"},\n  {\"box\": [7, 1], \"push\": \"Right\"},\n  {\"box\": [7, 3], \"push\": \"Left\"},\n  {\"box\": [8, 2], \"push\": \"Up\"}\n]",
+      "planned_pushes": [
         {
-          "step": 94,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            2,
+            2
+          ],
+          "push": "Right"
         },
         {
-          "step": 95,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            2,
+            1
+          ],
+          "push": "Down"
         },
         {
-          "step": 96,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            4,
+            2
+          ],
+          "push": "Up"
         },
         {
-          "step": 97,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            4,
+            1
+          ],
+          "push": "Down"
         },
         {
-          "step": 98,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            7,
+            1
+          ],
+          "push": "Right"
         },
         {
-          "step": 99,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "box": [
+            7,
+            3
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            8,
+            2
+          ],
+          "push": "Up"
         }
-      ]
+      ],
+      "expanded_actions": [],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 1,
+            "col": 1
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 6,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 1
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "box_destination_blocked_by_wall_or_boundary"
+        }
+      ],
+      "failure_reason": "box_destination_blocked_by_wall_or_boundary",
+      "failure_push_index": 0,
+      "steps": []
     },
     {
       "level_id": "boxoban_train_000_002",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
+      "status": "invalid_plan",
+      "step_count": 9,
+      "total_reward": -0.8999999999999999,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [5, 2], \"push\": \"Right\"},\n  {\"box\": [5, 4], \"push\": \"Right\"},\n  {\"box\": [4, 5], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Left\"},\n  {\"box\": [4, 5], \"push\": \"Up\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [3, 4], \"push\": \"Down\"}\n]",
+      "planned_pushes": [
+        {
+          "box": [
+            5,
+            2
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            5,
+            4
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            4,
+            5
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            5,
+            6
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            4,
+            5
+          ],
+          "push": "Up"
+        },
+        {
+          "box": [
+            5,
+            6
+          ],
+          "push": "Up"
+        },
+        {
+          "box": [
+            3,
+            4
+          ],
+          "push": "Down"
+        }
+      ],
+      "expanded_actions": [
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Right"
+      ],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 4,
+            "col": 6
+          },
+          "boxes_before": [
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 6
+            }
+          ],
+          "required_player_position": {
+            "row": 5,
+            "col": 1
+          },
+          "box_destination": {
+            "row": 5,
+            "col": 3
+          },
+          "path_to_push": [
+            "Up",
+            "Left",
+            "Left",
+            "Down",
+            "Left",
+            "Left",
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 5,
+            "col": 2
+          },
+          "boxes_after": [
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 6
+            }
+          ]
+        },
+        {
+          "push_index": 1,
+          "intent": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 5,
+            "col": 2
+          },
+          "boxes_before": [
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 6
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "required_push_position_blocked_by_box"
+        }
+      ],
+      "failure_reason": "required_push_position_blocked_by_box",
+      "failure_push_index": 1,
       "steps": [
         {
           "step": 0,
           "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $@ ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": true,
+          "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####. @  #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
         },
         {
           "step": 1,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########",
+          "state": "##########\n#####   ##\n#####   ##\n####. @  #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.@   #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 2,
+          "state": "##########\n#####   ##\n#####   ##\n####.@   #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####+    #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 3,
+          "state": "##########\n#####   ##\n#####   ##\n####+    #\n# .  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
           "raw_action": "Down",
           "parsed_action": "Down",
           "executed_action": "Down",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": true,
+          "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# . @$  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
         },
         {
-          "step": 2,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########",
+          "step": 4,
+          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# . @$  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .@ $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 5,
+          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .@ $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# +  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 6,
+          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# +  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n#@.  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 7,
+          "state": "##########\n#####   ##\n#####   ##\n####.    #\n#@.  $  ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
           "raw_action": "Down",
           "parsed_action": "Down",
           "executed_action": "Down",
-          "reward": -5.1,
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n#@$ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
+        },
+        {
+          "step": 8,
+          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n#@$ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
           "invalid_reason": null,
           "pushed_box": true,
-          "deadlocked": true,
+          "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   .   ##\n#####.@  #\n######$  #\n##########"
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# @$$ $ ##\n#   .   ##\n#####.   #\n######   #\n##########"
         }
       ]
     },
     {
       "level_id": "boxoban_train_000_004",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
+      "status": "invalid_plan",
+      "step_count": 9,
+      "total_reward": -0.8999999999999999,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n{\"box\": [2, 2], \"push\": \"Right\"},\n{\"box\": [3, 3], \"push\": \"Right\"},\n{\"box\": [6, 3], \"push\": \"Up\"},\n{\"box\": [4, 5], \"push\": \"Left\"},\n{\"box\": [4, 5], \"push\": \"Up\"}\n]",
+      "planned_pushes": [
+        {
+          "box": [
+            2,
+            2
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            3,
+            3
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            6,
+            3
+          ],
+          "push": "Up"
+        },
+        {
+          "box": [
+            4,
+            5
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            4,
+            5
+          ],
+          "push": "Up"
+        }
+      ],
+      "expanded_actions": [
+        "Right",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Right"
+      ],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 4,
+            "col": 3
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 2,
+            "col": 1
+          },
+          "box_destination": {
+            "row": 2,
+            "col": 3
+          },
+          "path_to_push": [
+            "Right",
+            "Up",
+            "Up",
+            "Up",
+            "Left",
+            "Left",
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 2,
+            "col": 2
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ]
+        },
+        {
+          "push_index": 1,
+          "intent": {
+            "box": [
+              3,
+              3
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 2
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "required_push_position_blocked_by_wall_or_boundary"
+        }
+      ],
+      "failure_reason": "required_push_position_blocked_by_wall_or_boundary",
+      "failure_push_index": 1,
       "steps": [
         {
           "step": 0,
           "state": "##########\n#   .  ###\n# $    ###\n###$   ###\n#  @ $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": true,
+          "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   .  ###\n# $    ###\n###$   ###\n#   @$.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
         },
         {
           "step": 1,
-          "state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "state": "##########\n#   .  ###\n# $    ###\n###$   ###\n#   @$.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
           "raw_action": "Up",
           "parsed_action": "Up",
           "executed_action": "Up",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": true,
+          "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   .  ###\n# $    ###\n###$@  ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
         },
         {
           "step": 2,
-          "state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "state": "##########\n#   .  ###\n# $    ###\n###$@  ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   .  ###\n# $ @  ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 3,
+          "state": "##########\n#   .  ###\n# $ @  ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   +  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 4,
+          "state": "##########\n#   +  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
           "raw_action": "Left",
           "parsed_action": "Left",
           "executed_action": "Left",
-          "reward": -5.1,
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#  @.  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 5,
+          "state": "##########\n#  @.  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n# @ .  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 6,
+          "state": "##########\n# @ .  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#@  .  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 7,
+          "state": "##########\n#@  .  ###\n# $    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   .  ###\n#@$    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+        },
+        {
+          "step": 8,
+          "state": "##########\n#   .  ###\n#@$    ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
           "invalid_reason": null,
           "pushed_box": true,
-          "deadlocked": true,
+          "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#  $.  ###\n#$@    ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n#   .  ###\n# @$   ###\n###$   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
         }
       ]
     },
     {
-      "level_id": "corner_trap_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
+      "level_id": "boxoban_medium_train_000_000",
+      "status": "invalid_plan",
+      "step_count": 18,
+      "total_reward": -1.8000000000000005,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [5, 5], \"push\": \"Left\"},\n  {\"box\": [5, 7], \"push\": \"Left\"},\n  {\"box\": [7, 6], \"push\": \"Right\"},\n  {\"box\": [7, 7], \"push\": \"Right\"}\n]",
+      "planned_pushes": [
         {
-          "step": 94,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
+          "box": [
+            5,
+            5
+          ],
+          "push": "Left"
         },
         {
-          "step": 95,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
-          "raw_action": "Right",
-          "parsed_action": "Right",
-          "executed_action": "Right",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "box": [
+            5,
+            7
+          ],
+          "push": "Left"
         },
         {
-          "step": 96,
-          "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######"
+          "box": [
+            7,
+            6
+          ],
+          "push": "Right"
         },
         {
-          "step": 97,
-          "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
-          "raw_action": "Left",
-          "parsed_action": "Left",
-          "executed_action": "Left",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######"
-        },
-        {
-          "step": 98,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 99,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
-          "raw_action": "Right",
-          "parsed_action": "Right",
-          "executed_action": "Right",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "box": [
+            7,
+            7
+          ],
+          "push": "Right"
         }
-      ]
-    },
-    {
-      "level_id": "two_box_basic_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
+      ],
+      "expanded_actions": [
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Up",
+        "Up",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Left",
+        "Up",
+        "Right",
+        "Right",
+        "Right",
+        "Down",
+        "Left"
+      ],
+      "push_execution_log": [
         {
-          "step": 94,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
+          "push_index": 0,
+          "intent": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 8,
+            "col": 4
+          },
+          "boxes_before": [
+            {
+              "row": 5,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 7
+            },
+            {
+              "row": 7,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 7
+            }
+          ],
+          "required_player_position": {
+            "row": 5,
+            "col": 6
+          },
+          "box_destination": {
+            "row": 5,
+            "col": 4
+          },
+          "path_to_push": [
+            "Right",
+            "Right",
+            "Right",
+            "Right",
+            "Up",
+            "Up",
+            "Up",
+            "Up",
+            "Left",
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 5,
+            "col": 5
+          },
+          "boxes_after": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 7
+            },
+            {
+              "row": 7,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 7
+            }
+          ]
         },
         {
-          "step": 95,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "push_index": 1,
+          "intent": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 5,
+            "col": 5
+          },
+          "boxes_before": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 7
+            },
+            {
+              "row": 7,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 7
+            }
+          ],
+          "required_player_position": {
+            "row": 5,
+            "col": 8
+          },
+          "box_destination": {
+            "row": 5,
+            "col": 6
+          },
+          "path_to_push": [
+            "Up",
+            "Right",
+            "Right",
+            "Right",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 5,
+            "col": 7
+          },
+          "boxes_after": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 7
+            }
+          ]
         },
         {
-          "step": 96,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 97,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 98,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 99,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "push_index": 2,
+          "intent": {
+            "box": [
+              7,
+              6
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 5,
+            "col": 7
+          },
+          "boxes_before": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 7
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "box_destination_blocked_by_box"
         }
-      ]
-    },
-    {
-      "level_id": "boxoban_train_000_000",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
-        {
-          "step": 94,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 95,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 96,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 97,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 98,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 99,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        }
-      ]
-    },
-    {
-      "level_id": "boxoban_train_000_002",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
+      ],
+      "failure_reason": "box_destination_blocked_by_box",
+      "failure_push_index": 2,
       "steps": [
         {
           "step": 0,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $@ ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n### @    #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": true,
+          "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###  @   #\n##########"
         },
         {
           "step": 1,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########",
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###  @   #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###   @  #\n##########"
+        },
+        {
+          "step": 2,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###   @  #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###    @ #\n##########"
+        },
+        {
+          "step": 3,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###    @ #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###     @#\n##########"
+        },
+        {
+          "step": 4,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###     @#\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$+#\n###      #\n##########"
+        },
+        {
+          "step": 5,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# #####  #\n##### $$+#\n###      #\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# ##### @#\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 6,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $ #\n# ##### @#\n##### $$.#\n###      #\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $@#\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 7,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $ $@#\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     . @#\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 8,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     . @#\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .@ #\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 9,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .@ #\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     +  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 10,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     +  #\n# #  $ $ #\n# #####  #\n##### $$.#\n###      #\n##########",
           "raw_action": "Down",
           "parsed_action": "Down",
           "executed_action": "Down",
           "reward": -0.1,
           "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $@$ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 11,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# #  $@$ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
           "pushed_box": true,
           "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########"
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              5,
+              5
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# # $@ $ #\n# #####  #\n##### $$.#\n###      #\n##########"
         },
         {
-          "step": 2,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########",
+          "step": 12,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# # $@ $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#    @.  #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 13,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#    @.  #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     +  #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 14,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     +  #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .@ #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 15,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .@ #\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     . @#\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 16,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     . @#\n# # $  $ #\n# #####  #\n##### $$.#\n###      #\n##########",
           "raw_action": "Down",
           "parsed_action": "Down",
           "executed_action": "Down",
-          "reward": -5.1,
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# # $  $@#\n# #####  #\n##### $$.#\n###      #\n##########"
+        },
+        {
+          "step": 17,
+          "state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# # $  $@#\n# #####  #\n##### $$.#\n###      #\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
           "invalid_reason": null,
           "pushed_box": true,
-          "deadlocked": true,
+          "deadlocked": false,
           "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   .   ##\n#####.@  #\n######$  #\n##########"
+          "semantic_phase": "push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              5,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##########\n#######  #\n### .# #.#\n#     .  #\n# # $ $@ #\n# #####  #\n##### $$.#\n###      #\n##########"
         }
       ]
     },
     {
-      "level_id": "boxoban_train_000_004",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
+      "level_id": "boxoban_medium_train_000_001",
+      "status": "invalid_plan",
+      "step_count": 0,
+      "total_reward": 0.0,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [2, 2], \"push\": \"Left\"},\n  {\"box\": [2, 1], \"push\": \"Down\"},\n  {\"box\": [7, 2], \"push\": \"Up\"},\n  {\"box\": [8, 4], \"push\": \"Left\"},\n  {\"box\": [7, 5], \"push\": \"Down\"}\n]",
+      "planned_pushes": [
+        {
+          "box": [
+            2,
+            2
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            2,
+            1
+          ],
+          "push": "Down"
+        },
+        {
+          "box": [
+            7,
+            2
+          ],
+          "push": "Up"
+        },
+        {
+          "box": [
+            8,
+            4
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            7,
+            5
+          ],
+          "push": "Down"
+        }
+      ],
+      "expanded_actions": [],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              2,
+              2
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 1,
+            "col": 3
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 2
+            },
+            {
+              "row": 8,
+              "col": 4
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "box_destination_blocked_by_box"
+        }
+      ],
+      "failure_reason": "box_destination_blocked_by_box",
+      "failure_push_index": 0,
+      "steps": []
+    },
+    {
+      "level_id": "boxoban_medium_train_000_002",
+      "status": "invalid_plan",
+      "step_count": 0,
+      "total_reward": 0.0,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [6, 3], \"push\": \"Right\"},\n  {\"box\": [7, 3], \"push\": \"Right\"},\n  {\"box\": [7, 2], \"push\": \"Right\"},\n  {\"box\": [8, 3], \"push\": \"Left\"}\n]",
+      "planned_pushes": [
+        {
+          "box": [
+            6,
+            3
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            7,
+            3
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            7,
+            2
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            8,
+            3
+          ],
+          "push": "Left"
+        }
+      ],
+      "expanded_actions": [],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              6,
+              3
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 8,
+            "col": 5
+          },
+          "boxes_before": [
+            {
+              "row": 6,
+              "col": 3
+            },
+            {
+              "row": 7,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 3
+            },
+            {
+              "row": 8,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 6,
+            "col": 2
+          },
+          "box_destination": {
+            "row": 6,
+            "col": 4
+          },
+          "result": "invalid_plan",
+          "failure_reason": "required_push_position_unreachable"
+        }
+      ],
+      "failure_reason": "required_push_position_unreachable",
+      "failure_push_index": 0,
+      "steps": []
+    },
+    {
+      "level_id": "boxoban_medium_train_000_003",
+      "status": "invalid_plan",
+      "step_count": 1,
+      "total_reward": -0.1,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[\n  {\"box\": [1, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Down\"},\n  {\"box\": [5, 2], \"push\": \"Right\"},\n  {\"box\": [7, 8], \"push\": \"Left\"}\n]",
+      "planned_pushes": [
+        {
+          "box": [
+            1,
+            6
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            2,
+            5
+          ],
+          "push": "Down"
+        },
+        {
+          "box": [
+            5,
+            2
+          ],
+          "push": "Right"
+        },
+        {
+          "box": [
+            7,
+            8
+          ],
+          "push": "Left"
+        }
+      ],
+      "expanded_actions": [
+        "Left"
+      ],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              1,
+              6
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 1,
+            "col": 7
+          },
+          "boxes_before": [
+            {
+              "row": 1,
+              "col": 6
+            },
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 8
+            }
+          ],
+          "required_player_position": {
+            "row": 1,
+            "col": 7
+          },
+          "box_destination": {
+            "row": 1,
+            "col": 5
+          },
+          "path_to_push": [],
+          "result": "executed",
+          "player_after": {
+            "row": 1,
+            "col": 6
+          },
+          "boxes_after": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 8
+            }
+          ]
+        },
+        {
+          "push_index": 1,
+          "intent": {
+            "box": [
+              2,
+              5
+            ],
+            "push": "Down"
+          },
+          "player_before": {
+            "row": 1,
+            "col": 6
+          },
+          "boxes_before": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 7,
+              "col": 8
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "box_destination_blocked_by_wall_or_boundary"
+        }
+      ],
+      "failure_reason": "box_destination_blocked_by_wall_or_boundary",
+      "failure_push_index": 1,
       "steps": [
         {
           "step": 0,
-          "state": "##########\n#   .  ###\n# $    ###\n###$   ###\n#  @ $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        },
-        {
-          "step": 1,
-          "state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        },
-        {
-          "step": 2,
-          "state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Left",
-          "parsed_action": "Left",
-          "executed_action": "Left",
-          "reward": -5.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": true,
-          "solved": false,
-          "next_state": "##########\n#  $.  ###\n#$@    ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        }
-      ]
-    },
-    {
-      "level_id": "corner_trap_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
-        {
-          "step": 94,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 95,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
-          "raw_action": "Right",
-          "parsed_action": "Right",
-          "executed_action": "Right",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 96,
-          "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######"
-        },
-        {
-          "step": 97,
-          "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+          "state": "##########\n#  .  $@ #\n#    $  ##\n# #  #####\n# ########\n# $   .  #\n#.  # # .#\n####### $#\n######   #\n##########",
           "raw_action": "Left",
           "parsed_action": "Left",
           "executed_action": "Left",
           "reward": -0.1,
           "invalid_reason": null,
-          "pushed_box": false,
+          "pushed_box": true,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######"
-        },
-        {
-          "step": 98,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 99,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
-          "raw_action": "Right",
-          "parsed_action": "Right",
-          "executed_action": "Right",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              1,
+              6
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n#  . $@  #\n#    $  ##\n# #  #####\n# ########\n# $   .  #\n#.  # # .#\n####### $#\n######   #\n##########"
         }
       ]
     },
     {
-      "level_id": "two_box_basic_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
+      "level_id": "boxoban_medium_train_000_004",
+      "status": "invalid_plan",
+      "step_count": 31,
+      "total_reward": -3.1000000000000014,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[{\"box\":[2,3],\"push\":\"Right\"},{\"box\":[2,7],\"push\":\"Left\"},{\"box\":[5,4],\"push\":\"Left\"},{\"box\":[6,3],\"push\":\"Up\"}]",
+      "planned_pushes": [
         {
-          "step": 94,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
+          "box": [
+            2,
+            3
+          ],
+          "push": "Right"
         },
         {
-          "step": 95,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "box": [
+            2,
+            7
+          ],
+          "push": "Left"
         },
         {
-          "step": 96,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
+          "box": [
+            5,
+            4
+          ],
+          "push": "Left"
         },
         {
-          "step": 97,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 98,
-          "state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########"
-        },
-        {
-          "step": 99,
-          "state": "########\n# @    #\n#  $$  #\n#  ..  #\n#      #\n########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "########\n#      #\n# @$$  #\n#  ..  #\n#      #\n########"
+          "box": [
+            6,
+            3
+          ],
+          "push": "Up"
         }
-      ]
-    },
-    {
-      "level_id": "boxoban_train_000_000",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
+      ],
+      "expanded_actions": [
+        "Up",
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Up",
+        "Right",
+        "Up",
+        "Up",
+        "Left",
+        "Left",
+        "Left",
+        "Left",
+        "Left",
+        "Left",
+        "Down",
+        "Right",
+        "Up",
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Down",
+        "Left",
+        "Left",
+        "Down",
+        "Left"
+      ],
+      "push_execution_log": [
         {
-          "step": 94,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "push_index": 0,
+          "intent": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "player_before": {
+            "row": 5,
+            "col": 3
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 7
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 2,
+            "col": 2
+          },
+          "box_destination": {
+            "row": 2,
+            "col": 4
+          },
+          "path_to_push": [
+            "Up",
+            "Right",
+            "Right",
+            "Right",
+            "Right",
+            "Up",
+            "Right",
+            "Up",
+            "Up",
+            "Left",
+            "Left",
+            "Left",
+            "Left",
+            "Left",
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 2,
+            "col": 3
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 7
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ]
         },
         {
-          "step": 95,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "push_index": 1,
+          "intent": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 3
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 7
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 2,
+            "col": 8
+          },
+          "box_destination": {
+            "row": 2,
+            "col": 6
+          },
+          "path_to_push": [
+            "Up",
+            "Right",
+            "Right",
+            "Right",
+            "Right",
+            "Right",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 2,
+            "col": 7
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 6
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ]
         },
         {
-          "step": 96,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "push_index": 2,
+          "intent": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 2,
+            "col": 7
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 6
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "required_player_position": {
+            "row": 5,
+            "col": 5
+          },
+          "box_destination": {
+            "row": 5,
+            "col": 3
+          },
+          "path_to_push": [
+            "Down",
+            "Down",
+            "Left",
+            "Left",
+            "Down"
+          ],
+          "result": "executed",
+          "player_after": {
+            "row": 5,
+            "col": 4
+          },
+          "boxes_after": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 6
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ]
         },
         {
-          "step": 97,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 98,
-          "state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
-        },
-        {
-          "step": 99,
-          "state": "##########\n#  #######\n#+$#######\n#   ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  #######\n#.$#######\n#@  ######\n#.$ ######\n#  #######\n# $ ######\n#$ . #####\n# .  #####\n##########"
+          "push_index": 3,
+          "intent": {
+            "box": [
+              6,
+              3
+            ],
+            "push": "Up"
+          },
+          "player_before": {
+            "row": 5,
+            "col": 4
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 6
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 6,
+              "col": 3
+            }
+          ],
+          "result": "invalid_plan",
+          "failure_reason": "box_destination_blocked_by_box"
         }
-      ]
-    },
-    {
-      "level_id": "boxoban_train_000_002",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
+      ],
+      "failure_reason": "box_destination_blocked_by_box",
+      "failure_push_index": 3,
       "steps": [
         {
           "step": 0,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $@ ##\n# $ $ $ ##\n#   .   ##\n#####.   #\n######   #\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########"
-        },
-        {
-          "step": 1,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $ @ ##\n#   . $ ##\n#####.   #\n######   #\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########"
-        },
-        {
-          "step": 2,
-          "state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   . @ ##\n#####.$  #\n######   #\n##########",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -5.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": true,
-          "solved": false,
-          "next_state": "##########\n#####   ##\n#####   ##\n####.    #\n# .  $  ##\n# $ $   ##\n#   .   ##\n#####.@  #\n######$  #\n##########"
-        }
-      ]
-    },
-    {
-      "level_id": "boxoban_train_000_004",
-      "status": "deadlock",
-      "step_count": 3,
-      "total_reward": -5.3,
-      "steps": [
-        {
-          "step": 0,
-          "state": "##########\n#   .  ###\n# $    ###\n###$   ###\n#  @ $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        },
-        {
-          "step": 1,
-          "state": "##########\n#   .  ###\n# $$   ###\n###@   ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        },
-        {
-          "step": 2,
-          "state": "##########\n#  $.  ###\n# $@   ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########",
-          "raw_action": "Left",
-          "parsed_action": "Left",
-          "executed_action": "Left",
-          "reward": -5.1,
-          "invalid_reason": null,
-          "pushed_box": true,
-          "deadlocked": true,
-          "solved": false,
-          "next_state": "##########\n#  $.  ###\n#$@    ###\n###    ###\n#    $.###\n#    . ###\n# .$  ####\n####  ####\n##########\n##########"
-        }
-      ]
-    },
-    {
-      "level_id": "corner_trap_001",
-      "status": "timeout",
-      "step_count": 100,
-      "total_reward": -9.99999999999998,
-      "steps": [
-        {
-          "step": 94,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##.@$ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
           "raw_action": "Up",
           "parsed_action": "Up",
           "executed_action": "Up",
@@ -1102,11 +2612,20 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###@  .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
         },
         {
-          "step": 95,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+          "step": 1,
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n###@  .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
           "raw_action": "Right",
           "parsed_action": "Right",
           "executed_action": "Right",
@@ -1115,50 +2634,20 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n### @ .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
         },
         {
-          "step": 96,
-          "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
-          "raw_action": "Down",
-          "parsed_action": "Down",
-          "executed_action": "Down",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######"
-        },
-        {
-          "step": 97,
-          "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
-          "raw_action": "Left",
-          "parsed_action": "Left",
-          "executed_action": "Left",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######"
-        },
-        {
-          "step": 98,
-          "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
-          "raw_action": "Up",
-          "parsed_action": "Up",
-          "executed_action": "Up",
-          "reward": -0.1,
-          "invalid_reason": null,
-          "pushed_box": false,
-          "deadlocked": false,
-          "solved": false,
-          "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######"
-        },
-        {
-          "step": 99,
-          "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+          "step": 2,
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n### @ .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
           "raw_action": "Right",
           "parsed_action": "Right",
           "executed_action": "Right",
@@ -1167,9 +2656,720 @@
           "pushed_box": false,
           "deadlocked": false,
           "solved": false,
-          "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######"
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 3,
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 4,
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 5,
+          "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 6,
+          "state": "##########\n##       #\n## $ . $ #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $ #\n####### @#\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 7,
+          "state": "##########\n##       #\n## $ . $ #\n####### @#\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## $ . $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 8,
+          "state": "##########\n##       #\n## $ . $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##      @#\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 9,
+          "state": "##########\n##      @#\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##     @ #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 10,
+          "state": "##########\n##     @ #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##    @  #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 11,
+          "state": "##########\n##    @  #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##   @   #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 12,
+          "state": "##########\n##   @   #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##  @    #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 13,
+          "state": "##########\n##  @    #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n## @     #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 14,
+          "state": "##########\n## @     #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##@      #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 15,
+          "state": "##########\n##@      #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n##@$ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 16,
+          "state": "##########\n##       #\n##@$ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": true,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "push",
+          "push_index": 0,
+          "planned_push": {
+            "box": [
+              2,
+              3
+            ],
+            "push": "Right"
+          },
+          "next_state": "##########\n##       #\n## @$. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 17,
+          "state": "##########\n##       #\n## @$. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Up",
+          "parsed_action": "Up",
+          "executed_action": "Up",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n## @     #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 18,
+          "state": "##########\n## @     #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##  @    #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 19,
+          "state": "##########\n##  @    #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##   @   #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 20,
+          "state": "##########\n##   @   #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##    @  #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 21,
+          "state": "##########\n##    @  #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##     @ #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 22,
+          "state": "##########\n##     @ #\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Right",
+          "parsed_action": "Right",
+          "executed_action": "Right",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##      @#\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 23,
+          "state": "##########\n##      @#\n##  $. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $. $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 24,
+          "state": "##########\n##       #\n##  $. $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": true,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "push",
+          "push_index": 1,
+          "planned_push": {
+            "box": [
+              2,
+              7
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$@ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 25,
+          "state": "##########\n##       #\n##  $.$@ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 26,
+          "state": "##########\n##       #\n##  $.$  #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 27,
+          "state": "##########\n##       #\n##  $.$  #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 28,
+          "state": "##########\n##       #\n##  $.$  #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 29,
+          "state": "##########\n##       #\n##  $.$  #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Down",
+          "parsed_action": "Down",
+          "executed_action": "Down",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": false,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "walk_to_push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######  #\n###   .  #\n##. $@####\n#  $ #####\n#.  ######\n#   ######\n##########"
+        },
+        {
+          "step": 30,
+          "state": "##########\n##       #\n##  $.$  #\n#######  #\n###   .  #\n##. $@####\n#  $ #####\n#.  ######\n#   ######\n##########",
+          "raw_action": "Left",
+          "parsed_action": "Left",
+          "executed_action": "Left",
+          "reward": -0.1,
+          "invalid_reason": null,
+          "pushed_box": true,
+          "deadlocked": false,
+          "solved": false,
+          "semantic_phase": "push",
+          "push_index": 2,
+          "planned_push": {
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left"
+          },
+          "next_state": "##########\n##       #\n##  $.$  #\n#######  #\n###   .  #\n##.$@ ####\n#  $ #####\n#.  ######\n#   ######\n##########"
         }
       ]
+    },
+    {
+      "level_id": "boxoban_medium_train_000_005",
+      "status": "invalid_plan",
+      "step_count": 0,
+      "total_reward": 0.0,
+      "policy_mode": "full_path",
+      "raw_plan_response": "[{\"box\":[4,6],\"push\":\"Left\"},{\"box\":[5,5],\"push\":\"Up\"},{\"box\":[6,6],\"push\":\"Left\"},{\"box\":[7,6],\"push\":\"Up\"}]",
+      "planned_pushes": [
+        {
+          "box": [
+            4,
+            6
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            5,
+            5
+          ],
+          "push": "Up"
+        },
+        {
+          "box": [
+            6,
+            6
+          ],
+          "push": "Left"
+        },
+        {
+          "box": [
+            7,
+            6
+          ],
+          "push": "Up"
+        }
+      ],
+      "expanded_actions": [],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "box": [
+              4,
+              6
+            ],
+            "push": "Left"
+          },
+          "player_before": {
+            "row": 7,
+            "col": 7
+          },
+          "boxes_before": [
+            {
+              "row": 4,
+              "col": 6
+            },
+            {
+              "row": 5,
+              "col": 5
+            },
+            {
+              "row": 6,
+              "col": 6
+            },
+            {
+              "row": 7,
+              "col": 6
+            }
+          ],
+          "required_player_position": {
+            "row": 4,
+            "col": 7
+          },
+          "box_destination": {
+            "row": 4,
+            "col": 5
+          },
+          "result": "invalid_plan",
+          "failure_reason": "required_push_position_unreachable"
+        }
+      ],
+      "failure_reason": "required_push_position_unreachable",
+      "failure_push_index": 0,
+      "steps": []
     }
   ]
 }
