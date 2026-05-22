@@ -31,6 +31,7 @@ def run_episode(
     max_steps: int,
     seed: int,
     max_repair_attempts: int = 0,
+    repair_from_current_state: bool = False,
 ) -> EpisodeResult:
     if getattr(agent, "policy_mode", "") == "full_path":
         return run_full_path_episode(
@@ -39,6 +40,7 @@ def run_episode(
             max_steps=max_steps,
             seed=seed,
             max_repair_attempts=max_repair_attempts,
+            repair_from_current_state=repair_from_current_state,
         )
 
     rng = random.Random(seed)
@@ -173,6 +175,7 @@ def run_full_path_episode(
     max_steps: int,
     seed: int,
     max_repair_attempts: int = 0,
+    repair_from_current_state: bool = False,
 ) -> EpisodeResult:
     state_text = env.reset()
     start_llm_calls = getattr(agent, "llm_call_count", 0)
@@ -190,13 +193,17 @@ def run_full_path_episode(
     budget_exhausted = False
 
     for attempt_index in range(max_repair_attempts + 1):
-        state_text = env.reset()
+        if attempt_index == 0 or not repair_from_current_state:
+            state_text = env.reset()
+        else:
+            state_text = env.render_text()
         context = {
             "rules": RULES_TEXT,
             "state_summary": _state_summary(env),
             "max_steps": max_steps,
             "memory": _agent_memory(agent),
             "repair_feedback": repair_feedback,
+            "legal_push_candidates": _legal_push_candidates(env),
         }
         try:
             if hasattr(agent, "select_plan"):
@@ -249,14 +256,16 @@ def run_full_path_episode(
             }
             repair_attempts.append(attempt)
             if attempt_index < max_repair_attempts:
-                repair_feedback = _repair_feedback_from_attempt(attempt)
+                repair_feedback = _repair_feedback_from_attempt(
+                    attempt,
+                    repair_from_current_state=repair_from_current_state,
+                )
                 continue
             final_status = "invalid_plan"
             final_metadata = dict(attempt)
             final_metadata.pop("attempt_index", None)
             break
 
-        env.reset()
         execution = execute_push_plan(
             env=env,
             plan=plan,
@@ -285,6 +294,9 @@ def run_full_path_episode(
             attempt["failure_reason"] = execution.failure_reason
         if execution.failure_push_index is not None:
             attempt["failure_push_index"] = execution.failure_push_index
+        alternatives = _repair_alternatives_from_env(env, attempt)
+        if alternatives:
+            attempt["repair_alternative_pushes"] = alternatives
         repair_attempts.append(attempt)
 
         final_status = execution.status
@@ -299,7 +311,10 @@ def run_full_path_episode(
             or attempt_index >= max_repair_attempts
         ):
             break
-        repair_feedback = _repair_feedback_from_attempt(attempt)
+        repair_feedback = _repair_feedback_from_attempt(
+            attempt,
+            repair_from_current_state=repair_from_current_state,
+        )
 
     final_metadata.update(_repair_metadata(repair_attempts, final_status))
 
@@ -341,6 +356,7 @@ def run_experiment(
     seed: int,
     results_dir: Path,
     max_repair_attempts: int = 0,
+    repair_from_current_state: bool = False,
 ) -> dict[str, Any]:
     memory_store = getattr(agent, "memory_store", None)
     if memory_store is not None and getattr(agent, "agent_type", "") != "no_memory":
@@ -357,6 +373,7 @@ def run_experiment(
             max_steps=max_steps,
             seed=episode_seed,
             max_repair_attempts=max_repair_attempts,
+            repair_from_current_state=repair_from_current_state,
         )
         save_episode(result, results_dir)
         results.append(result)
@@ -383,6 +400,7 @@ def run_experiment(
             "seed": seed,
             "max_steps": max_steps,
             "max_repair_attempts": max_repair_attempts,
+            "repair_from_current_state": repair_from_current_state,
             "results_dir": str(results_dir),
             "memory_path": getattr(agent, "memory_path", None),
             "memory_hash": getattr(agent, "memory_hash", None),
@@ -426,6 +444,34 @@ def _state_summary(env: SokobanEnv) -> dict[str, Any]:
     }
 
 
+def _legal_push_candidates(env: SokobanEnv) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    box_positions_by_id = {
+        box_id: position
+        for box_id, position in enumerate(sorted(env.boxes))
+    }
+    for box_id, box in box_positions_by_id.items():
+        for push, (dr, dc) in DIRECTIONS.items():
+            destination = box.moved(dr, dc)
+            required_player = box.moved(-dr, -dc)
+            if env._is_blocked_cell(destination) or destination in env.boxes:
+                continue
+            if env._is_blocked_cell(required_player) or required_player in env.boxes:
+                continue
+            if _shortest_path_to(env, required_player) is None:
+                continue
+            candidates.append(
+                {
+                    "box_id": box_id,
+                    "box": _position_list(box),
+                    "push": push,
+                    "required_player": _position_list(required_player),
+                    "destination": _position_list(destination),
+                }
+            )
+    return candidates
+
+
 def _position_list(position: Position) -> list[int]:
     return [position.row, position.col]
 
@@ -450,7 +496,11 @@ def _repair_metadata(repair_attempts: list[dict[str, Any]], final_status: str) -
     return metadata
 
 
-def _repair_feedback_from_attempt(attempt: dict[str, Any]) -> str:
+def _repair_feedback_from_attempt(
+    attempt: dict[str, Any],
+    *,
+    repair_from_current_state: bool = False,
+) -> str:
     status = str(attempt.get("status", "unknown"))
     failure_reason = attempt.get("failure_reason") or "none"
     lines = [
@@ -473,6 +523,12 @@ def _repair_feedback_from_attempt(attempt: dict[str, Any]) -> str:
             lines.append(f"Required player standing cell: {_format_log_position(failed_log['required_player_position'])}")
         if failed_log.get("error"):
             lines.append(f"Why invalid: {failed_log['error']}.")
+    alternatives = attempt.get("repair_alternative_pushes")
+    if isinstance(alternatives, list) and alternatives:
+        lines.append("Legal alternatives near this state:")
+        for item in alternatives[:8]:
+            lines.append(json.dumps(item, sort_keys=True))
+        lines.append("Prefer reusing listed box_id values when regenerating the plan.")
 
     if status == "plan_exhausted":
         lines.append("The plan executed legally but did not solve the puzzle.")
@@ -490,8 +546,51 @@ def _repair_feedback_from_attempt(attempt: dict[str, Any]) -> str:
             lines.append(f"Parser error: {attempt['error_message']}")
         lines.append("Return valid JSON only.")
 
-    lines.append("Regenerate a complete plan from the original board. Do not repeat the failed push.")
+    if repair_from_current_state:
+        lines.append("Regenerate a complete plan from the current board. Do not repeat the failed push.")
+    else:
+        lines.append("Regenerate a complete plan from the original board. Do not repeat the failed push.")
     return "\n".join(lines)
+
+
+def _repair_alternatives_from_env(env: SokobanEnv, attempt: dict[str, Any]) -> list[dict[str, Any]]:
+    alternatives = _legal_push_candidates(env)
+    failed_log = _failed_push_log(attempt)
+    if not failed_log:
+        return alternatives[:8]
+    resolved = failed_log.get("resolved_box")
+    if not isinstance(resolved, dict):
+        return alternatives[:8]
+    row = resolved.get("row")
+    col = resolved.get("col")
+    if not isinstance(row, int) or not isinstance(col, int):
+        return alternatives[:8]
+    prioritized = [
+        item for item in alternatives
+        if item.get("box") == [row, col]
+    ]
+    if prioritized:
+        return prioritized[:8]
+    return alternatives[:8]
+
+
+def _shortest_path_to(env: SokobanEnv, target: Position) -> list[str] | None:
+    blocked = set(env.level.walls) | set(env.boxes)
+    if target in blocked or env._is_blocked_cell(target):
+        return None
+    queue: list[tuple[Position, list[str]]] = [(env.player, [])]
+    visited = {env.player}
+    while queue:
+        current, path = queue.pop(0)
+        if current == target:
+            return path
+        for action, (dr, dc) in DIRECTIONS.items():
+            nxt = current.moved(dr, dc)
+            if nxt in visited or nxt in blocked or env._is_blocked_cell(nxt):
+                continue
+            visited.add(nxt)
+            queue.append((nxt, [*path, action]))
+    return None
 
 
 def _failed_push_log(attempt: dict[str, Any]) -> dict[str, Any] | None:

@@ -189,16 +189,16 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert "Planning checklist:" in no_memory_prompt
     assert "until every box is on a target" in no_memory_prompt
     assert "Do not stop after one push" in no_memory_prompt
-    assert "use the box's updated coordinate" in no_memory_prompt
+    assert "updated coordinate" in no_memory_prompt
+    assert '"box_id": integer' in no_memory_prompt
     assert "boxes are interchangeable" in no_memory_prompt
     assert "any box may go to any target" in no_memory_prompt
     assert "avoid moving a box off a target unless necessary" in no_memory_prompt
     assert '"box": [row, col]' in no_memory_prompt
-    assert '"box_id": 0' not in no_memory_prompt
     assert '"player_after": [row, col]' not in no_memory_prompt
     assert '"box_after": [row, col]' not in no_memory_prompt
     assert "Return JSON only" in no_memory_prompt
-    assert '{"box": [4, 4], "push": "Right"}' in no_memory_prompt
+    assert '{"box_id": 0, "push": "Down"}' in no_memory_prompt
     assert "Prior trajectory records" in raw_prompt
     assert "executed_action: Right" in raw_prompt
     assert "raw_action" not in raw_prompt.split("Memory context:", 1)[1]

@@ -331,9 +331,12 @@ def test_run_episode_full_path_repair_can_turn_invalid_plan_into_success():
     repair_prompt = client.responses.calls[1]["input"]
     assert "Current board:" in repair_prompt
     assert "Output contract:" in repair_prompt
+    assert "Legal push candidates on this board" in repair_prompt
     assert "Repair feedback:" in repair_prompt
     assert "Failure reason: box_destination_blocked_by_wall_or_boundary" in repair_prompt
     assert 'Failed intent: {"box_id": 0, "push": "Up"}' in repair_prompt
+    assert "Legal alternatives near this state:" in repair_prompt
+    assert '"push": "Right"' in repair_prompt
     assert "Regenerate a complete plan from the original board" in repair_prompt
 
 
@@ -392,3 +395,36 @@ def test_run_episode_full_path_repair_budget_exhausted_returns_last_failure():
         "invalid_plan",
         "invalid_plan",
     ]
+
+
+def test_run_episode_full_path_repair_from_current_state_chains_partial_plans():
+    level = make_level([
+        "#######",
+        "#@ $ .#",
+        "#######",
+    ])
+    client = FakeClient([
+        '[{"box_id": 0, "push": "Right"}]',
+        '[{"box_id": 0, "push": "Right"}]',
+    ])
+    agent = LLMAgent(client=client)
+
+    result = run_episode(
+        SokobanEnv(level),
+        agent,
+        max_steps=20,
+        seed=0,
+        max_repair_attempts=1,
+        repair_from_current_state=True,
+    )
+
+    assert result.status == "success"
+    assert result.llm_call_count == 2
+    assert len(client.responses.calls) == 2
+    assert result.metadata["repair_attempt_count"] == 1
+    assert [attempt["status"] for attempt in result.metadata["repair_attempts"]] == [
+        "plan_exhausted",
+        "success",
+    ]
+    repair_prompt = client.responses.calls[1]["input"]
+    assert "Regenerate a complete plan from the current board" in repair_prompt

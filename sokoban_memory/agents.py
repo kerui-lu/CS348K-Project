@@ -200,6 +200,7 @@ class FullPathLLMAgent(BaseAgent):
             memory_condition=self.memory_condition,
             memory_text=memory_text,
             repair_feedback=context.get("repair_feedback"),
+            legal_push_candidates=context.get("legal_push_candidates", []),
         )
         return rendered.prompt, rendered.memory_text, rendered.non_memory_template
 

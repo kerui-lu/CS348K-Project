@@ -34,6 +34,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--level_split", default=None, choices=["train", "eval", "unspecified"])
     parser.add_argument("--max_steps", type=int, default=100)
     parser.add_argument("--max_repair_attempts", type=int, default=0)
+    parser.add_argument(
+        "--repair_from_current_state",
+        action="store_true",
+        help="For full-path agents, run repair attempts from the post-plan board instead of resetting to the original board.",
+    )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--results_dir", default="results")
     parser.add_argument("--memory_path", default=None)
@@ -96,6 +101,7 @@ def main() -> None:
         seed=args.seed,
         results_dir=Path(args.results_dir),
         max_repair_attempts=args.max_repair_attempts,
+        repair_from_current_state=args.repair_from_current_state,
     )
     print(json.dumps(summary, indent=2))
 
