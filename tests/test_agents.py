@@ -11,6 +11,7 @@ from sokoban_memory.agents import (
     ReflectionHeuristicAgent,
     _load_dotenv,
 )
+from sokoban_memory.experiment import RULES_TEXT
 from sokoban_memory.memory import HeuristicMemory, RawTrajectoryMemory
 
 
@@ -161,7 +162,7 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     )
     heuristic_memory = HeuristicMemory(["Do not push a box into a non-target corner."])
     context = {
-        "rules": "Move Up/Down/Left/Right.",
+        "rules": RULES_TEXT,
         "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
         "max_steps": 20,
     }
@@ -177,11 +178,21 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     raw_prompt = raw_client.responses.calls[0]["input"]
     reflection_prompt = reflection_client.responses.calls[0]["input"]
     assert "Condition: none" in no_memory_prompt
+    assert "Prompt version: full_path_v2_1" in no_memory_prompt
     assert "No past experience is available" in no_memory_prompt
+    assert "space empty floor" in no_memory_prompt
+    assert "walk into empty floor cells or target cells" in no_memory_prompt
+    assert "stand in the cell opposite the push direction" in no_memory_prompt
+    assert "destination cell is empty floor or a target" in no_memory_prompt
+    assert "If pushing Right from box [r, c]" in no_memory_prompt
+    assert "Only write a push if the box exists there now" in no_memory_prompt
     assert "Planning checklist:" in no_memory_prompt
     assert "until every box is on a target" in no_memory_prompt
     assert "Do not stop after one push" in no_memory_prompt
     assert "use the box's updated coordinate" in no_memory_prompt
+    assert "boxes are interchangeable" in no_memory_prompt
+    assert "any box may go to any target" in no_memory_prompt
+    assert "avoid moving a box off a target unless necessary" in no_memory_prompt
     assert '"box": [row, col]' in no_memory_prompt
     assert '"box_id": 0' not in no_memory_prompt
     assert '"player_after": [row, col]' not in no_memory_prompt

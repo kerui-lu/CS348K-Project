@@ -15,7 +15,14 @@ from sokoban_memory.metrics import summarize_results
 from sokoban_memory.prompts import level_metadata
 from sokoban_memory.types import EpisodeResult, Level, Position
 
-RULES_TEXT = "Move Up/Down/Left/Right. Push boxes only. No pulling. No pushing two boxes."
+RULES_TEXT = (
+    "Move Up/Down/Left/Right only; no diagonal moves. "
+    "The player may walk into empty floor cells or target cells, but not into walls, boundaries, or boxes. "
+    "To push a box, the player must stand in the cell opposite the push direction. "
+    "The box moves one cell in the push direction only if that destination cell is empty floor or a target. "
+    "No pulling, no pushing two boxes, and no pushing a box into a wall, boundary, or another box. "
+    "Goal: all boxes must be on target cells."
+)
 
 
 def run_episode(
