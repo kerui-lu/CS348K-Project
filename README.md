@@ -16,7 +16,13 @@ See [`docs/week6_checkpoint.md`](docs/week6_checkpoint.md).
 
 See [`docs/week7_update.md`](docs/week7_update.md).
 
-Week 7 adds a bounded verifier-guided repair loop through `--max_repair_attempts`, but the latest sanity run shows that one repair attempt did not improve train success. The active LLM prompt has therefore been reverted to `full_path_v2`, the simpler coordinate-based full-path prompt. Current results should be treated as an evaluation-pipeline milestone, not a final memory-performance claim.
+Week 7 adds a bounded verifier-guided repair loop through `--max_repair_attempts`, but the latest sanity run shows that one repair attempt did not improve train success. Current results should be treated as an evaluation-pipeline milestone, not a final memory-performance claim.
+
+### Week 8 checkpoint
+
+See [`docs/week8_checkpoint.md`](docs/week8_checkpoint.md).
+
+Week 8 summarizes the full-path prompt ablations and failure analysis. The active LLM prompt is `full_path_v2_1`, a coordinate-based full-path prompt with clearer Sokoban rule grounding.
 
 Completed in v1:
 
