@@ -1,5 +1,15 @@
 # Week 7 Update: Full-Path Prompt and Repair Status
 
+Note: work layered after `full_path_kerui` is tracked for Week 8 checkpoint in:
+
+- `docs/week8_checkpoint.md`
+
+## Latest Detailed Log
+
+For a complete goals/progress narrative and change-by-change implementation history (including deadlock fixes, partial metrics, unstuck fallback, and annotated GIF workflow), see:
+
+- `docs/progress_log_2026-05-22.md`
+
 ## Current Branch Status
 
 Branch `full_path_kerui` now uses the full-path push-intent architecture:

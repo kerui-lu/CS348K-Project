@@ -116,3 +116,31 @@ def test_summary_reports_repair_counters():
     assert summary["success_without_repair_count"] == 1
     assert summary["first_attempt_invalid_plan_count"] == 2
     assert summary["per_level"]["l1"]["success_after_repair_count"] == 1
+
+
+def test_summary_reports_partial_progress_score():
+    partial = make_result("l1", "invalid_plan", 3)
+    partial.trajectory = [
+        {
+            "state": "######\n#@$$.#\n#  . #\n######",
+            "next_state": "######\n#@*$ #\n#  . #\n######",
+        }
+    ]
+    partial.metadata = {
+        "final_board": "######\n#@*$ #\n#  . #\n######",
+    }
+    stuck = make_result("l2", "timeout", 3)
+    stuck.trajectory = [
+        {
+            "state": "#####\n#@$.#\n#####",
+            "next_state": "#####\n#@$.#\n#####",
+        }
+    ]
+    summary = summarize_results([partial, stuck])
+
+    assert summary["average_final_goal_completion"] == 0.25
+    assert summary["average_best_goal_completion"] == 0.25
+    assert summary["partial_progress_score"] == 0.25
+    assert summary["partial_progress_rate_25"] == 0.5
+    assert summary["partial_progress_rate_50"] == 0.5
+    assert summary["partial_progress_rate_75"] == 0.0

@@ -37,6 +37,9 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
     efficiency_values = [value for value in efficiency_values if value is not None]
     steps_over_optimal = [_steps_over_optimal(r) for r in success_results]
     steps_over_optimal = [value for value in steps_over_optimal if value is not None]
+    goal_progress_pairs = [_goal_progress(r) for r in results]
+    final_goal_completion_values = [pair[0] for pair in goal_progress_pairs]
+    best_goal_completion_values = [pair[1] for pair in goal_progress_pairs]
 
     if episodes == 0:
         return {
@@ -68,6 +71,12 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
             "success_after_repair_count": 0,
             "success_without_repair_count": 0,
             "first_attempt_invalid_plan_count": 0,
+            "average_final_goal_completion": 0.0,
+            "average_best_goal_completion": 0.0,
+            "partial_progress_score": 0.0,
+            "partial_progress_rate_25": 0.0,
+            "partial_progress_rate_50": 0.0,
+            "partial_progress_rate_75": 0.0,
             "per_level": {},
         }
 
@@ -102,6 +111,12 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
         "success_after_repair_count": success_after_repair_count,
         "success_without_repair_count": success_without_repair_count,
         "first_attempt_invalid_plan_count": first_attempt_invalid_plan_count,
+        "average_final_goal_completion": _average(final_goal_completion_values),
+        "average_best_goal_completion": _average(best_goal_completion_values),
+        "partial_progress_score": _average(best_goal_completion_values),
+        "partial_progress_rate_25": _share_at_least(best_goal_completion_values, 0.25),
+        "partial_progress_rate_50": _share_at_least(best_goal_completion_values, 0.50),
+        "partial_progress_rate_75": _share_at_least(best_goal_completion_values, 0.75),
         "per_level": summarize_by_level(results),
     }
 
@@ -118,6 +133,9 @@ def summarize_by_level(results: list[EpisodeResult]) -> dict[str, dict[str, Any]
         success_results = [r for r in level_results if r.status == "success"]
         efficiency_values = [_solution_efficiency(r) for r in success_results]
         efficiency_values = [value for value in efficiency_values if value is not None]
+        goal_progress_pairs = [_goal_progress(r) for r in level_results]
+        final_goal_completion_values = [pair[0] for pair in goal_progress_pairs]
+        best_goal_completion_values = [pair[1] for pair in goal_progress_pairs]
         per_level[level_id] = {
             "attempts": attempts,
             "successes": status_counts["success_count"],
@@ -145,6 +163,12 @@ def summarize_by_level(results: list[EpisodeResult]) -> dict[str, dict[str, Any]
             "first_attempt_invalid_plan_count": sum(
                 1 for r in level_results if r.metadata.get("first_attempt_status") == "invalid_plan"
             ),
+            "average_final_goal_completion": _average(final_goal_completion_values),
+            "average_best_goal_completion": _average(best_goal_completion_values),
+            "partial_progress_score": _average(best_goal_completion_values),
+            "partial_progress_rate_25": _share_at_least(best_goal_completion_values, 0.25),
+            "partial_progress_rate_50": _share_at_least(best_goal_completion_values, 0.50),
+            "partial_progress_rate_75": _share_at_least(best_goal_completion_values, 0.75),
         }
     return per_level
 
@@ -181,3 +205,45 @@ def _average(values: list[float | int]) -> float:
 def _metadata_int(result: EpisodeResult, key: str) -> int:
     value = result.metadata.get(key, 0)
     return value if isinstance(value, int) and not isinstance(value, bool) else 0
+
+
+def _goal_progress(result: EpisodeResult) -> tuple[float, float]:
+    if result.status == "success":
+        return 1.0, 1.0
+    states = _board_snapshots(result)
+    if not states:
+        return 0.0, 0.0
+    progress_values = [_goal_completion_ratio(state) for state in states]
+    progress_values = [value for value in progress_values if value is not None]
+    if not progress_values:
+        return 0.0, 0.0
+    return progress_values[-1], max(progress_values)
+
+
+def _board_snapshots(result: EpisodeResult) -> list[str]:
+    snapshots: list[str] = []
+    for step in result.trajectory:
+        state = step.get("state")
+        if isinstance(state, str) and state:
+            snapshots.append(state)
+        next_state = step.get("next_state")
+        if isinstance(next_state, str) and next_state:
+            snapshots.append(next_state)
+    final_board = result.metadata.get("final_board")
+    if isinstance(final_board, str) and final_board:
+        snapshots.append(final_board)
+    return snapshots
+
+
+def _goal_completion_ratio(board_text: str) -> float | None:
+    boxes_on_target = board_text.count("*")
+    total_boxes = boxes_on_target + board_text.count("$")
+    if total_boxes <= 0:
+        return None
+    return boxes_on_target / total_boxes
+
+
+def _share_at_least(values: list[float], threshold: float) -> float:
+    if not values:
+        return 0.0
+    return sum(1 for value in values if value >= threshold) / len(values)
