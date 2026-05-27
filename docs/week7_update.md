@@ -20,16 +20,16 @@ Branch `full_path_kerui` now uses the full-path push-intent architecture:
 - `levels/v2_pilot.json` contains 12 train levels and 12 eval levels.
 - Deadlock detection includes conservative local corner, wall/no-target/no-exit, 2x2 freeze, and two-box freeze checks.
 
-The active prompt is now `full_path_v2_1`, a coordinate-based full-path prompt with clearer Sokoban rule grounding. It asks for strict JSON push intents:
+The active prompt family is now `full_path_v2_1` with legal-push scaffolding and box-id-first guidance. It asks for strict JSON push intents (box-id preferred, coordinate fallback):
 
 ```json
 [
-  {"box": [3, 2], "push": "Down"},
+  {"box_id": 0, "push": "Down"},
   {"box": [4, 2], "push": "Right"}
 ]
 ```
 
-Coordinates are still dynamic: after a push, later plan items must use the box's updated coordinate.
+Coordinates are still dynamic when coordinate fallback is used: after a push, later plan items must use the box's updated coordinate.
 
 ## Week 7 Experiments
 

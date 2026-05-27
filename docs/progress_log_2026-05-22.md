@@ -1,7 +1,7 @@
 # Sokoban Improvement Log (May 22, 2026)
 
 Date: 2026-05-22  
-Scope: Week 6 to Week 7 iteration cycle on full-path Sokoban planning
+Scope: Week 7 to Week 8 iteration cycle on full-path Sokoban planning
 
 ## Goals
 
@@ -102,6 +102,11 @@ Scope: Week 6 to Week 7 iteration cycle on full-path Sokoban planning
     - `invalid_plan_recovered_with_unstuck`
     - `unreachable_recovered_with_unstuck`
 
+Status update (important):
+
+- This experiment was **fully reverted** after focused reruns showed no solve-rate lift and noisier failure behavior on target cases.
+- Current branch behavior and checkpoint conclusions do **not** rely on unstuck fallback.
+
 ### 8) GIF annotation upgrades for debugging
 
 - File: `scripts/render_episode_gifs.py` (recreated and upgraded)
@@ -140,10 +145,8 @@ Scope: Week 6 to Week 7 iteration cycle on full-path Sokoban planning
 
 ## Open Issues / Next Steps
 
-- Improve unstuck scoring with stronger penalties for creating non-target corner risk.
-- Add richer recovery feedback in repair prompts (include candidate ranking and local hazard notes).
-- Add stuck-loop detection from repeated board hashes and trigger unstuck earlier.
-- Add comparative before/after report on identical seeds:
-  - baseline vs deadlock-lookahead vs unstuck-fallback.
+- Run larger seed-matched comparisons focused on memory winner selection (`no_memory` vs `raw_trajectory_memory` vs `reflection_heuristic`).
+- Reduce `invalid_plan` noise further so memory effects are easier to measure.
 - Keep reporting both strict solve metrics and partial-progress metrics in all checkpoints.
+- Keep qualitative failure GIF panels aligned with the same matched quantitative runs.
 

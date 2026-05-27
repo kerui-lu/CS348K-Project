@@ -22,20 +22,21 @@ Week 7 adds a bounded verifier-guided repair loop through `--max_repair_attempts
 
 See [`docs/week8_checkpoint.md`](docs/week8_checkpoint.md).
 
-Week 8 summarizes the full-path prompt ablations and failure analysis. The active LLM prompt is `full_path_v2_1`, a coordinate-based full-path prompt with clearer Sokoban rule grounding.
+Week 8 summarizes the full-path prompt ablations and failure analysis. The active planning contract is `full_path_v2_1` with legal-push scaffolding and box-id-first planning (`{"box_id": ..., "push": ...}` preferred, coordinate fallback supported).
 
 Completed in v1:
 
 - Deterministic grid-based Sokoban environment with movement, pushing, wall collision, two-box blocking, solved-state detection, and conservative local deadlock detection.
 - Agent interface plus working `rule_based`, `no_memory`, `raw_trajectory_memory`, `reflection_heuristic`, and `llm` agent types.
 - OpenAI-backed full-path push-plan generation through the Responses API.
-- Strict JSON parsing for push intents such as `{"box": [3, 4], "push": "Right"}`.
+- Strict JSON parsing for push intents such as `{"box_id": 0, "push": "Right"}` (with coordinate fallback `{"box": [3, 4], "push": "Right"}`).
 - Per-episode JSON trajectory logs and aggregate `summary.json` metrics.
 - Unit tests for the environment, parser, logging, CLI, and LLM-agent wrapper.
 
 Added in the full-path branch:
 
 - Shared full-path push-intent policy for `no_memory`, `raw_trajectory_memory`, and `reflection_heuristic`.
+- Legal-push candidate scaffolding and box-id-first plan schema to reduce semantic coordinate drift.
 - Local BFS expansion from each push intent to the shortest non-pushing walking path, followed by an authoritative `SokobanEnv` push check.
 - Frozen offline memory-bank workflow for clean ablations.
 - Full raw failed-trajectory memory storage with budgeted prompt rendering.
@@ -45,6 +46,12 @@ Added in the full-path branch:
 - Prompt/memory/cache metadata in episode trajectories and summaries.
 - Guardrails: tagged train/eval levels, fail-hard memory leak checks, raw memory with factual replay only, `temperature`/`max_output_tokens` logging, and separate `budget_exhausted`, `api_error`, `invalid_plan`, and `plan_exhausted` outcomes.
 - Deadlock checks for non-target static corners, wall/no-target/no-exit traps, 2x2 wall/box freezes, and conservative two-box freezes. This branch intentionally does not add static dead-square precomputation.
+
+Documentation map for cohesive project narrative:
+
+- Week 7 architecture and early full-path limitations: `docs/week7_update.md`
+- Week 8 consolidated checkpoint and memory-comparison status: `docs/week8_checkpoint.md`
+- Detailed chronological implementation log (including reverted experiments): `docs/progress_log_2026-05-22.md`
 
 Memory conditions supported by the CLI:
 
