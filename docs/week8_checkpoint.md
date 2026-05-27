@@ -1,91 +1,69 @@
-# Week 8 Checkpoint (May 22, 2026)
+# Week 8 Checkpoint: Full-Path Evaluation and Failure Analysis
 
-## Goal
+## Summary
 
-Improve Sokoban solve quality by reducing `invalid_plan` and `deadlock` failures in our full-path LLM setup, while keeping comparisons reproducible across:
+This checkpoint updates the earlier Week 8 `main` narrative with the additional work that happened afterward on top of `full_path_kerui`. The core setup remains full-path push-intent planning: the LLM proposes semantic pushes, and local code verifies legality/reachability before executing primitive moves. During this cycle we tightened legal-push/box-id planning guidance, improved failure observability with annotated GIFs and cleaner deadlock short-circuit logging, fixed a deadlock false positive, and added partial-progress metrics.
+
+The core conclusion is still diagnostic: infrastructure and measurement improved substantially, but strict solve performance on hard eval levels remains constrained by semantic planning errors (`invalid_plan`, `deadlock`) rather than JSON-format failures.
+
+## Evaluation Template
+
+The final memory comparison still uses matched settings across:
 
 - `no_memory`
 - `raw_trajectory_memory`
 - `reflection_heuristic`
 
-Detailed change log: `docs/progress_log_2026-05-22.md`.
+Each run uses fixed levels/settings with the same model, seed, output budget, step budget, and memory budget.
 
----
+Primary metrics:
 
-## LMGame Background and What We Learned
+- `solve_rate`
+- `invalid_plan_count`
+- `deadlock_count`
+- `plan_exhausted_count`
+- `timeout_count`
 
-LMGame-Bench motivated this direction: Sokoban typically needs harness support (state scaffolding, structured interaction, memory) to move beyond near-zero performance.
+Secondary diagnostics:
 
-What we carried into this repo:
+- `planned_push_count`
+- `executed_push_count`
+- `expanded_primitive_step_count`
+- `repair_attempt_count`
+- `success_after_repair_count`
+- failure reason counts (blocked destination, unreachable stand position, missing box coordinate, etc.)
 
-- Structured full-path plan format (with box IDs and local validation).
-- Memory-conditioned variants and side-by-side evaluation.
-- Repair loop with failure feedback.
-- Better observability (episode JSON + failure GIFs).
+Week 8 additions on top of earlier checkpoint template:
 
-Main learning so far: LMGame-style scaffolding helps with progress signals, but our current blocker is still execution-quality on long-horizon pushes (illegal push proposals and deadlock-prone plans), so solve rate remains low on hard eval levels.
+- `partial_progress_score`
+- `average_best_goal_completion`
 
----
+## Intermediate Results
 
-## Evaluation Plan (Finalized)
+### A) Earlier prompt-sweep baseline (from previous `main` week8 checkpoint)
 
-### Quantitative outputs
+All runs in this table used 12 train levels, `no_memory`, `gpt-5-nano`, temperature 0.
 
-- Strict metrics:
-  - `solve_rate`
-  - `invalid_plan_count`
-  - `deadlock_count`
-  - `plan_exhausted_count`
-  - `timeout_count`
-- Progress metrics:
-  - `partial_progress_score`
-  - `average_best_goal_completion`
+| Run | Prompt / scaffold | Success | Invalid plan | Deadlock | Plan exhausted | Notes |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| `full_path_v2_train_prompt_check` | coordinate push plan | 2/12 | 9/12 | 1/12 | 0/12 | Best simple baseline in this sweep |
+| `full_path_v3_train_prompt_check` | v2 + legality self-check wording | 1/12 | 11/12 | 0/12 | 0/12 | More legality text did not help |
+| `full_path_v4_trace_prompt_check` | v2 + structured trace fields | 2/12 | 9/12 | 1/12 | 0/12 | No valid-rate gain |
+| `full_path_v5_indexed_trace_prompt_check` | indexed boxes + compact trace | 1/12 | 10/12 | 0/12 | 1/12 | Less coordinate burden, still many illegal pushes |
+| `full_path_v5_repair1_train_check` | v5 + one repair attempt | 1/12 | 10/12 | 1/12 | 0/12 | 11 repairs, 0 success-after-repair |
+| `full_path_v2_1_rules_prompt_check` | v2 + clearer push-legality examples | 1/12 | 11/12 | 0/12 | 0/12 | Better grounding, no solve lift |
 
-### What partial progress means
+Interpretation carried forward:
 
-For each episode:
+- Prompt wording alone was insufficient to fix semantic Sokoban validity.
 
-- `goal_completion_ratio = boxes_on_target / total_boxes`
-- Track the **best** ratio reached over the episode.
-- `partial_progress_score` is the average of those best ratios across episodes.
+### B) Later matched memory comparisons and on-top changes
 
-This captures meaningful intermediate progress that `solve_rate` (binary) misses.
-
-### Qualitative outputs
-
-- Failure GIFs per run and agent.
-- Overlay shows terminal failure reason (invalid instruction or deadlock reason).
-
-### Short run IDs used below
+Short run IDs:
 
 - `W6_STEP_BASE` -> `results/v2_task3_post_evaluation_summary.json`
 - `W7_FP_BOXID` -> `results/lmgame_closer_eval_boxid_20260522_132732/evaluation_summary.json`
 - `W7_FP_BOXID_DLOOK` -> `results/deadlock_lookahead_eval_20260522_2109/evaluation_summary.json`
-
----
-
-## What We Tried on Top of Kerui Full-Path
-
-1. Failure-trace analysis pipeline:
-   - Correlated GIF behavior with episode metadata and push execution logs.
-2. Repair-loop/data integrity fixes:
-   - Cleaned edge cases so deadlock short-circuit episodes still serialize valid trajectory/state for tooling.
-3. Deadlock lookahead filter:
-   - Removed push candidates that immediately enter deadlock states.
-4. Deadlock false-positive fix:
-   - Fixed wall-segment deadlock heuristic and added regression test.
-5. Partial progress scoring:
-   - Added metrics and tests to report non-binary improvement.
-6. Unstuck fallback prototype:
-   - Implemented and tested, then fully reverted because outcomes worsened (more bad terminal behavior).
-7. GIF explainability upgrade:
-   - Added clear failure subtitle (failed instruction or deadlock reason) in rendered GIFs.
-
----
-
-## Intermediate Results
-
-## Table A — Strict outcomes
 
 | Run ID | Agent | Episodes | Solve Rate | Invalid Plan | Deadlock | Plan Exhausted | Timeout |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -99,10 +77,6 @@ This captures meaningful intermediate progress that `solve_rate` (binary) misses
 | `W7_FP_BOXID_DLOOK` | `raw_trajectory_memory` | 12 | 0.083 | 5 | 3 | 3 | 0 |
 | `W7_FP_BOXID_DLOOK` | `reflection_heuristic` | 12 | 0.083 | 5 | 4 | 2 | 0 |
 
-Takeaway: full-path + box ID improved from zero-solve baseline to non-zero solve rate; deadlock lookahead improved some failure composition but did not yet raise solve rate on this set.
-
-## Table B — Partial progress
-
 | Run ID | Agent | Solve Rate | Partial Progress Score | Avg Best Goal Completion |
 |---|---|---:|---:|---:|
 | `W7_FP_BOXID` | `no_memory` | 0.083 | 0.208 | 0.208 |
@@ -112,58 +86,63 @@ Takeaway: full-path + box ID improved from zero-solve baseline to non-zero solve
 | `W7_FP_BOXID_DLOOK` | `raw_trajectory_memory` | 0.083 | 0.333 | 0.333 |
 | `W7_FP_BOXID_DLOOK` | `reflection_heuristic` | 0.083 | 0.375 | 0.375 |
 
-Takeaway: progress score rises in lookahead runs, especially with memory, even where strict solves do not.
+Interpretation:
 
-## Memory Options Status (Current Evidence)
+- Relative to old Week 6 one-step baseline, full-path + box-id era reached non-zero solve rate.
+- In the direct on-top comparison (`W7_FP_BOXID` -> `W7_FP_BOXID_DLOOK`), strict solve stayed flat while partial progress improved.
+- Memory-enabled variants currently look better than `no_memory` overall, but `raw_trajectory_memory` vs `reflection_heuristic` remains unresolved on strict solve rate.
+- The tried-and-reverted unstuck fallback is excluded from this evidence because it increased noisy behavior without solve-rate lift on target reruns.
 
-Question: which memory option is best (`no_memory`, `raw_trajectory_memory`, or `reflection_heuristic`)?
+### C) Artifacts and tooling produced during this cycle
 
-Current readout from available runs:
+The checkpoint evidence is backed by concrete artifacts generated during these runs:
 
-- On strict `solve_rate`, `raw_trajectory_memory` and `reflection_heuristic` are tied at `0.083` in both full-path runs.
-- `no_memory` is less stable: it drops to `0.000` in `W7_FP_BOXID_DLOOK`.
-- On partial progress, ranking in lookahead run is:
-  - `reflection_heuristic` (`0.375`) > `raw_trajectory_memory` (`0.333`) > `no_memory` (`0.271`).
-- On deadlocks in lookahead run:
-  - `raw_trajectory_memory` (`3`) is slightly better than `reflection_heuristic` (`4`), both better than `no_memory` (`5`).
+- Failure comparison GIF panels:
+  - `docs/failure_gifs/lmgame_boxid_20260522/`
+  - `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
+  - `docs/failure_gifs/deadlock_fix_retest_20260522/`
+- Reference replay GIF set:
+  - `docs/reference_gifs/`
+- Supporting scripts used to generate/verify these outputs:
+  - `scripts/render_episode_gifs.py`
+  - `scripts/render_reference_gifs.py`
+  - `scripts/verify_reference_solutions.py`
+  - `scripts/build_secondary_references.py`
+  - `scripts/verify_secondary_references.py`
 
-Bottom line: evidence currently supports **memory-enabled variants over no-memory**, but we do **not** yet have enough seed-matched data to declare `raw_trajectory_memory` vs `reflection_heuristic` winner on strict solves.
+## Representative Failures
 
-## Artifacts
+`simple_001` can be solved, but hard levels still expose repeated semantic invalid-plan patterns.
 
-- `docs/failure_gifs/lmgame_boxid_20260522/`
-- `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
-- `docs/reference_gifs/`
+- early pushes into blocked destinations
+- required standing cell blocked or unreachable
+- stale or missing box coordinate during longer plans
 
----
+Common failure reasons:
 
-## What Is Working vs Not Working
+- `box_destination_blocked_by_box`
+- `box_destination_blocked_by_wall_or_boundary`
+- `required_push_position_blocked_by_box`
+- `required_push_position_unreachable`
+- `box_coordinate_missing`
 
-Working:
+## What This Answers
 
-- Reproducible multi-agent evaluation with explicit failure taxonomy.
-- Stronger diagnostics (episode metadata + annotated GIFs).
-- Partial-progress metrics reveal useful movement hidden by solve-only reporting.
+This updated checkpoint now supports the following claims:
 
-Not yet working:
+- Full-path executor + verifier + failure taxonomy are stable and reproducible.
+- Week 8 added stronger observability (annotated GIFs), deadlock-heuristic correction, and partial-progress metrics.
+- Memory-enabled modes currently outperform no-memory on combined signals, but strict winner between raw vs reflection memory is not yet established.
+- Unstuck fallback is excluded from final evidence because it was tested and reverted.
 
-- Solve rate remains low on difficult eval levels.
-- `invalid_plan` and `deadlock` still dominate terminal outcomes.
-- Memory variants do not yet create strong, consistent solve-rate separation.
+## Remaining Problems and Next Step
 
----
+The main unresolved issue remains semantic legality and long-horizon consistency, not JSON shape. Prompt wording iterations alone were not enough; legality scaffolding and box-id guidance improved diagnostics and partial progress but did not yet produce robust hard-level solve gains.
 
-## Clean Next Steps
+Next steps should prioritize memory-winner resolution under matched seeds:
 
-1. Memory winner experiment (highest priority):
-   - Run `no_memory`, `raw_trajectory_memory`, and `reflection_heuristic` on the same expanded seed set and level list.
-   - Report paired per-level winner counts and overall solve-rate deltas.
-2. Tie-break metrics for memory modes:
-   - For each memory mode, report `solve_rate`, `partial_progress_score`, `invalid_plan_count`, and `deadlock_count`.
-   - Use this to separate "more progress" from "more actual solves."
-3. Failure-mode slicing by memory type:
-   - Build a compact table showing which failure class each memory mode reduces most.
-4. Prompt/executor changes aimed at memory comparison validity:
-   - Prioritize fixes that reduce `invalid_plan` noise so memory effects are easier to detect.
-5. Final project decision rule:
-   - Choose memory mode by strict solve-rate first; break ties with deadlock rate, then partial-progress score.
+1. Run expanded seed-matched eval for all three memory modes on same level list.
+2. Report strict winner by `solve_rate`; break ties with `deadlock_count`, then `partial_progress_score`.
+3. Keep per-mode failure slicing to show which memory representation reduces which failure class.
+
+Until that is complete, results should be framed as a strong evaluation/failure-analysis milestone rather than final proof of best memory representation.
