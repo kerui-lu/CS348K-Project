@@ -2,7 +2,7 @@
 
 ## Summary
 
-This checkpoint updates the earlier Week 8 `main` narrative with the additional work that happened afterward on top of `full_path_kerui`. The core setup remains full-path push-intent planning: the LLM proposes semantic pushes, and local code verifies legality/reachability before executing primitive moves. During this cycle we tightened legal-push/box-id planning guidance, improved failure observability with annotated GIFs and cleaner deadlock short-circuit logging, fixed a deadlock false positive, and added partial-progress metrics.
+This checkpoint updates the earlier Week 8 `main` narrative with the additional work that happened afterward on top of `full_path_kerui`. The core setup remains full-path push-intent planning: the LLM proposes semantic pushes, and local code verifies legality/reachability before executing primitive moves. During this cycle we tightened legal-push/box-id planning guidance (across agent/prompt/executor wiring), improved failure observability with annotated GIFs and cleaner deadlock short-circuit logging, fixed a deadlock false positive, added partial-progress metrics, and added an offline secondary-reference pipeline (local BFS solver + verification outputs) to strengthen replay/diagnostic baselines.
 
 The core conclusion is still diagnostic: infrastructure and measurement improved substantially, but strict solve performance on hard eval levels remains constrained by semantic planning errors (`invalid_plan`, `deadlock`) rather than JSON-format failures.
 
@@ -37,6 +37,26 @@ Week 8 additions on top of earlier checkpoint template:
 
 - `partial_progress_score`
 - `average_best_goal_completion`
+- secondary-reference verification artifacts for levels missing primary references
+
+### LMGame-inspired elements carried into this checkpoint
+
+These are adaptations of LMGame/GamingAgent ideas rather than copied benchmark tests:
+
+- Harness-first evaluation mindset:
+  - compare memory modes under matched seeds/configs rather than isolated anecdotes.
+- Structured symbolic planning context:
+  - legal push candidates + box identity guidance to reduce free-form semantic drift.
+- Memory as an explicit ablation axis:
+  - `no_memory` vs `raw_trajectory_memory` vs `reflection_heuristic`.
+- Progress-style interpretation alongside strict solve:
+  - partial-progress metrics to capture non-binary movement.
+
+What we added as repo-specific test/validation work on top:
+
+- full-path legality/deadlock regression tests in our own `tests/` suite;
+- solver and secondary-reference verification tests (`tests/test_solver.py`);
+- artifact validation through episode JSON + GIF overlays for failure reasoning.
 
 ## Intermediate Results
 
@@ -98,15 +118,22 @@ Interpretation:
 The checkpoint evidence is backed by concrete artifacts generated during these runs:
 
 - Failure comparison GIF panels:
+  - `docs/failure_gifs/lmgame_boxid_20260522/`
+  - `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
+  - `docs/failure_gifs/deadlock_fix_retest_20260522/`
   - `docs/failure_gifs/invalid_step_overlay_20260527/curated/` (curated regenerated examples with player-direction arrows for failed moves)
 - Reference replay GIF set:
   - `docs/reference_gifs/`
 - Supporting scripts used to generate/verify these outputs:
   - `scripts/render_episode_gifs.py`
-  - `scripts/render_reference_gifs.py`
-  - `scripts/verify_reference_solutions.py`
   - `scripts/build_secondary_references.py`
   - `scripts/verify_secondary_references.py`
+- Secondary reference outputs:
+  - `levels/v2_pilot_secondary_references.json`
+  - `levels/v2_pilot_secondary_references_unfiltered.json`
+- Core solver module and tests used for this pipeline:
+  - `sokoban_memory/solver.py`
+  - `tests/test_solver.py`
 
 ## Representative Failures
 
@@ -130,8 +157,11 @@ This updated checkpoint now supports the following claims:
 
 - Full-path executor + verifier + failure taxonomy are stable and reproducible.
 - Week 8 added stronger observability (annotated GIFs), deadlock-heuristic correction, and partial-progress metrics.
+- Deadlock short-circuit handling now produces cleaner, more trustworthy terminal episode logs/replays instead of ambiguous failure playback.
 - Memory-enabled modes currently outperform no-memory on combined signals, but strict winner between raw vs reflection memory is not yet established.
 - Unstuck fallback is excluded from final evidence because it was tested and reverted.
+- Secondary-reference generation/verification is now locally reproducible via BFS solver tooling, improving reference coverage for diagnostic workflows.
+- Test coverage was expanded around these changes (agents/full-path/metrics/solver), reducing regression risk while iterating on memory comparisons.
 
 ## Remaining Problems and Next Step
 
