@@ -98,10 +98,7 @@ Interpretation:
 The checkpoint evidence is backed by concrete artifacts generated during these runs:
 
 - Failure comparison GIF panels:
-  - `docs/failure_gifs/lmgame_boxid_20260522/`
-  - `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
-  - `docs/failure_gifs/deadlock_fix_retest_20260522/`
-  - `docs/failure_gifs/invalid_step_overlay_20260527/` (regenerated with player-direction arrows for failed moves)
+  - `docs/failure_gifs/invalid_step_overlay_20260527/curated/` (curated regenerated examples with player-direction arrows for failed moves)
 - Reference replay GIF set:
   - `docs/reference_gifs/`
 - Supporting scripts used to generate/verify these outputs:

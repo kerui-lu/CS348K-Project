@@ -131,9 +131,13 @@ These toggles can produce publishable conclusions even if absolute solve rates r
 
 | Issue observed | Change tried | Result / status |
 |---|---|---|
-| GIFs showed terminal failure but not the attempted move clearly. | Regenerated failure GIFs with a red direction arrow on the player for the attempted action, while keeping text overlays minimal. | New artifacts in `docs/failure_gifs/invalid_step_overlay_20260527/`; curated cross-memory examples are in the `curated/` subfolder. |
-| Legal-push prompt instructions were advisory rather than enforced. | Added executor-side legal-candidate gating: a push must match the current reachable `legal_push_candidates` set before execution continues. | Focused tests pass; future runs should classify these failures earlier and more consistently. |
-| Repair attempts could repeat the exact failed `(box_id, push)` pair. | Added a repair guardrail that bans the last genuinely failed `(box_id, push)` pair on the next repair attempt. | Focused tests pass; legal `plan_exhausted` continuations remain allowed so multi-call partial progress is not blocked. |
+| GIFs showed terminal failure but not the attempted move clearly. | Regenerated failure GIFs with a red direction arrow on the player for the attempted action, while keeping text overlays minimal. | Kept only the curated arrow examples in `docs/failure_gifs/invalid_step_overlay_20260527/curated/` after cleanup. |
+| Legal-push prompt instructions were advisory rather than enforced. | Added executor-side legal-candidate gating: a push must match the current reachable `legal_push_candidates` set before execution continues. | Implemented and tested. `python -m pytest` passed (`88 passed`); this has not yet been rerun as a new matched LLM evaluation, so strict solve-rate impact is still pending. |
+| Repair attempts could repeat the exact failed `(box_id, push)` pair. | Added a repair guardrail that bans the last genuinely failed `(box_id, push)` pair on the next repair attempt. | Implemented and tested. `python -m pytest` passed (`88 passed`); legal `plan_exhausted` continuations remain allowed so multi-call partial progress is not blocked. |
+
+Result interpretation:
+- Both requested guardrails are now in code, not just in the prompt.
+- Current evidence is regression-test evidence, not a new memory-comparison result. The next matched evaluation should be labeled as a post-guardrail run before comparing solve/deadlock/invalid-plan rates against `W7_FP_BOXID_DLOOK`.
 
 ---
 
