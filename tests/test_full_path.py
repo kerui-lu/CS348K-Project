@@ -1,9 +1,15 @@
 import pytest
 
-from sokoban_memory.agents import LLMAgent
+from sokoban_memory.agents import LLMAgent, NoMemoryAgent
 from sokoban_memory.env import SokobanEnv
 from sokoban_memory.experiment import run_episode
-from sokoban_memory.full_path import PushPlanParseError, execute_push_plan, parse_push_plan, shortest_player_path
+from sokoban_memory.full_path import (
+    PushIntent,
+    PushPlanParseError,
+    execute_push_plan,
+    parse_push_plan,
+    shortest_player_path,
+)
 from sokoban_memory.types import Level, Position
 
 
@@ -428,3 +434,60 @@ def test_run_episode_full_path_repair_from_current_state_chains_partial_plans():
     ]
     repair_prompt = client.responses.calls[1]["input"]
     assert "Regenerate a complete plan from the current board" in repair_prompt
+
+
+def test_execute_push_plan_rejects_push_outside_current_legal_candidates():
+    env = SokobanEnv(make_level([
+        "#####",
+        "#@$.#",
+        "#####",
+    ]))
+    env.reset()
+
+    result = execute_push_plan(
+        env=env,
+        plan=[PushIntent(box_id=0, push="Up")],
+        max_steps=10,
+        raw_response='[{"box_id": 0, "push": "Up"}]',
+        call_metadata={},
+    )
+
+    assert result.status == "invalid_plan"
+    assert result.failure_reason == "box_destination_blocked_by_wall_or_boundary"
+    assert result.failure_push_index == 0
+    assert result.push_execution_log[0]["legal_push_candidates"] == [
+        {
+            "box_id": 0,
+            "box": [1, 2],
+            "push": "Right",
+            "required_player": [1, 1],
+            "destination": [1, 3],
+        }
+    ]
+
+
+def test_repair_guardrail_rejects_repeated_failed_box_id_push_pair():
+    level = make_level([
+        "#####",
+        "#@$.#",
+        "#####",
+    ])
+    agent = NoMemoryAgent(
+        client=FakeClient('[{"box_id": 0, "push": "Up"}]'),
+        max_llm_calls=2,
+    )
+
+    result = run_episode(
+        SokobanEnv(level),
+        agent,
+        max_steps=10,
+        seed=0,
+        max_repair_attempts=1,
+    )
+
+    assert result.status == "invalid_plan"
+    assert result.metadata["failure_reason"] == "repeated_failed_push_guardrail"
+    assert result.metadata["repair_attempts"][1]["forbidden_failed_push"] == {
+        "box_id": 0,
+        "push": "Up",
+    }

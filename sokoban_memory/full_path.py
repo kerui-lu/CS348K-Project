@@ -175,6 +175,27 @@ def execute_push_plan(
         destination = resolved_box.moved(dr, dc)
         log_entry["required_player_position"] = _position_dict(required_player)
         log_entry["box_destination"] = _position_dict(destination)
+        legal_push_candidates = _legal_push_candidates(env, box_positions_by_id)
+        if not _matches_legal_push_candidate(
+            legal_push_candidates,
+            resolved_box_id=resolved_box_id,
+            resolved_box=resolved_box,
+            push=intent.push,
+        ):
+            failure_reason = _candidate_rejection_reason(env, resolved_box, intent.push)
+            log_entry["result"] = "invalid_plan"
+            log_entry["failure_reason"] = failure_reason
+            log_entry["legal_push_candidates"] = legal_push_candidates
+            return _result(
+                "invalid_plan",
+                trajectory,
+                total_reward,
+                expanded_actions,
+                push_execution_log,
+                executed_push_count,
+                failure_reason,
+                push_index,
+            )
 
         validation_error = _validate_push_intent(env, resolved_box, intent.push)
         if validation_error is not None:
@@ -352,6 +373,63 @@ def _validate_push_intent(env: SokobanEnv, box: Position, push: Action) -> str |
     if required_player in env.boxes:
         return "required_push_position_blocked_by_box"
     return None
+
+
+def _legal_push_candidates(
+    env: SokobanEnv,
+    box_positions_by_id: dict[int, Position],
+) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for box_id, box in sorted(box_positions_by_id.items()):
+        if box not in env.boxes:
+            continue
+        for push, (dr, dc) in DIRECTIONS.items():
+            destination = box.moved(dr, dc)
+            required_player = box.moved(-dr, -dc)
+            if env._is_blocked_cell(destination) or destination in env.boxes:
+                continue
+            if env._is_blocked_cell(required_player) or required_player in env.boxes:
+                continue
+            if shortest_player_path(env, required_player) is None:
+                continue
+            candidates.append(
+                {
+                    "box_id": box_id,
+                    "box": [box.row, box.col],
+                    "push": push,
+                    "required_player": [required_player.row, required_player.col],
+                    "destination": [destination.row, destination.col],
+                }
+            )
+    return candidates
+
+
+def _matches_legal_push_candidate(
+    candidates: list[dict[str, Any]],
+    *,
+    resolved_box_id: int | None,
+    resolved_box: Position,
+    push: Action,
+) -> bool:
+    for candidate in candidates:
+        if candidate.get("push") != push:
+            continue
+        if resolved_box_id is not None and candidate.get("box_id") == resolved_box_id:
+            return True
+        if candidate.get("box") == [resolved_box.row, resolved_box.col]:
+            return True
+    return False
+
+
+def _candidate_rejection_reason(env: SokobanEnv, box: Position, push: Action) -> str:
+    validation_error = _validate_push_intent(env, box, push)
+    if validation_error is not None:
+        return validation_error
+    dr, dc = DIRECTIONS[push]
+    required_player = box.moved(-dr, -dc)
+    if shortest_player_path(env, required_player) is None:
+        return "required_push_position_unreachable"
+    return "push_not_in_current_legal_candidates"
 
 
 def _trajectory_step(

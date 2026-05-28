@@ -185,6 +185,7 @@ def run_full_path_episode(
     max_repair_attempts = max(0, max_repair_attempts)
     repair_attempts: list[dict[str, Any]] = []
     repair_feedback: str | None = None
+    forbidden_failed_push: tuple[int, str] | None = None
     final_status = "invalid_plan"
     final_step_count = 0
     final_total_reward = 0.0
@@ -265,6 +266,36 @@ def run_full_path_episode(
             final_metadata = dict(attempt)
             final_metadata.pop("attempt_index", None)
             break
+        repeated_failed_push_index = _repeated_failed_push_index(plan, forbidden_failed_push)
+        if repeated_failed_push_index is not None:
+            attempt = {
+                "attempt_index": attempt_index,
+                "raw_plan_response": raw_plan,
+                "status": "invalid_plan",
+                "failure_reason": "repeated_failed_push_guardrail",
+                "planned_pushes": planned_pushes,
+                "executed_push_count": 0,
+                "planned_push_count": len(planned_pushes),
+                "expanded_primitive_step_count": 0,
+                "expanded_actions": [],
+                "push_execution_log": [],
+                "failure_push_index": repeated_failed_push_index,
+                "forbidden_failed_push": {
+                    "box_id": forbidden_failed_push[0],
+                    "push": forbidden_failed_push[1],
+                } if forbidden_failed_push is not None else None,
+            }
+            repair_attempts.append(attempt)
+            if attempt_index < max_repair_attempts:
+                repair_feedback = _repair_feedback_from_attempt(
+                    attempt,
+                    repair_from_current_state=repair_from_current_state,
+                )
+                continue
+            final_status = "invalid_plan"
+            final_metadata = dict(attempt)
+            final_metadata.pop("attempt_index", None)
+            break
 
         execution = execute_push_plan(
             env=env,
@@ -311,6 +342,7 @@ def run_full_path_episode(
             or attempt_index >= max_repair_attempts
         ):
             break
+        forbidden_failed_push = _failed_intent_signature(attempt)
         repair_feedback = _repair_feedback_from_attempt(
             attempt,
             repair_from_current_state=repair_from_current_state,
@@ -515,6 +547,13 @@ def _repair_feedback_from_attempt(
     if failed_log:
         if failed_log.get("intent") is not None:
             lines.append(f"Failed intent: {json.dumps(failed_log['intent'], sort_keys=True)}")
+            signature = _intent_signature(failed_log.get("intent"))
+            if signature is not None:
+                box_id, push = signature
+                lines.append(
+                    "Forbidden in the next repair attempt: "
+                    f'do not include any plan item with {{"box_id": {box_id}, "push": "{push}"}}.'
+                )
         if failed_log.get("resolved_box") is not None:
             lines.append(f"Resolved box: {_format_log_position(failed_log['resolved_box'])}")
         if failed_log.get("box_destination") is not None:
@@ -572,6 +611,36 @@ def _repair_alternatives_from_env(env: SokobanEnv, attempt: dict[str, Any]) -> l
     if prioritized:
         return prioritized[:8]
     return alternatives[:8]
+
+
+def _repeated_failed_push_index(plan: list[Any], forbidden_failed_push: tuple[int, str] | None) -> int | None:
+    if forbidden_failed_push is None:
+        return None
+    for index, intent in enumerate(plan):
+        if (intent.box_id, intent.push) == forbidden_failed_push:
+            return index
+    return None
+
+
+def _failed_intent_signature(attempt: dict[str, Any]) -> tuple[int, str] | None:
+    if attempt.get("status") == "plan_exhausted":
+        return None
+    failed_log = _failed_push_log(attempt)
+    if not failed_log:
+        return None
+    if failed_log.get("result") not in {"invalid_plan", "deadlock"}:
+        return None
+    return _intent_signature(failed_log.get("intent"))
+
+
+def _intent_signature(intent: Any) -> tuple[int, str] | None:
+    if not isinstance(intent, dict):
+        return None
+    box_id = intent.get("box_id")
+    push = intent.get("push")
+    if isinstance(box_id, int) and not isinstance(box_id, bool) and isinstance(push, str):
+        return box_id, push
+    return None
 
 
 def _shortest_path_to(env: SokobanEnv, target: Position) -> list[str] | None:

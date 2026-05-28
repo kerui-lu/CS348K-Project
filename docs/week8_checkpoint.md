@@ -101,6 +101,7 @@ The checkpoint evidence is backed by concrete artifacts generated during these r
   - `docs/failure_gifs/lmgame_boxid_20260522/`
   - `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
   - `docs/failure_gifs/deadlock_fix_retest_20260522/`
+  - `docs/failure_gifs/invalid_step_overlay_20260527/` (regenerated with player-direction arrows for failed moves)
 - Reference replay GIF set:
   - `docs/reference_gifs/`
 - Supporting scripts used to generate/verify these outputs:
@@ -138,6 +139,8 @@ This updated checkpoint now supports the following claims:
 ## Remaining Problems and Next Step
 
 The main unresolved issue remains semantic legality and long-horizon consistency, not JSON shape. Prompt wording iterations alone were not enough; legality scaffolding and box-id guidance improved diagnostics and partial progress but did not yet produce robust hard-level solve gains.
+
+Post-checkpoint guardrail note: the legal-push candidate contract is now enforced in the executor, not only stated in the prompt, and repair feedback now blocks repeating the same genuinely failed `(box_id, push)` pair. This targets the repeated invalid-push/deadlock patterns seen in the GIF review without reintroducing the noisy unstuck fallback.
 
 Next steps should prioritize memory-winner resolution under matched seeds:
 
