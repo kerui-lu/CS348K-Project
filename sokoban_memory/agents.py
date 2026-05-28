@@ -343,6 +343,8 @@ def responses_create_kwargs(
 
 
 def reasoning_config(model: str) -> dict[str, str] | None:
+    if model.startswith("gpt-5.2"):
+        return {"effort": "low"}
     if model.startswith("gpt-5"):
         return {"effort": "minimal"}
     return None
