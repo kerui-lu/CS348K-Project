@@ -4,7 +4,7 @@
 
 This report documents the current V3 Sokoban memory-evaluation design and the results executed on `levels/v3_boxoban_balanced.json`.
 
-The current executed results include the planner-validity gate and two same-level retry conditions: `verifier_summary_retry` and `raw_same_level_iterative`. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode. Both retry conditions improve held-out eval solve rate under a fixed attempt budget, but heuristic same-level memory and train-to-eval heuristic generalization are not yet complete.
+The current executed results include the planner-validity gate and three same-level retry conditions: `verifier_summary_retry`, `raw_same_level_iterative`, and `heuristic_same_level_iterative`. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode. All three retry conditions improve held-out eval solve rate under a fixed attempt budget, but train-to-eval heuristic generalization is not yet complete.
 
 Main result:
 
@@ -18,6 +18,7 @@ Main result:
 - Dominant failure subtype: `unreachable_standing_cell`.
 - Same-level verifier-summary retry: eval `solve_rate@K` improves from `8/24 = 33.3%` to `13/24 = 54.2%` with `K = 3`.
 - Same-level raw trajectory retry: eval `solve_rate@K` also reaches `13/24 = 54.2%` with `K = 3`, but with a different solved-level set and a higher invalid-plan attempt count.
+- Same-level heuristic retry: eval `solve_rate@K` reaches `12/24 = 50.0%` with `K = 3`.
 
 Because invalid plans are still common, same-level raw/heuristic retry and train-to-eval heuristic generalization should be interpreted separately from verifier-guided scaffolding.
 
@@ -275,6 +276,31 @@ Same-level raw trajectory retry:
 
 The final raw same-level evaluation uses `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean`, a clean copy of the raw result directory with one duplicate cached file removed. The duplicate occurred when the original long run wrote the final level after the missing-level check had already started a cached supplemental run.
 
+Same-level heuristic retry:
+
+```bash
+.venv/bin/python run_experiment.py \
+  --experiment_mode same_level_iterative \
+  --condition heuristic_same_level_iterative \
+  --model gpt-5.2 \
+  --levels levels/v3_boxoban_balanced.json \
+  --level_split eval \
+  --attempt_budget 3 \
+  --max_steps 100 \
+  --max_llm_calls 3 \
+  --llm_cache_path .llm_cache/responses \
+  --cache_namespace v3_eval_heuristic_same_level_k3_gpt52_low_16384 \
+  --temperature 0 \
+  --max_output_tokens 16384 \
+  --results_dir results/v3_eval_heuristic_same_level_k3_gpt52_low_16384
+
+.venv/bin/python evaluate_results.py \
+  --results_dir results/v3_eval_heuristic_same_level_k3_gpt52_low_16384 \
+  --levels levels/v3_boxoban_balanced.json \
+  --output results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/evaluation_summary.json \
+  --fail_on_validation_error
+```
+
 ## Token-Cap Smoke Results
 
 The original `8192` token cap was not sufficient for `gpt-5.2` with reasoning effort `low`.
@@ -392,6 +418,7 @@ The second same-level retry condition tested was `raw_same_level_iterative` on t
 | single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
 | `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
 | `raw_same_level_iterative`, K=3 | 24 | 55 | 25.0% | 54.2% | 13 | 34 | 4 | 4 |
+| `heuristic_same_level_iterative`, K=3 | 24 | 55 | 20.8% | 50.0% | 12 | 31 | 3 | 9 |
 
 Raw same-level retry solved 6 levels not solved by the single-shot eval baseline:
 
@@ -451,9 +478,77 @@ Interpretation:
 - Raw evidence can rescue different levels than verifier-summary retry, suggesting that concrete same-level evidence is sometimes useful.
 - Raw retry has more invalid-plan attempts than verifier-summary retry in this run, so compact raw evidence may add useful local context but also increases prompt complexity.
 
+## Same-Level Heuristic Retry Results
+
+The third same-level retry condition tested was `heuristic_same_level_iterative` on the eval split with `K = 3`. This condition generates concise same-level reflection heuristics from prior failures, then renders the accepted same-level heuristics on later attempts for the same level.
+
+| Condition | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
+| `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
+| `raw_same_level_iterative`, K=3 | 24 | 55 | 25.0% | 54.2% | 13 | 34 | 4 | 4 |
+| `heuristic_same_level_iterative`, K=3 | 24 | 55 | 20.8% | 50.0% | 12 | 31 | 3 | 9 |
+
+Heuristic same-level retry solved 4 levels not solved by the single-shot eval baseline:
+
+- `boxoban_medium_valid_000_168`
+- `boxoban_medium_valid_000_270`
+- `boxoban_unfiltered_valid_000_127`
+- `boxoban_unfiltered_valid_000_289`
+
+It did not lose any level solved by the single-shot eval baseline.
+
+Compared with raw same-level retry, heuristic same-level retry solved one additional level:
+
+- `boxoban_medium_valid_000_290`
+
+It failed two levels solved by raw same-level retry:
+
+- `boxoban_medium_valid_000_275`
+- `boxoban_unfiltered_valid_000_197`
+
+Compared with verifier-summary retry, heuristic same-level retry did not solve any additional level and missed one verifier-solved level:
+
+- `boxoban_unfiltered_valid_000_197`
+
+The cumulative solved-by-attempt curve was:
+
+| Attempt cutoff | Solved level rate |
+| ---: | ---: |
+| 1 | 20.8% |
+| 2 | 50.0% |
+| 3 | 50.0% |
+
+Failure subtype counts across all heuristic same-level retry attempts:
+
+| Failure subtype | Count |
+| --- | ---: |
+| `unreachable_standing_cell` | 26 |
+| `plan_exhausted` | 9 |
+| `empty_output` | 4 |
+| `deadlock` | 3 |
+| `blocked_standing_cell` | 1 |
+
+Stratum-level heuristic retry results:
+
+| Eval stratum | Attempts | Solve rate@1 | Solve rate@K | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| medium / constrained | 10 | 0.0% | 50.0% | 40.0% | 0.0% | 40.0% | 30.0% |
+| medium / middle | 11 | 0.0% | 25.0% | 54.5% | 0.0% | 36.4% | 22.7% |
+| medium / open | 12 | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 25.0% |
+| unfiltered / constrained | 7 | 50.0% | 75.0% | 14.3% | 42.9% | 0.0% | 42.9% |
+| unfiltered / middle | 9 | 0.0% | 75.0% | 55.6% | 0.0% | 11.1% | 61.1% |
+| unfiltered / open | 6 | 75.0% | 75.0% | 50.0% | 0.0% | 0.0% | 70.8% |
+
+Interpretation:
+
+- Same-level heuristic retry improves over the single-shot baseline but does not outperform verifier-summary or raw same-level retry on solved-level coverage.
+- It has fewer invalid-plan attempts than raw retry but more plan-exhausted attempts, suggesting that some generated heuristics improve legality while still failing to produce complete plans.
+- The third attempt did not improve solved-level coverage in this run; all gains happened by attempt 2.
+
 ## Interpretation
 
-The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24. However, planner validity is still not clean enough for a final train-to-eval heuristic-memory claim.
+The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24, while heuristic same-level retry improves it to 12/24. However, planner validity is still not clean enough for a final train-to-eval heuristic-memory claim.
 
 Key observations:
 
@@ -464,6 +559,7 @@ Key observations:
 - Medium levels are harder than unfiltered levels under the current prompt. Eval medium middle levels had 0% solve rate and 100% invalid-plan rate.
 - `verifier_summary_retry` raises eval `solve_rate@K` to 54.2%, but it does not remove invalid push proposals.
 - `raw_same_level_iterative` also reaches 54.2% eval `solve_rate@K`, with a different solved-level set and more invalid-plan attempts.
+- `heuristic_same_level_iterative` reaches 50.0% eval `solve_rate@K`; it is useful relative to no memory, but it is not stronger than verifier-summary or raw retry in this run.
 
 ## Current Gate Decision
 
@@ -473,16 +569,16 @@ The current Track 0 and verifier-summary results trigger the planner-validity ca
 - If memory improves `best_goal_completion_rate` without improving solve rate, it may be helping partial progress but not complete planning.
 - If train-derived global heuristics improve eval solve rate while also reducing invalid pushes, that would be stronger evidence of useful abstraction.
 
-The next experimental step is to compare both retry baselines against same-level heuristic memory before broad train-to-eval heuristic claims.
+The next experimental step is to decide whether to run train-side heuristic collection for train-to-eval generalization despite same-level heuristic retry not outperforming simpler same-level retry baselines.
 
 ## Next Runs
 
 Recommended next execution order:
 
-1. `heuristic_same_level_iterative` on the eval split with `K = 3`.
-2. If same-level heuristic retry improves validity or solved-level coverage, run the same condition on train.
-3. Generate train-derived global heuristics only after same-level heuristic generation produces stable, non-rejected rules.
-4. Run train-to-eval heuristic generalization with stratum-level reporting.
+1. Inspect same-level heuristic outputs to estimate how many rules are `global_allowed`, `same_level_only`, or `rejected`.
+2. If enough `global_allowed` rules are produced, run train-side heuristic collection on `levels/v3_boxoban_balanced.json`.
+3. Run train-to-eval heuristic generalization with only `global_allowed` train-derived heuristics.
+4. Report train-to-eval results separately from same-level retry results.
 
 These runs should keep the same fixed settings:
 
@@ -505,6 +601,7 @@ Executed result directories:
 - `results/v3_eval_verifier_retry_k3_gpt52_low_16384`
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384`
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean`
+- `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384`
 
 Combined evaluation summary:
 
@@ -516,3 +613,4 @@ Validation:
 - `results/v3_track0_eval_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_eval_verifier_retry_k3_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean/evaluation_summary.json`
+- `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/evaluation_summary.json`
