@@ -191,3 +191,38 @@ def test_heuristic_same_level_iterative_generates_retry_heuristics(tmp_path):
     assert len(reflection_client.responses.calls) == 1
     assert "Same-level reflection heuristics" in plan_client.responses.calls[1]["input"]
     assert "named box exists" in plan_client.responses.calls[1]["input"]
+
+
+def test_heuristic_same_level_v1_specific_uses_concrete_reflection(tmp_path):
+    level = load_levels("levels/simple.json")[0]
+    plan_client = FakeClient([
+        '[{"box": [0, 0], "push": "Right"}]',
+        '[{"box": [2, 3], "push": "Right"}]',
+    ])
+    # Concrete, coordinate-grounded heuristic (would be classed same_level_only
+    # by scope, and must still reach the planner in same_level_mode).
+    reflection_client = FakeClient(
+        '["Do not push box [0,0] Right: standing cell [0,-1] is off-board; push box [2,3] Right first."]'
+    )
+
+    summary = run_same_level_iterative_experiment(
+        levels=[level],
+        condition="heuristic_same_level_iterative",
+        attempts_per_level=2,
+        max_steps=20,
+        seed=0,
+        results_dir=tmp_path,
+        client=plan_client,
+        reflection_client=reflection_client,
+        max_llm_calls=5,
+        cache_namespace="test_heuristic_v1_specific",
+        same_level_reflection_version="v1_specific",
+    )
+
+    assert summary["solve_rate_at_k"] == 1.0
+    assert summary["same_level_reflection_version"] == "v1_specific"
+    # Reflection prompt is the failure-specific one, not the generic cross-level one.
+    reflection_prompt = reflection_client.responses.calls[0]["input"]
+    assert "ONE specific Sokoban level" in reflection_prompt
+    # The concrete coordinate heuristic survives same_level_mode rendering.
+    assert "[0,-1] is off-board" in plan_client.responses.calls[1]["input"]

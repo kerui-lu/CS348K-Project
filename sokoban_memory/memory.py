@@ -19,6 +19,13 @@ class MemoryRenderConfig:
     max_memory_items: int = 3
     max_steps_per_memory: int = 6
     max_memory_chars: int = 4000
+    # Same-level heuristic tuning (V2). These only affect the
+    # `heuristic_same_level_iterative` path; cross-level conditions keep the
+    # legacy caps above.
+    same_level_reflection_evidence_items: int = 4
+    same_level_reflection_evidence_chars: int = 16000
+    same_level_heuristic_render_items: int = 6
+    same_level_heuristic_render_chars: int = 8000
 
     def to_dict(self) -> dict[str, int]:
         return asdict(self)
@@ -107,6 +114,33 @@ class RawTrajectoryMemory:
         assert_raw_render_has_no_strategic_words(rendered)
         return rendered
 
+    def render_same_level_failure_evidence(self, level_id: str, config: MemoryRenderConfig) -> str:
+        """Full same-level failure evidence for the reflection generator.
+
+        Unlike `render_for_level` (which is shown to the *planner* and is kept
+        compact), this is the *input to the reflection LLM*. It uses a larger
+        item/char budget so the reflector can see precisely what failed:
+        the failed push, verifier reason, and the relevant boards.
+        """
+        records = self.records_for_level(level_id)
+        selected = _select_compact_same_level_records(
+            records,
+            max_items=config.same_level_reflection_evidence_items,
+        )
+        if not selected:
+            return f"No same-level failure evidence is available for {level_id}."
+        sections = [
+            "Same-level failure evidence from prior attempts on this exact board:",
+            f"memory_renderer_version: {MEMORY_RENDERER_VERSION}",
+            f"level_id: {level_id}",
+            f"attempt_records: {len(selected)}",
+        ]
+        for idx, episode in enumerate(selected, start=1):
+            sections.append(_render_compact_same_level_evidence(idx, episode))
+        rendered = truncate_text("\n\n".join(sections), config.same_level_reflection_evidence_chars)
+        assert_raw_render_has_no_strategic_words(rendered)
+        return rendered
+
     def render_verifier_summary_for_level(self, level_id: str, config: MemoryRenderConfig) -> str:
         selected = _select_compact_same_level_records(
             self.records_for_level(level_id),
@@ -191,7 +225,13 @@ class HeuristicMemory:
         lines.extend(f"{idx}. {heuristic}" for idx, heuristic in enumerate(selected, start=1))
         return truncate_text("\n".join(lines), config.max_memory_chars)
 
-    def render_for_level(self, level_id: str, config: MemoryRenderConfig) -> str:
+    def render_for_level(
+        self,
+        level_id: str,
+        config: MemoryRenderConfig,
+        *,
+        same_level_mode: bool = False,
+    ) -> str:
         source_level_ids = {
             str(item)
             for item in (
@@ -201,23 +241,34 @@ class HeuristicMemory:
             )
         }
         allow_same_level_rules = not source_level_ids or level_id in source_level_ids
-        selected = [
-            heuristic
-            for heuristic in self.heuristics
-            if classify_heuristic(heuristic)["scope"] == "global_allowed"
-            or (
-                allow_same_level_rules
-                and classify_heuristic(heuristic)["scope"] == "same_level_only"
-            )
-        ][: config.max_memory_items]
+        if same_level_mode:
+            # V2: these heuristics were generated from THIS level's failures and
+            # are only ever rendered for THIS level, so concrete, board-grounded
+            # guidance (coordinates, directions, even short board fragments) is
+            # exactly what we want. Do not drop on scope; just budget by count.
+            item_cap = config.same_level_heuristic_render_items
+            char_cap = config.same_level_heuristic_render_chars
+            selected = [h for h in self.heuristics if h.strip()][:item_cap]
+        else:
+            item_cap = config.max_memory_items
+            char_cap = config.max_memory_chars
+            selected = [
+                heuristic
+                for heuristic in self.heuristics
+                if classify_heuristic(heuristic)["scope"] == "global_allowed"
+                or (
+                    allow_same_level_rules
+                    and classify_heuristic(heuristic)["scope"] == "same_level_only"
+                )
+            ][:item_cap]
         if not selected:
             return f"No same-level reflection heuristics are available for {level_id}."
         lines = [
-            "Same-level reflection heuristics distilled from previous failures:",
+            "Same-level reflection heuristics distilled from previous failures on this exact board:",
             f"level_id: {level_id}",
         ]
         lines.extend(f"{idx}. {heuristic}" for idx, heuristic in enumerate(selected, start=1))
-        return truncate_text("\n".join(lines), config.max_memory_chars)
+        return truncate_text("\n".join(lines), char_cap)
 
     def classified_heuristics(self) -> list[dict[str, str]]:
         return [classify_heuristic(heuristic) for heuristic in self.heuristics]

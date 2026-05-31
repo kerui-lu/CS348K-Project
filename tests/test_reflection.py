@@ -1,5 +1,10 @@
 from sokoban_memory.memory import MemoryRenderConfig, RawTrajectoryMemory
-from sokoban_memory.reflection import generate_reflection_memory, parse_heuristics
+from sokoban_memory.reflection import (
+    build_same_level_reflection_prompt,
+    generate_reflection_memory,
+    generate_same_level_reflection_memory,
+    parse_heuristics,
+)
 
 
 class FakeResponses:
@@ -30,6 +35,90 @@ def make_raw_memory():
             }
         ]
     )
+
+
+def make_same_level_raw_memory():
+    return RawTrajectoryMemory(
+        source_metadata={"memory_scope": "same_level", "source_level_ids": ["lvl_a"]},
+        episodes=[
+            {
+                "level_id": "lvl_a",
+                "status": "invalid_plan",
+                "failure_reason": "required_push_position_unreachable",
+                "failure_subtype": "unreachable_standing_cell",
+                "failure_push_index": 2,
+                "initial_board": "#####\n#@$.#\n#####",
+                "board_before_failed_push": "#####\n#@$.#\n#####",
+                "board_after_last_successful_push": "#####\n#@$.#\n#####",
+                "push_execution_log": [
+                    {
+                        "push_index": 2,
+                        "model_intent": {"box": [1, 2], "push": "Left"},
+                        "status": "failed",
+                        "resolved_box_before_push": {"row": 1, "col": 2},
+                        "standing_cell_required": {"row": 1, "col": 3},
+                        "destination_cell": {"row": 1, "col": 1},
+                        "failure_subtype": "unreachable_standing_cell",
+                    }
+                ],
+            }
+        ],
+    )
+
+
+def test_same_level_reflection_prompt_is_failure_specific():
+    raw = make_same_level_raw_memory()
+    config = MemoryRenderConfig()
+    prompt = build_same_level_reflection_prompt(raw, "lvl_a", config, version="v1_specific")
+    assert "ONE specific Sokoban level" in prompt
+    assert "lvl_a" in prompt
+    # Concrete failure evidence must be present for the reflector to use.
+    assert "standing_cell_required" in prompt
+    assert "Never re-emit the exact push that just failed." in prompt
+
+    hybrid = build_same_level_reflection_prompt(raw, "lvl_a", config, version="v3_hybrid_verifier")
+    assert "literal restatement of the verifier" in hybrid
+
+    complete = build_same_level_reflection_prompt(raw, "lvl_a", config, version="v2_complete_plan")
+    assert "COMPLETE" in complete
+
+
+def test_same_level_reflection_baseline_matches_legacy(tmp_path):
+    raw = make_same_level_raw_memory()
+    config = MemoryRenderConfig(max_memory_chars=2000)
+    legacy = build_same_level_reflection_prompt(raw, "lvl_a", config, version="baseline")
+    from sokoban_memory.reflection import build_reflection_prompt
+
+    assert legacy == build_reflection_prompt(raw, config)
+
+
+def test_generate_same_level_reflection_uses_cache_and_version(tmp_path):
+    cache_path = tmp_path / "cache"
+    client = FakeClient('["Box [1,2] cannot be pushed Left: standing cell [1,3] is blocked; push it Right instead."]')
+    second = FakeClient('["should not run"]')
+    mem = generate_same_level_reflection_memory(
+        make_same_level_raw_memory(),
+        level_id="lvl_a",
+        version="v1_specific",
+        client=client,
+        llm_cache_path=str(cache_path),
+        cache_namespace="test_same_level_reflection",
+    )
+    cached = generate_same_level_reflection_memory(
+        make_same_level_raw_memory(),
+        level_id="lvl_a",
+        version="v1_specific",
+        client=second,
+        llm_cache_path=str(cache_path),
+        max_llm_calls=0,
+        cache_namespace="test_same_level_reflection",
+    )
+    assert mem.heuristics and "[1,3]" in mem.heuristics[0]
+    assert cached.heuristics == mem.heuristics
+    assert len(client.responses.calls) == 1
+    assert second.responses.calls == []
+    assert mem.source_metadata["same_level_reflection_version"] == "v1_specific"
+    assert mem.source_metadata["reflection_prompt_version"] == "same_level_reflection_v1_specific"
 
 
 def test_parse_heuristics_accepts_json_array_and_bullets():

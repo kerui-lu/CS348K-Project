@@ -28,7 +28,12 @@ from sokoban_memory.memory import (
 )
 from sokoban_memory.metrics import summarize_results
 from sokoban_memory.prompts import level_metadata
-from sokoban_memory.reflection import generate_reflection_memory
+from sokoban_memory.reflection import (
+    DEFAULT_SAME_LEVEL_REFLECTION_VERSION,
+    SAME_LEVEL_REFLECTION_VERSIONS,
+    generate_reflection_memory,
+    generate_same_level_reflection_memory,
+)
 from sokoban_memory.types import EpisodeResult, Level, Position
 from sokoban_memory.v3_trajectory import (
     RunIdentity,
@@ -551,11 +556,20 @@ def run_same_level_iterative_experiment(
     max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
     cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
     level_suite_path: str | Path | None = None,
+    same_level_reflection_version: str = DEFAULT_SAME_LEVEL_REFLECTION_VERSION,
 ) -> dict[str, Any]:
     if condition not in SAME_LEVEL_ITERATIVE_CONDITIONS:
         raise ValueError(f"Unknown same-level iterative condition: {condition}")
     if attempts_per_level <= 0:
         raise ValueError("attempts_per_level must be positive.")
+    if same_level_reflection_version not in SAME_LEVEL_REFLECTION_VERSIONS:
+        raise ValueError(
+            f"Unknown same_level_reflection_version: {same_level_reflection_version}"
+        )
+    same_level_render_mode = (
+        condition == "heuristic_same_level_iterative"
+        and same_level_reflection_version != "baseline"
+    )
 
     config = memory_config or MemoryRenderConfig()
     run_identity = make_run_identity(level_suite_path)
@@ -585,6 +599,7 @@ def run_same_level_iterative_experiment(
                 "iteration_attempt_index": attempt_index,
                 "attempt_budget": effective_attempts,
                 "same_level_iterative_condition": condition,
+                "same_level_render_mode": same_level_render_mode,
             }
             if hasattr(agent, "memory_hash"):
                 agent.memory_hash = getattr(getattr(agent, "memory_store", None), "memory_hash", None)
@@ -627,6 +642,7 @@ def run_same_level_iterative_experiment(
                 temperature=temperature,
                 max_output_tokens=max_output_tokens,
                 cache_namespace=cache_namespace,
+                same_level_reflection_version=same_level_reflection_version,
             )
 
     summary = summarize_results(results)
@@ -634,6 +650,7 @@ def run_same_level_iterative_experiment(
         {
             "experiment_mode": "same_level_iterative",
             "condition": condition,
+            "same_level_reflection_version": same_level_reflection_version,
             "attempts_per_level": effective_attempts,
             "requested_levels": len(levels),
             **level_metadata(levels),
@@ -731,6 +748,7 @@ def _update_same_level_memory_after_failure(
     temperature: float,
     max_output_tokens: int,
     cache_namespace: str,
+    same_level_reflection_version: str = DEFAULT_SAME_LEVEL_REFLECTION_VERSION,
 ) -> None:
     if condition not in {"verifier_summary_retry", "raw_same_level_iterative", "heuristic_same_level_iterative"}:
         return
@@ -747,8 +765,10 @@ def _update_same_level_memory_after_failure(
         agent.memory_hash = raw_memory.memory_hash  # type: ignore[attr-defined]
         return
 
-    heuristic_memory = generate_reflection_memory(
+    heuristic_memory = generate_same_level_reflection_memory(
         raw_memory,
+        level_id=level.level_id,
+        version=same_level_reflection_version,
         model=model,
         api_key_env=api_key_env,
         client=reflection_client,

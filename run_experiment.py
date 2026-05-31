@@ -20,6 +20,10 @@ from sokoban_memory.experiment import (
     run_experiment,
     run_same_level_iterative_experiment,
 )
+from sokoban_memory.reflection import (
+    DEFAULT_SAME_LEVEL_REFLECTION_VERSION,
+    SAME_LEVEL_REFLECTION_VERSIONS,
+)
 
 
 def _max_output_tokens_at_least_min(value: str) -> int:
@@ -51,6 +55,12 @@ def build_parser() -> argparse.ArgumentParser:
     ])
     parser.add_argument("--experiment_mode", default="standard", choices=["standard", "same_level_iterative"])
     parser.add_argument("--condition", default=None, choices=sorted(SAME_LEVEL_ITERATIVE_CONDITIONS))
+    parser.add_argument(
+        "--same_level_reflection_version",
+        default=DEFAULT_SAME_LEVEL_REFLECTION_VERSION,
+        choices=sorted(SAME_LEVEL_REFLECTION_VERSIONS),
+        help="Reflection prompt style for heuristic_same_level_iterative.",
+    )
     parser.add_argument("--attempt_budget", type=int, default=5)
     parser.add_argument("--episodes", type=int, default=10)
     parser.add_argument("--levels", default="levels/simple.json")
@@ -72,6 +82,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max_memory_items", type=int, default=3)
     parser.add_argument("--max_steps_per_memory", type=int, default=6)
     parser.add_argument("--max_memory_chars", type=int, default=4000)
+    parser.add_argument("--same_level_reflection_evidence_items", type=int, default=4)
+    parser.add_argument("--same_level_reflection_evidence_chars", type=int, default=16000)
+    parser.add_argument("--same_level_heuristic_render_items", type=int, default=6)
+    parser.add_argument("--same_level_heuristic_render_chars", type=int, default=8000)
     parser.add_argument("--llm_cache_path", default=None)
     parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
     parser.add_argument(
@@ -113,6 +127,10 @@ def main() -> None:
         max_memory_items=args.max_memory_items,
         max_steps_per_memory=args.max_steps_per_memory,
         max_memory_chars=args.max_memory_chars,
+        same_level_reflection_evidence_items=args.same_level_reflection_evidence_items,
+        same_level_reflection_evidence_chars=args.same_level_reflection_evidence_chars,
+        same_level_heuristic_render_items=args.same_level_heuristic_render_items,
+        same_level_heuristic_render_chars=args.same_level_heuristic_render_chars,
     )
     if args.experiment_mode == "same_level_iterative":
         condition = args.condition or _condition_from_agent(args.agent)
@@ -132,6 +150,7 @@ def main() -> None:
             max_output_tokens=args.max_output_tokens,
             cache_namespace=args.cache_namespace,
             level_suite_path=args.levels,
+            same_level_reflection_version=args.same_level_reflection_version,
         )
         print(json.dumps(summary, indent=2))
         return

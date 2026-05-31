@@ -229,7 +229,10 @@ class FullPathLLMAgent(BaseAgent):
             and self.memory_condition == "heuristic_same_level_iterative"
             and hasattr(self.memory_store, "render_for_level")
         ):
-            return self.memory_store.render_for_level(level_id, self.memory_config)
+            same_level_mode = bool(context.get("same_level_render_mode")) if context else False
+            return self.memory_store.render_for_level(
+                level_id, self.memory_config, same_level_mode=same_level_mode
+            )
         if hasattr(self.memory_store, "render"):
             return self.memory_store.render(self.memory_config)
         return str(self.memory_store)
