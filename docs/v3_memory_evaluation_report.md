@@ -13,7 +13,7 @@ Main result:
 - Reasoning effort: `low`.
 - Prompt version: `full_path_v2_1`.
 - Main token cap used after ablation: `16384`.
-- Current code default and minimum `max_output_tokens` for future runs: `32768`.
+- Current code default and minimum `max_output_tokens` for future runs: `16384`.
 - Overall single-shot solve rate: `16/48 = 33.3%`.
 - Overall invalid-plan rate: `23/48 = 47.9%`.
 - Dominant failure subtype: `unreachable_standing_cell`.
@@ -76,6 +76,8 @@ Train-to-eval heuristic generalization conditions:
 
 Raw trajectory memory is same-level-only. Cross-level prompts may render only `global_allowed` heuristic rules.
 
+For train-to-eval heuristic conditions, the heuristic memory is pooled across train levels: train failures are distilled into one global heuristic bank, and every eval level receives the same rendered top-K `global_allowed` heuristics. This is separate from `heuristic_same_level_iterative`, where heuristics are generated from prior failures on the same level and are used only for that level's retries.
+
 ### Metrics
 
 Primary metrics:
@@ -108,7 +110,7 @@ Failure subtypes:
 
 ## Executed Commands
 
-The commands in this section record already executed runs. Some historical commands use token caps below the current code minimum of `32768`; reruns should omit `--max_output_tokens` or set it to at least `32768`.
+The commands in this section record already executed runs. Some historical commands use token caps below the current code minimum of `16384`; reruns should omit `--max_output_tokens` or set it to at least `16384`.
 
 Rule-based sanity:
 
@@ -683,7 +685,7 @@ These runs should keep the same fixed settings:
 
 - model: `gpt-5.2`
 - reasoning effort: `low`
-- max output tokens: `32768`
+- max output tokens: `16384`
 - max steps: `100`
 - prompt version: `full_path_v2_1`
 - level suite: `levels/v3_boxoban_balanced.json`

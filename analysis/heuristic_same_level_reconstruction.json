@@ -1,0 +1,1956 @@
+{
+  "summary": {
+    "schema_version": "heuristic_same_level_reconstruction_v1",
+    "generated_at_utc": "2026-05-31T21:24:40Z",
+    "source_results_dir": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384",
+    "cache_namespace": "v3_eval_heuristic_same_level_k3_gpt52_low_16384",
+    "model": "gpt-5.2",
+    "temperature": 0.0,
+    "max_output_tokens": 16384,
+    "memory_caps": {
+      "max_memory_items": 3,
+      "max_steps_per_memory": 6,
+      "max_memory_chars": 4000
+    },
+    "level_count": 24,
+    "episode_result_count": 55,
+    "reconstructed_group_count": 43,
+    "cache_missing_count": 0,
+    "used_by_next_attempt_count": 31,
+    "unique_heuristic_set_count": 25,
+    "heuristic_count_distribution": {
+      "10": 15,
+      "12": 3,
+      "6": 5,
+      "4": 1,
+      "9": 8,
+      "7": 6,
+      "5": 5
+    }
+  },
+  "missing": [],
+  "records": [
+    {
+      "level_id": "boxoban_medium_valid_000_055",
+      "after_attempt_index": 0,
+      "after_seed": 66,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160126Z_heuristic_same_level_iterative_boxoban_medium_valid_000_055_seed66_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "90ffdaa97300dc209b15a71a93d0d3bfd0bede4716b440af78852e07ab285021",
+      "heuristic_memory_hash": "56d62421f5254fc53b979edc84921ebbf62341957376026d9b13b1c851c6060e",
+      "heuristic_set_hash": "77796af80997739eea6e232928744732614eba29e8bc7538ccc399687c3da42e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (one step opposite the push direction) is reachable from the player’s current region given the current box layout; never assume you can “walk around” later.",
+        "Treat each push as a potential connectivity change: avoid pushes that would separate the map into disconnected walk regions where future required standing cells lie in a different component.",
+        "Do not push a box into a 1-tile-wide corridor (or doorway) if that corridor is needed as a transit route to reach other pushes; keep at least one passable lane to any area that still contains goals or movable boxes.",
+        "Prefer solving/parking boxes deepest-first in tight areas: when multiple boxes share a narrow lane, push the farthest/most blocking box first to avoid trapping yourself behind nearer boxes.",
+        "Avoid pushing boxes adjacent in a row/column into a compact cluster unless you have confirmed future standing cells around each box remain available; clustered boxes frequently eliminate the only approach squares.",
+        "If a planned push requires approaching a box from the ‘outside’ of a wall pocket (near borders or concave walls), ensure that approach square cannot be later blocked by moving another box into that pocket entrance.",
+        "After any push that moves a box off a main aisle and toward a corner/wall, immediately re-check reachability of approach squares for all remaining unsolved boxes; abort or re-plan if any approach becomes unreachable.",
+        "Never plan a push sequence that depends on accessing a square behind a box that you are also planning to move into a blocking position later; enforce a constraint that approach squares for remaining pushes stay clear.",
+        "When two pushes target boxes in the same hallway, insert an explicit invariant: at every step, there exists a walk path between the player and the next push’s standing cell without requiring moving other boxes first.",
+        "Prefer pushes that increase maneuvering space (pull boxes away from chokepoints, open loops) early; delay space-reducing pushes (into chokepoints, against walls) until they are final placements on goals."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "c2dd23306a36e08a4b8b2b0aec86e876fd9e9485a177b1c8bd5665a18af61084",
+        "prompt_hash": "720f2fffd0b7a24970d06efc91d0dd788195aeea50bb99d25750f25ddf8fba27",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_055",
+      "after_attempt_index": 1,
+      "after_seed": 67,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160346Z_heuristic_same_level_iterative_boxoban_medium_valid_000_055_seed67_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "ec5eba20122152915e47f02f5cb8ee5c4a2512622fe20a871b8fd73bdb2565ce",
+      "heuristic_memory_hash": "0d8fed7d9c298787cd3b8c466abbb6c85f22a27087198ac5c764b601cdc8e9ff",
+      "heuristic_set_hash": "77796af80997739eea6e232928744732614eba29e8bc7538ccc399687c3da42e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (one step opposite the push direction) is reachable from the player’s current region given the current box layout; never assume you can “walk around” later.",
+        "Treat each push as a potential connectivity change: avoid pushes that would separate the map into disconnected walk regions where future required standing cells lie in a different component.",
+        "Do not push a box into a 1-tile-wide corridor (or doorway) if that corridor is needed as a transit route to reach other pushes; keep at least one passable lane to any area that still contains goals or movable boxes.",
+        "Prefer solving/parking boxes deepest-first in tight areas: when multiple boxes share a narrow lane, push the farthest/most blocking box first to avoid trapping yourself behind nearer boxes.",
+        "Avoid pushing boxes adjacent in a row/column into a compact cluster unless you have confirmed future standing cells around each box remain available; clustered boxes frequently eliminate the only approach squares.",
+        "If a planned push requires approaching a box from the ‘outside’ of a wall pocket (near borders or concave walls), ensure that approach square cannot be later blocked by moving another box into that pocket entrance.",
+        "After any push that moves a box off a main aisle and toward a corner/wall, immediately re-check reachability of approach squares for all remaining unsolved boxes; abort or re-plan if any approach becomes unreachable.",
+        "Never plan a push sequence that depends on accessing a square behind a box that you are also planning to move into a blocking position later; enforce a constraint that approach squares for remaining pushes stay clear.",
+        "When two pushes target boxes in the same hallway, insert an explicit invariant: at every step, there exists a walk path between the player and the next push’s standing cell without requiring moving other boxes first.",
+        "Prefer pushes that increase maneuvering space (pull boxes away from chokepoints, open loops) early; delay space-reducing pushes (into chokepoints, against walls) until they are final placements on goals."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "c2dd23306a36e08a4b8b2b0aec86e876fd9e9485a177b1c8bd5665a18af61084",
+        "prompt_hash": "720f2fffd0b7a24970d06efc91d0dd788195aeea50bb99d25750f25ddf8fba27",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_055",
+      "after_attempt_index": 2,
+      "after_seed": 68,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160346Z_heuristic_same_level_iterative_boxoban_medium_valid_000_055_seed68_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "1bd1dc14964e3e0ad69afbe881ffd0e35284cf0c2b70bcdf295c3a661851be64",
+      "heuristic_memory_hash": "50bb27ca5abce6c4991039ef480b61aad642324640692c16e66549f4ce5a1f81",
+      "heuristic_set_hash": "77796af80997739eea6e232928744732614eba29e8bc7538ccc399687c3da42e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (one step opposite the push direction) is reachable from the player’s current region given the current box layout; never assume you can “walk around” later.",
+        "Treat each push as a potential connectivity change: avoid pushes that would separate the map into disconnected walk regions where future required standing cells lie in a different component.",
+        "Do not push a box into a 1-tile-wide corridor (or doorway) if that corridor is needed as a transit route to reach other pushes; keep at least one passable lane to any area that still contains goals or movable boxes.",
+        "Prefer solving/parking boxes deepest-first in tight areas: when multiple boxes share a narrow lane, push the farthest/most blocking box first to avoid trapping yourself behind nearer boxes.",
+        "Avoid pushing boxes adjacent in a row/column into a compact cluster unless you have confirmed future standing cells around each box remain available; clustered boxes frequently eliminate the only approach squares.",
+        "If a planned push requires approaching a box from the ‘outside’ of a wall pocket (near borders or concave walls), ensure that approach square cannot be later blocked by moving another box into that pocket entrance.",
+        "After any push that moves a box off a main aisle and toward a corner/wall, immediately re-check reachability of approach squares for all remaining unsolved boxes; abort or re-plan if any approach becomes unreachable.",
+        "Never plan a push sequence that depends on accessing a square behind a box that you are also planning to move into a blocking position later; enforce a constraint that approach squares for remaining pushes stay clear.",
+        "When two pushes target boxes in the same hallway, insert an explicit invariant: at every step, there exists a walk path between the player and the next push’s standing cell without requiring moving other boxes first.",
+        "Prefer pushes that increase maneuvering space (pull boxes away from chokepoints, open loops) early; delay space-reducing pushes (into chokepoints, against walls) until they are final placements on goals."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "c2dd23306a36e08a4b8b2b0aec86e876fd9e9485a177b1c8bd5665a18af61084",
+        "prompt_hash": "720f2fffd0b7a24970d06efc91d0dd788195aeea50bb99d25750f25ddf8fba27",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_082",
+      "after_attempt_index": 0,
+      "after_seed": 69,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160453Z_heuristic_same_level_iterative_boxoban_medium_valid_000_082_seed69_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "f93a646d738650cc8bcf77ed91f8de6e8d260099fb11fbfea6c7ac2c04b9a89c",
+      "heuristic_memory_hash": "9a9dce5b889d816af2220b5f86afe908cc6577c5e34428ff2484bfc5eebccb1d",
+      "heuristic_set_hash": "86eea927a8cf7472818acb2db7ed52e4e5fb6b36c853b35af327007cc0c25d5a",
+      "heuristic_count": 12,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "rejected",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {\"box\":[r,c],\"push\":dir}, verify the required standing cell (opposite of dir) is in the player’s current reachable region given all boxes as obstacles; if not, replan earlier pushes to restore access rather than continuing the sequence.",
+        "Treat narrow corridors/1-tile hallways as one-way constraints: do not push a box deeper into a corridor unless you have already confirmed you can still reach the needed side for every future push of that box (no ability to walk around it).",
+        "Preserve at least one continuous “backbone” walkway connecting major rooms; avoid moves that place boxes on chokepoints (doors, corridor bends, single-width connectors) that the player must later traverse to reach other boxes’ push positions.",
+        "When planning consecutive pushes on different boxes, insert an explicit accessibility check after each push: recompute player reachability and ensure the next intent’s standing cell remains reachable; if reachability shrinks, prefer undoing/alternative ordering.",
+        "Do not plan to push a box along a wall into a spot where the player cannot stand on the wall-side again; wall-adjacent lines often remove half the approach options and can make later approach cells unreachable.",
+        "Avoid creating box “screens”: two boxes in adjacent cells across a corridor/entrance can block passage even if neither is in a corner; ensure at least one-tile gap remains on critical passage lines.",
+        "If a box is pushed onto a goal in a tight area, confirm it does not also block the only route needed to approach other boxes; only commit to goal placement when alternative routes exist.",
+        "Prefer ordering pushes that open space and increase reachable area first; postpone pushes that reduce connectivity (closing off loops/rooms) until all tasks behind that connector are completed.",
+        "For any intended multi-step push chain on one box (e.g., Down,Down,Down), validate at each intermediate position that the player can still reach the next required standing cell; abort the chain as soon as one step would trap the player on the wrong side.",
+        "Flag any push that would leave the player in a region with no path back to other boxes (reachability partition); avoid moves that isolate the player unless it immediately completes the level.",
+        "When two boxes are close, avoid pushing one to become adjacent to the other unless you have confirmed it doesn’t eliminate all approach cells for either box (adjacency can remove standing squares).",
+        "Never assume you can 'walk around later': if a box is against a wall or in a 1-wide corridor, the only valid pushes are those that keep the required standing cell in the currently reachable component; plan with that strict constraint."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0ad1ae11b64a6dd8fda81e7d4fcf3b753d4c443a49e6c9eca20fbd810180f591",
+        "prompt_hash": "3f32262948213a954854a01010b0d96bab2bbb2fcd05240080fe822427d6f9a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_082",
+      "after_attempt_index": 1,
+      "after_seed": 70,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160631Z_heuristic_same_level_iterative_boxoban_medium_valid_000_082_seed70_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "157a96fb0467bcac4e813bca7b1727492537d55e6fb9c759ce38f856407c48f4",
+      "heuristic_memory_hash": "b723ede6ec082fc39dc85535004f61febfc681f0a0eab40021f0dc75afec3415",
+      "heuristic_set_hash": "86eea927a8cf7472818acb2db7ed52e4e5fb6b36c853b35af327007cc0c25d5a",
+      "heuristic_count": 12,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "rejected",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {\"box\":[r,c],\"push\":dir}, verify the required standing cell (opposite of dir) is in the player’s current reachable region given all boxes as obstacles; if not, replan earlier pushes to restore access rather than continuing the sequence.",
+        "Treat narrow corridors/1-tile hallways as one-way constraints: do not push a box deeper into a corridor unless you have already confirmed you can still reach the needed side for every future push of that box (no ability to walk around it).",
+        "Preserve at least one continuous “backbone” walkway connecting major rooms; avoid moves that place boxes on chokepoints (doors, corridor bends, single-width connectors) that the player must later traverse to reach other boxes’ push positions.",
+        "When planning consecutive pushes on different boxes, insert an explicit accessibility check after each push: recompute player reachability and ensure the next intent’s standing cell remains reachable; if reachability shrinks, prefer undoing/alternative ordering.",
+        "Do not plan to push a box along a wall into a spot where the player cannot stand on the wall-side again; wall-adjacent lines often remove half the approach options and can make later approach cells unreachable.",
+        "Avoid creating box “screens”: two boxes in adjacent cells across a corridor/entrance can block passage even if neither is in a corner; ensure at least one-tile gap remains on critical passage lines.",
+        "If a box is pushed onto a goal in a tight area, confirm it does not also block the only route needed to approach other boxes; only commit to goal placement when alternative routes exist.",
+        "Prefer ordering pushes that open space and increase reachable area first; postpone pushes that reduce connectivity (closing off loops/rooms) until all tasks behind that connector are completed.",
+        "For any intended multi-step push chain on one box (e.g., Down,Down,Down), validate at each intermediate position that the player can still reach the next required standing cell; abort the chain as soon as one step would trap the player on the wrong side.",
+        "Flag any push that would leave the player in a region with no path back to other boxes (reachability partition); avoid moves that isolate the player unless it immediately completes the level.",
+        "When two boxes are close, avoid pushing one to become adjacent to the other unless you have confirmed it doesn’t eliminate all approach cells for either box (adjacency can remove standing squares).",
+        "Never assume you can 'walk around later': if a box is against a wall or in a 1-wide corridor, the only valid pushes are those that keep the required standing cell in the currently reachable component; plan with that strict constraint."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0ad1ae11b64a6dd8fda81e7d4fcf3b753d4c443a49e6c9eca20fbd810180f591",
+        "prompt_hash": "3f32262948213a954854a01010b0d96bab2bbb2fcd05240080fe822427d6f9a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_082",
+      "after_attempt_index": 2,
+      "after_seed": 71,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160631Z_heuristic_same_level_iterative_boxoban_medium_valid_000_082_seed71_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "ea64e0cb8640155be24de34a48fbc083b73d3443f8542b7bec2125746417ca3e",
+      "heuristic_memory_hash": "2633da11348710389805fd7ff4ae6ea4ce2b4ed440381a8c90261fdab6e53169",
+      "heuristic_set_hash": "86eea927a8cf7472818acb2db7ed52e4e5fb6b36c853b35af327007cc0c25d5a",
+      "heuristic_count": 12,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "rejected",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {\"box\":[r,c],\"push\":dir}, verify the required standing cell (opposite of dir) is in the player’s current reachable region given all boxes as obstacles; if not, replan earlier pushes to restore access rather than continuing the sequence.",
+        "Treat narrow corridors/1-tile hallways as one-way constraints: do not push a box deeper into a corridor unless you have already confirmed you can still reach the needed side for every future push of that box (no ability to walk around it).",
+        "Preserve at least one continuous “backbone” walkway connecting major rooms; avoid moves that place boxes on chokepoints (doors, corridor bends, single-width connectors) that the player must later traverse to reach other boxes’ push positions.",
+        "When planning consecutive pushes on different boxes, insert an explicit accessibility check after each push: recompute player reachability and ensure the next intent’s standing cell remains reachable; if reachability shrinks, prefer undoing/alternative ordering.",
+        "Do not plan to push a box along a wall into a spot where the player cannot stand on the wall-side again; wall-adjacent lines often remove half the approach options and can make later approach cells unreachable.",
+        "Avoid creating box “screens”: two boxes in adjacent cells across a corridor/entrance can block passage even if neither is in a corner; ensure at least one-tile gap remains on critical passage lines.",
+        "If a box is pushed onto a goal in a tight area, confirm it does not also block the only route needed to approach other boxes; only commit to goal placement when alternative routes exist.",
+        "Prefer ordering pushes that open space and increase reachable area first; postpone pushes that reduce connectivity (closing off loops/rooms) until all tasks behind that connector are completed.",
+        "For any intended multi-step push chain on one box (e.g., Down,Down,Down), validate at each intermediate position that the player can still reach the next required standing cell; abort the chain as soon as one step would trap the player on the wrong side.",
+        "Flag any push that would leave the player in a region with no path back to other boxes (reachability partition); avoid moves that isolate the player unless it immediately completes the level.",
+        "When two boxes are close, avoid pushing one to become adjacent to the other unless you have confirmed it doesn’t eliminate all approach cells for either box (adjacency can remove standing squares).",
+        "Never assume you can 'walk around later': if a box is against a wall or in a 1-wide corridor, the only valid pushes are those that keep the required standing cell in the currently reachable component; plan with that strict constraint."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0ad1ae11b64a6dd8fda81e7d4fcf3b753d4c443a49e6c9eca20fbd810180f591",
+        "prompt_hash": "3f32262948213a954854a01010b0d96bab2bbb2fcd05240080fe822427d6f9a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_092",
+      "after_attempt_index": 0,
+      "after_seed": 42,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T152458Z_heuristic_same_level_iterative_boxoban_medium_valid_000_092_seed42_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "86044dd729eb894a0b8bbd3e548703b84eda707681ee81b61e2bf4dba265e0ff",
+      "heuristic_memory_hash": "81a6957ed645395be2b3088b117dc0303dc7aff0e5d2d2a107aee2c0a9ea6902",
+      "heuristic_set_hash": "0edb5ffc6b505946675b6e8d6bc458df6a1045d8c57d744b059f0579261f10a5",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, reject any move that places a box into a non-goal corner (adjacent to walls on two perpendicular sides) or into a 1-wide corridor segment where it cannot be pulled back unless that corridor contains the box’s target goal.",
+        "Avoid pushing boxes flush against long walls when the box is not already aligned with a goal on that wall; wall-hugging often removes lateral push options and creates irreversible blocks.",
+        "Do not create 2-box “compaction” (two boxes adjacent in a tight hallway or against a wall) unless you have already verified a concrete sequence to separate them later; treat adjacent boxes near walls as a high-risk deadlock precursor.",
+        "For every candidate push, require a quick ‘future pushability’ check: after the push, the box must have at least one legal subsequent push direction (or be on a goal); otherwise deprioritize or forbid the push.",
+        "Preserve player circulation paths: avoid pushes that seal off the only route to reach the far side of any remaining movable box (i.e., do not turn a passage cell into an immovable barrier by parking a box there).",
+        "When multiple boxes share a constrained region, prioritize freeing and organizing space (moving boxes away from chokepoints) over pushing boxes deeper into the same constrained pocket.",
+        "Prefer moves that increase alignment of a box with an available goal line (same row/column with clear path) rather than simply shifting boxes leftward/rightward without goal alignment.",
+        "Never push a box into a cell that reduces the number of accessible ‘standing’ squares around other boxes you still need to move; treat loss of access to required push positions as a hard planning constraint.",
+        "If a planned push sequence does not strictly improve a heuristic (e.g., sum of box-to-goal distances with deadlock penalties, or number of boxes on goals), backtrack early instead of exhausting the push budget continuing the same compaction pattern.",
+        "Treat pushes that move a box off a goal or away from a goal corridor as prohibited unless they immediately enable another box to reach a goal (explicit short-horizon justification required)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "189e017a32da58ed2cb6a081e4fe35fe7a8299a2019189814088645b9133614a",
+        "prompt_hash": "866beb1804f8804d5b109459e3e43f828d0ae9c873fbe3eba6cfdd2f3b856b92",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_092",
+      "after_attempt_index": 1,
+      "after_seed": 43,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T152810Z_heuristic_same_level_iterative_boxoban_medium_valid_000_092_seed43_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "8d051ec75296a667626fa99839b5ad5d7d807c8f34da2902d20d5ed49c5f47d5",
+      "heuristic_memory_hash": "c054275c27b171be47e89235820826442269f8145c810adf79379852d28769a8",
+      "heuristic_set_hash": "0edb5ffc6b505946675b6e8d6bc458df6a1045d8c57d744b059f0579261f10a5",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, reject any move that places a box into a non-goal corner (adjacent to walls on two perpendicular sides) or into a 1-wide corridor segment where it cannot be pulled back unless that corridor contains the box’s target goal.",
+        "Avoid pushing boxes flush against long walls when the box is not already aligned with a goal on that wall; wall-hugging often removes lateral push options and creates irreversible blocks.",
+        "Do not create 2-box “compaction” (two boxes adjacent in a tight hallway or against a wall) unless you have already verified a concrete sequence to separate them later; treat adjacent boxes near walls as a high-risk deadlock precursor.",
+        "For every candidate push, require a quick ‘future pushability’ check: after the push, the box must have at least one legal subsequent push direction (or be on a goal); otherwise deprioritize or forbid the push.",
+        "Preserve player circulation paths: avoid pushes that seal off the only route to reach the far side of any remaining movable box (i.e., do not turn a passage cell into an immovable barrier by parking a box there).",
+        "When multiple boxes share a constrained region, prioritize freeing and organizing space (moving boxes away from chokepoints) over pushing boxes deeper into the same constrained pocket.",
+        "Prefer moves that increase alignment of a box with an available goal line (same row/column with clear path) rather than simply shifting boxes leftward/rightward without goal alignment.",
+        "Never push a box into a cell that reduces the number of accessible ‘standing’ squares around other boxes you still need to move; treat loss of access to required push positions as a hard planning constraint.",
+        "If a planned push sequence does not strictly improve a heuristic (e.g., sum of box-to-goal distances with deadlock penalties, or number of boxes on goals), backtrack early instead of exhausting the push budget continuing the same compaction pattern.",
+        "Treat pushes that move a box off a goal or away from a goal corridor as prohibited unless they immediately enable another box to reach a goal (explicit short-horizon justification required)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "189e017a32da58ed2cb6a081e4fe35fe7a8299a2019189814088645b9133614a",
+        "prompt_hash": "866beb1804f8804d5b109459e3e43f828d0ae9c873fbe3eba6cfdd2f3b856b92",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_092",
+      "after_attempt_index": 2,
+      "after_seed": 44,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T152810Z_heuristic_same_level_iterative_boxoban_medium_valid_000_092_seed44_plan_exhausted.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "80c8d5872ae522c7f29724c9fc042e634228a29f8a13127ba6712baca2783084",
+      "heuristic_memory_hash": "39b5184375a5103ee6aad45454c44f8649a4533a552fe1dba98220b1ef455d8e",
+      "heuristic_set_hash": "0edb5ffc6b505946675b6e8d6bc458df6a1045d8c57d744b059f0579261f10a5",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, reject any move that places a box into a non-goal corner (adjacent to walls on two perpendicular sides) or into a 1-wide corridor segment where it cannot be pulled back unless that corridor contains the box’s target goal.",
+        "Avoid pushing boxes flush against long walls when the box is not already aligned with a goal on that wall; wall-hugging often removes lateral push options and creates irreversible blocks.",
+        "Do not create 2-box “compaction” (two boxes adjacent in a tight hallway or against a wall) unless you have already verified a concrete sequence to separate them later; treat adjacent boxes near walls as a high-risk deadlock precursor.",
+        "For every candidate push, require a quick ‘future pushability’ check: after the push, the box must have at least one legal subsequent push direction (or be on a goal); otherwise deprioritize or forbid the push.",
+        "Preserve player circulation paths: avoid pushes that seal off the only route to reach the far side of any remaining movable box (i.e., do not turn a passage cell into an immovable barrier by parking a box there).",
+        "When multiple boxes share a constrained region, prioritize freeing and organizing space (moving boxes away from chokepoints) over pushing boxes deeper into the same constrained pocket.",
+        "Prefer moves that increase alignment of a box with an available goal line (same row/column with clear path) rather than simply shifting boxes leftward/rightward without goal alignment.",
+        "Never push a box into a cell that reduces the number of accessible ‘standing’ squares around other boxes you still need to move; treat loss of access to required push positions as a hard planning constraint.",
+        "If a planned push sequence does not strictly improve a heuristic (e.g., sum of box-to-goal distances with deadlock penalties, or number of boxes on goals), backtrack early instead of exhausting the push budget continuing the same compaction pattern.",
+        "Treat pushes that move a box off a goal or away from a goal corridor as prohibited unless they immediately enable another box to reach a goal (explicit short-horizon justification required)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "189e017a32da58ed2cb6a081e4fe35fe7a8299a2019189814088645b9133614a",
+        "prompt_hash": "866beb1804f8804d5b109459e3e43f828d0ae9c873fbe3eba6cfdd2f3b856b92",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_155",
+      "after_attempt_index": 0,
+      "after_seed": 54,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T154148Z_heuristic_same_level_iterative_boxoban_medium_valid_000_155_seed54_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "f359bb5900d6d007d67622820b2194d7aba78370ab27cc68e6bc42f2e6d478c8",
+      "heuristic_memory_hash": "1c25d51b450c512653226f46f7fb13d2b4b19e9d253454fb8670f885b1658a57",
+      "heuristic_set_hash": "3c21e2258994f90cfd9f53e07e103a343ef79048fded9621e2016fdaff7bccc6",
+      "heuristic_count": 6,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, validate that the required standing cell (one step opposite the push direction from the target box) is reachable by the player via walkable tiles given current walls/boxes; if not reachable, do not propose the push.",
+        "Treat each push as requiring two preconditions: (1) standing cell reachable, (2) destination cell free; check both explicitly and reject the push if either fails.",
+        "If a push’s standing cell lies in a different disconnected free-space component than the player (due to walls/boxes forming partitions), prioritize pushes that reconnect/open access rather than attempting the unreachable push.",
+        "When a box is adjacent to walls/blocked corridors, prefer planning pushes that keep the player’s access to the box’s “working side”; avoid pushing a box into positions where its future required standing cells are behind walls or other boxes.",
+        "Do not rely on future pushes to make the first push’s standing cell reachable; enforce reachability with the current state only (the verifier will not 'teleport' the player through planned future changes).",
+        "If multiple boxes exist, confirm you are targeting the correct one and that its required standing cell is not occupied by another box or enclosed; otherwise choose a different box/push that is immediately feasible."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "10f2032b8717d9c307e9c48311aee3df764b80828373ed037634a8e59cef77c6",
+        "prompt_hash": "e1c8040a5a310dc6c2f9f6dcaeaab3e5c177e09694db459da02739860c743bca",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_155",
+      "after_attempt_index": 1,
+      "after_seed": 55,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T154527Z_heuristic_same_level_iterative_boxoban_medium_valid_000_155_seed55_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "c625ab19fdf8d72569e040d5ea9244236a355ce3d4cf54de6f20cd531043e9d3",
+      "heuristic_memory_hash": "0b99b895df0d5c35f9ef2de4a274c3cdebbf7cde1f541399450a510cfbb6c633",
+      "heuristic_set_hash": "f5345522cced3e26be87249570ca13b9bf242807afa3fc7ea1c55fe4ab51b9d1",
+      "heuristic_count": 6,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (opposite the push direction) is reachable by the player via a walkable path that does not move boxes; if not reachable, do not propose that push.",
+        "Treat pushes that require standing on the far side of a box against a wall/solid block (or in a sealed pocket) as invalid unless you can explicitly reach that cell first; prefer pushes where the standing cell lies in open corridor space connected to the player.",
+        "When selecting a specific box coordinate for a push, confirm it is the intended box instance (not an ambiguous coordinate in a cluster) and that both the standing cell and destination cell are free and connected to the player region at planning time.",
+        "Add an early connectivity check: compute player-reachable floor region given current walls+boxes; only allow pushes whose standing cell is inside that region.",
+        "Avoid planning sequences starting with a push that is immediately unreachable; prioritize preparatory pushes that open access to the needed standing positions.",
+        "Validate JSON output strictly (non-empty array of intents with required keys/types); if no valid push is found, output an explicit empty plan rather than malformed JSON."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "29790853b192f7038e1e8d68d73ed5d9714db2559b1e53f7300a4193bdcf0ae5",
+        "prompt_hash": "b0a02b9481598cfda1613a4b9c76d1f56129a383a3d78ef7dfc49f067c671aa5",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_155",
+      "after_attempt_index": 2,
+      "after_seed": 56,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T154901Z_heuristic_same_level_iterative_boxoban_medium_valid_000_155_seed56_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "8442d9cc4779bcfe29b3722a6185389dc0246d34c8d59f34032211aeb45a9f12",
+      "heuristic_memory_hash": "3418ea7bd42771773ec9ec487c88fb19ac25f1993ca4073444498b64f10f27b0",
+      "heuristic_set_hash": "220c1d0d345408209aca6d280d161ac845e95a354c6f1bec6894a9b8b508e97a",
+      "heuristic_count": 6,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (opposite the push direction from the box) is reachable by the player via empty floor/goal cells without moving any boxes; if unreachable, do not propose that push.",
+        "Treat the push as invalid if the standing cell is behind walls or inside an isolated pocket separated from the player’s current region; only propose pushes whose standing cell lies in the player’s connected component of walkable tiles.",
+        "When selecting a box+direction, run a quick 'can-stand-behind' check: standing cell must be in-bounds, not a wall, and not occupied by any box; otherwise reject the push even if the destination cell is free.",
+        "Prioritize pushes that keep the player on the same side of the box cluster; avoid proposing pushes that require approaching a box from a side that is blocked by the surrounding wall geometry.",
+        "Output strictly valid JSON (an array of objects with keys like \"box\" and \"push\"), never free-form text; invalid JSON should be treated as a hard failure.",
+        "Use consistent coordinate addressing: ensure the \"box\" coordinates refer to a currently existing box position at planning time; if the box is not at that cell, re-resolve before proposing the push."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "05a0d6074edd866daa65fad816e1b24c657f2e9d56a1782abcd37d6f2cc7f90c",
+        "prompt_hash": "9c03a6051aa20d1ba738f3536e6fecff9ea638686305ab76d391c2b4c9c83e5a",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_168",
+      "after_attempt_index": 0,
+      "after_seed": 45,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T152914Z_heuristic_same_level_iterative_boxoban_medium_valid_000_168_seed45_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "72ff36686d8b953c0ccfbde7f35769eccdfdf99ecb0e9216a996dfcf18a03433",
+      "heuristic_memory_hash": "0bcdcd2034ad4c0fbd5534bc1caba12f4818f63d8515b813d34d3c1f3f80abe5",
+      "heuristic_set_hash": "ca4f795420b5be1372fb39fcfc02d41424524c356fff4a71141a7965b1613907",
+      "heuristic_count": 4,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, ensure the required standing cell (one step opposite the push direction from the box) is reachable by the player in the current grid connectivity (treating walls and all boxes as obstacles).",
+        "Do not plan pushes where the standing cell is in a sealed region/corridor that has no path from the player; if the only access would require moving other boxes first, plan those prerequisite box moves explicitly before this push.",
+        "When selecting the next box to push, prioritize boxes whose push-standing cells lie in the player’s current reachable component; postpone boxes whose approach side is blocked by walls/boxes until access is opened.",
+        "Add a precheck: for each candidate push, verify both (a) player can reach the standing cell and (b) the box destination cell is free; reject the push if either fails instead of relying on later recovery."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "49ac8dcc98edea81d90f69084fa798b07fd88d5c5af3b887894a70f4f93c9dc9",
+        "prompt_hash": "eef935ea41e49720dd93c07f80f84e3ccbaa0c2c2dfbac8764868d26208f202c",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_192",
+      "after_attempt_index": 0,
+      "after_seed": 57,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T155019Z_heuristic_same_level_iterative_boxoban_medium_valid_000_192_seed57_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "fb46eaa943ab049994c9c314b3ea8493fd6f3be9718881960c1a132849966ffc",
+      "heuristic_memory_hash": "66f4d610d5574681c3f451c66378f908a35a3d849783e2ba8e2e5b083015e463",
+      "heuristic_set_hash": "4e8dc3824b171ae59d36d43e8086e04c8dc94a5643b72bfbbca9425da0038b0a",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {box:[r,c], push:dir}, verify the required standing cell (opposite dir from the box) is on a walkable tile AND is reachable from the current player position under current box placements; otherwise pick a different push or move another box first.",
+        "Treat each planned push as operating on the post-state of all previous pushes: re-resolve the target box by current coordinates/identity after every push; never assume a box remains at its original [r,c].",
+        "Avoid sequences that move a box into a corridor/edge such that its only potential push-side square becomes a wall/void or a permanently blocked pocket; if after the push the player cannot ever get to at least one side needed for future planned pushes, reject that push.",
+        "When pushing a box along a wall, explicitly check that the player will still have access to the side needed for the NEXT intended direction change (e.g., switching from horizontal to vertical pushes often requires access to an interior square that may be blocked).",
+        "Do not plan a push that depends on walking through a one-tile choke point if any box might later occupy or guard that choke; preserve at least one open route back to the required standing cells of unfinished boxes.",
+        "Prefer ordering pushes so that boxes in open areas are positioned first; delay pushing boxes deep into alcoves/near corners until you are confident no future push requires approaching them from the now-blocked side.",
+        "If multiple boxes exist, ensure the path to the required standing cell does not require moving through another box’s future destination square; reserve maneuvering space around targets until they are finalized on goals.",
+        "Add a feasibility check for every intent: if destination cell is free but the standing cell is (or will become) isolated by walls+boxes (no path from current player region), mark the intent invalid and replan.",
+        "Avoid pushing boxes to the boundary of the map unless it is a goal or the box will never need to be pushed from the boundary side again; boundary-adjacent boxes frequently make required standing positions unreachable."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0e494abfb92dd058b0d155818b6417e9bbf9848a08a70d6fe7cf35529a382cc8",
+        "prompt_hash": "d549bf0bfdb2a4ba46870b851e85c4b3688b6cadb0094844a92e9e55f4bc78f4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_192",
+      "after_attempt_index": 1,
+      "after_seed": 58,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T155253Z_heuristic_same_level_iterative_boxoban_medium_valid_000_192_seed58_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "2f5b468ecfdc4a97c0e23e4b630e69894fc9d3046800e58e6b68cabae2005a40",
+      "heuristic_memory_hash": "f9b4279daf4b4e8c580b69f2accac81cd408090f25fa626c6afc322490863e37",
+      "heuristic_set_hash": "4e8dc3824b171ae59d36d43e8086e04c8dc94a5643b72bfbbca9425da0038b0a",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {box:[r,c], push:dir}, verify the required standing cell (opposite dir from the box) is on a walkable tile AND is reachable from the current player position under current box placements; otherwise pick a different push or move another box first.",
+        "Treat each planned push as operating on the post-state of all previous pushes: re-resolve the target box by current coordinates/identity after every push; never assume a box remains at its original [r,c].",
+        "Avoid sequences that move a box into a corridor/edge such that its only potential push-side square becomes a wall/void or a permanently blocked pocket; if after the push the player cannot ever get to at least one side needed for future planned pushes, reject that push.",
+        "When pushing a box along a wall, explicitly check that the player will still have access to the side needed for the NEXT intended direction change (e.g., switching from horizontal to vertical pushes often requires access to an interior square that may be blocked).",
+        "Do not plan a push that depends on walking through a one-tile choke point if any box might later occupy or guard that choke; preserve at least one open route back to the required standing cells of unfinished boxes.",
+        "Prefer ordering pushes so that boxes in open areas are positioned first; delay pushing boxes deep into alcoves/near corners until you are confident no future push requires approaching them from the now-blocked side.",
+        "If multiple boxes exist, ensure the path to the required standing cell does not require moving through another box’s future destination square; reserve maneuvering space around targets until they are finalized on goals.",
+        "Add a feasibility check for every intent: if destination cell is free but the standing cell is (or will become) isolated by walls+boxes (no path from current player region), mark the intent invalid and replan.",
+        "Avoid pushing boxes to the boundary of the map unless it is a goal or the box will never need to be pushed from the boundary side again; boundary-adjacent boxes frequently make required standing positions unreachable."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0e494abfb92dd058b0d155818b6417e9bbf9848a08a70d6fe7cf35529a382cc8",
+        "prompt_hash": "d549bf0bfdb2a4ba46870b851e85c4b3688b6cadb0094844a92e9e55f4bc78f4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_192",
+      "after_attempt_index": 2,
+      "after_seed": 59,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T155253Z_heuristic_same_level_iterative_boxoban_medium_valid_000_192_seed59_plan_exhausted.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "d42bdad44868245a2405302ec9fdd284261879b9758ccd71744cb25cad625fb4",
+      "heuristic_memory_hash": "08351f5aca02f49a8e0112d52c2f8f98ff330001784e4a3125ea3e0bbca99341",
+      "heuristic_set_hash": "4e8dc3824b171ae59d36d43e8086e04c8dc94a5643b72bfbbca9425da0038b0a",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting an intent {box:[r,c], push:dir}, verify the required standing cell (opposite dir from the box) is on a walkable tile AND is reachable from the current player position under current box placements; otherwise pick a different push or move another box first.",
+        "Treat each planned push as operating on the post-state of all previous pushes: re-resolve the target box by current coordinates/identity after every push; never assume a box remains at its original [r,c].",
+        "Avoid sequences that move a box into a corridor/edge such that its only potential push-side square becomes a wall/void or a permanently blocked pocket; if after the push the player cannot ever get to at least one side needed for future planned pushes, reject that push.",
+        "When pushing a box along a wall, explicitly check that the player will still have access to the side needed for the NEXT intended direction change (e.g., switching from horizontal to vertical pushes often requires access to an interior square that may be blocked).",
+        "Do not plan a push that depends on walking through a one-tile choke point if any box might later occupy or guard that choke; preserve at least one open route back to the required standing cells of unfinished boxes.",
+        "Prefer ordering pushes so that boxes in open areas are positioned first; delay pushing boxes deep into alcoves/near corners until you are confident no future push requires approaching them from the now-blocked side.",
+        "If multiple boxes exist, ensure the path to the required standing cell does not require moving through another box’s future destination square; reserve maneuvering space around targets until they are finalized on goals.",
+        "Add a feasibility check for every intent: if destination cell is free but the standing cell is (or will become) isolated by walls+boxes (no path from current player region), mark the intent invalid and replan.",
+        "Avoid pushing boxes to the boundary of the map unless it is a goal or the box will never need to be pushed from the boundary side again; boundary-adjacent boxes frequently make required standing positions unreachable."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0e494abfb92dd058b0d155818b6417e9bbf9848a08a70d6fe7cf35529a382cc8",
+        "prompt_hash": "d549bf0bfdb2a4ba46870b851e85c4b3688b6cadb0094844a92e9e55f4bc78f4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_217",
+      "after_attempt_index": 0,
+      "after_seed": 48,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T153236Z_heuristic_same_level_iterative_boxoban_medium_valid_000_217_seed48_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "e9fa883de865bcd911bc6106fec415fbfe4e1b86c1eba8b6574e71bf24c69967",
+      "heuristic_memory_hash": "4365e05e70358ad9984ca11dd711819f1236b1d31ecfaf084c09903d09ec6651",
+      "heuristic_set_hash": "0a893db99848e1697619f72eb600f1991463a69dd558c62ee3e9f5178dff4d92",
+      "heuristic_count": 6,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to any push intent, require that the player can reach the required standing cell (the cell opposite the push direction from the box) via a walk path through current free cells; if not reachable, reject/replace the push.",
+        "Do not plan pushes that require approaching a box from behind when that behind-cell lies in a sealed region (walled-off pocket) or behind other boxes; treat such boxes as currently unpushable in that direction.",
+        "For each candidate push, run a quick reachability test on the player ignoring the push itself (no “teleporting” to the standing cell); only allow pushes where the standing cell is reachable without moving any boxes.",
+        "When multiple boxes exist, account for box-as-obstacle effects in reachability: a standing cell that is geometrically adjacent may still be unreachable because intervening boxes block the only corridor.",
+        "Prefer planning pushes that are accessible from the player’s current connected component of free space; deprioritize pushes on boxes located across narrow chokepoints unless the chokepoint is confirmed clear.",
+        "If a push sequence targets a box multiple steps in a row, re-validate standing-cell reachability after every prior push; do not assume the approach side will remain reachable as boxes shift."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "1bf4fc8be283a66de1f3e4c3e71f12966c552ad73e3277066cdf2d145a6a88c0",
+        "prompt_hash": "79938efd64109dbf2ebdb8bd3b339222e48962cf50fac8355947432aebb763d2",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_217",
+      "after_attempt_index": 1,
+      "after_seed": 49,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T153455Z_heuristic_same_level_iterative_boxoban_medium_valid_000_217_seed49_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "2592ad21b2336f8e0fe42fc6802b30da98c19ef857d1cdfa0c6e41b096eef206",
+      "heuristic_memory_hash": "30f84a23de9cfc015e9abe54f019d54538866d5aa68ebaa9a95a2ccd1f0af733",
+      "heuristic_set_hash": "c4fc617f8c0dea507802ed30c3cd12c1d32219669ff6a8535cbb4b6379640ee4",
+      "heuristic_count": 6,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the player can reach the required standing cell (the square opposite the push direction) through current free floor (treat walls and boxes as blocked). If unreachable, do not output that push.",
+        "Prefer pushes that keep at least one traversable corridor connecting the player region to future push sides; avoid pushing a box in a way that seals off narrow passageways needed to get behind other boxes.",
+        "When multiple boxes are clustered, do not plan to push an interior box unless you have already created (and preserved) an access route to the needed side; instead, first move blocking boxes that prevent reaching the standing cell.",
+        "In cramped maps, treat any standing cell that lies in a different enclosed room/partition from the player as invalid; use a quick flood-fill from the player each step to reject pushes whose standing cell is outside the reachable component.",
+        "Avoid planning repeated pushes on a box from the same side unless you re-check reachability after each push; small layout changes often make the next required standing cell unreachable.",
+        "If a push requires standing on a cell adjacent to walls/boxes in a cul-de-sac, assume high risk of unreachable access; prioritize opening space (pulling boxes away from corners/corridors) before attempting that push."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "7e89acc73fe56a20700f93e47c30f9ac3fd6a167f1d7eaf7dfc7b139580cb083",
+        "prompt_hash": "08324300936e8edbf5d7d7a011439b19b7d2986f26a19cf18b6ffe245bd6a0ba",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_217",
+      "after_attempt_index": 2,
+      "after_seed": 50,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T153834Z_heuristic_same_level_iterative_boxoban_medium_valid_000_217_seed50_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "4368ba1bbff88f68908a70ecefc04d7f3876279f77ccfa39f66f96abdf918991",
+      "heuristic_memory_hash": "c5441dd61b70c3bc55bf38bf7965f8d82af0ec69405f726faf2682d33ce91726",
+      "heuristic_set_hash": "0c1ed34d80807b81b848f75f5ccd9b189e91738a0c12163c7f82aea7a7d3700d",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, ensure the required standing cell (the square opposite the push direction from the box) is in the player’s current reachable region given walls + current box placements; if not reachable, do not include the push.",
+        "Treat every planned push as changing player reachability: after each push, recompute the player’s reachable area and revalidate the next push’s standing cell; avoid long push sequences that assume reachability remains the same.",
+        "Reject pushes where the standing cell is technically empty but lies behind a one-tile choke/corridor that is (or can become) blocked by any box; require a robust access path, not just adjacency.",
+        "Prioritize pushes that keep at least one navigable loop/open area for the player; avoid moving boxes in ways that seal passages and strand the player on the wrong side of the box to be pushed next.",
+        "When multiple boxes exist, do not key pushes only by (row,col) from an earlier state; re-resolve the intended box at execution time and confirm the target box is still the one adjacent to the required standing cell/destination geometry.",
+        "Avoid planning repeated pushes on the same box along a wall/corridor unless you have confirmed you can stay on the needed side for every subsequent push (i.e., you can follow the box without being cut off).",
+        "If a box is adjacent to walls/other boxes such that only one side is reachable, only plan pushes that use that reachable side; do not plan pushes that require approaching from the sealed side even if the destination is free.",
+        "Add a precheck: for intent {box, push}, require (1) destination cell free, (2) standing cell free, and (3) standing cell reachable; failing any of these should prune the push immediately rather than producing an invalid plan.",
+        "When a push requires entering a small alcove/side pocket to get behind a box, ensure that entering that pocket is possible now and will remain possible after earlier planned pushes (boxes can block the alcove entrance)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "444112a652fba0e37bf0b71de1028851bea0ff049ca35c91ac51f52d26ec0d4f",
+        "prompt_hash": "1bd5a96c8fd7b44c19cf7724f1a0bceb4b9042eba86dd545d7b68e7c6bd23c8a",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_242",
+      "after_attempt_index": 0,
+      "after_seed": 72,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160755Z_heuristic_same_level_iterative_boxoban_medium_valid_000_242_seed72_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "8c42e5a87ae1bd0caadd5ac8551008acd6821c0a9cb515644d5f367d847d581c",
+      "heuristic_memory_hash": "c16f06287a78a55e07f98319f4f29df33cedd8bb377e8539bf98e0bab37046f7",
+      "heuristic_set_hash": "1dab92ee1c31aa9435ff6d5df072a31906099a82dc7ca9bee07eee284a107e65",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, verify the required standing cell (opposite the push direction) is reachable via a walking path in the current box configuration; reject any push with an unreachable standing cell.",
+        "Do not plan an immediate follow-up push on the same box unless you have also checked that the *next* push’s standing cell will remain reachable after the first push (pushes can cut off access behind the box).",
+        "Treat boxes on narrow edge corridors as potential access blockers: pushing a box along the boundary can remove the only route to get behind it for an upward/downward push later; only do so if an alternate route to the needed behind-cell exists.",
+        "When a push requires standing on a cell adjacent to a wall/blocked region (e.g., below a topologically sealed pocket), explicitly test reachability of that cell rather than assuming adjacency implies access.",
+        "Add a planner rule: for any candidate push intent, run a quick 'two-step lookahead' feasibility check (current push standing-cell reachability + next intended push standing-cell reachability after simulating the push) to avoid sequences that strand the player.",
+        "Prefer pushes that keep the player on the same side of the box as future required pushes; avoid pushing the box to a position where the player ends up trapped on the wrong side with no path around.",
+        "If a box is pushed against another box or tight structure, re-evaluate connectivity of the player's free-space graph; avoid moves that partition the walkable area and isolate required standing cells."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "59bb9ae9c21fbee3ccdd49c7ca5b50839fab404b0b2c992c6a80d9f6dd2a069f",
+        "prompt_hash": "0d440c22669d0ba75ae2a01a24ada956dbe8f3375f7d2566ea8e7144bcdff605",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_242",
+      "after_attempt_index": 1,
+      "after_seed": 73,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161208Z_heuristic_same_level_iterative_boxoban_medium_valid_000_242_seed73_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "c621a28f9fd0fe4766ed7ed6e5e1ff37e821e0635ccce8b7e842d7c8075daabf",
+      "heuristic_memory_hash": "db2b04ecedd0651420ecbc19cab3fdd4aad323349b74d0e9fe63e908686f6d0a",
+      "heuristic_set_hash": "1dab92ee1c31aa9435ff6d5df072a31906099a82dc7ca9bee07eee284a107e65",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, verify the required standing cell (opposite the push direction) is reachable via a walking path in the current box configuration; reject any push with an unreachable standing cell.",
+        "Do not plan an immediate follow-up push on the same box unless you have also checked that the *next* push’s standing cell will remain reachable after the first push (pushes can cut off access behind the box).",
+        "Treat boxes on narrow edge corridors as potential access blockers: pushing a box along the boundary can remove the only route to get behind it for an upward/downward push later; only do so if an alternate route to the needed behind-cell exists.",
+        "When a push requires standing on a cell adjacent to a wall/blocked region (e.g., below a topologically sealed pocket), explicitly test reachability of that cell rather than assuming adjacency implies access.",
+        "Add a planner rule: for any candidate push intent, run a quick 'two-step lookahead' feasibility check (current push standing-cell reachability + next intended push standing-cell reachability after simulating the push) to avoid sequences that strand the player.",
+        "Prefer pushes that keep the player on the same side of the box as future required pushes; avoid pushing the box to a position where the player ends up trapped on the wrong side with no path around.",
+        "If a box is pushed against another box or tight structure, re-evaluate connectivity of the player's free-space graph; avoid moves that partition the walkable area and isolate required standing cells."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "59bb9ae9c21fbee3ccdd49c7ca5b50839fab404b0b2c992c6a80d9f6dd2a069f",
+        "prompt_hash": "0d440c22669d0ba75ae2a01a24ada956dbe8f3375f7d2566ea8e7144bcdff605",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_242",
+      "after_attempt_index": 2,
+      "after_seed": 74,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161208Z_heuristic_same_level_iterative_boxoban_medium_valid_000_242_seed74_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "7812897e791578a768ce6ce5a214d663fe82bbba9224c78463e97eaa1edac09d",
+      "heuristic_memory_hash": "8125db277cf813eab19049e05bb17a324d5a555e43b27cd27b009e39b505c22b",
+      "heuristic_set_hash": "1dab92ee1c31aa9435ff6d5df072a31906099a82dc7ca9bee07eee284a107e65",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push, verify the required standing cell (opposite the push direction) is reachable via a walking path in the current box configuration; reject any push with an unreachable standing cell.",
+        "Do not plan an immediate follow-up push on the same box unless you have also checked that the *next* push’s standing cell will remain reachable after the first push (pushes can cut off access behind the box).",
+        "Treat boxes on narrow edge corridors as potential access blockers: pushing a box along the boundary can remove the only route to get behind it for an upward/downward push later; only do so if an alternate route to the needed behind-cell exists.",
+        "When a push requires standing on a cell adjacent to a wall/blocked region (e.g., below a topologically sealed pocket), explicitly test reachability of that cell rather than assuming adjacency implies access.",
+        "Add a planner rule: for any candidate push intent, run a quick 'two-step lookahead' feasibility check (current push standing-cell reachability + next intended push standing-cell reachability after simulating the push) to avoid sequences that strand the player.",
+        "Prefer pushes that keep the player on the same side of the box as future required pushes; avoid pushing the box to a position where the player ends up trapped on the wrong side with no path around.",
+        "If a box is pushed against another box or tight structure, re-evaluate connectivity of the player's free-space graph; avoid moves that partition the walkable area and isolate required standing cells."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "59bb9ae9c21fbee3ccdd49c7ca5b50839fab404b0b2c992c6a80d9f6dd2a069f",
+        "prompt_hash": "0d440c22669d0ba75ae2a01a24ada956dbe8f3375f7d2566ea8e7144bcdff605",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_248",
+      "after_attempt_index": 0,
+      "after_seed": 75,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161347Z_heuristic_same_level_iterative_boxoban_medium_valid_000_248_seed75_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "4197bceba70965936a298a61988574a5b3a15f4ed8e9bc4f2782990cca15ca4c",
+      "heuristic_memory_hash": "352246ac7831d09841b0a1b865aea11a2e0baa72065deeaa5af52ff7691fd6a8",
+      "heuristic_set_hash": "8f4dfc3f80cf4deca56c2a77bacfe16a4d35c57e5cf70b4143169f877e9b6c0e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify that the required standing cell (the square opposite the push direction) will remain reachable from the player’s current region after accounting for all boxes as obstacles.",
+        "Avoid push sequences that move a box across a corridor/doorway if that corridor is needed to access the standing cells for later pushes; treat narrow passages as critical connectivity resources.",
+        "Do not plan long runs of same-direction pushes (e.g., repeated 'Right') unless you have confirmed that the player can keep re-positioning to the new standing cell each step; each incremental push can cut off the next setup square.",
+        "When pushing a box toward a wall/edge, check for immediate loss of access behind the box; if the player cannot get around the box afterward, any future push requiring that side becomes impossible.",
+        "Prefer pushes that increase player mobility (open routes) early; postpone pushes that reduce walkable space or create one-way commitments until goals are clearly achievable.",
+        "After any push that changes a chokepoint (tight hallway, 1-tile gap, corner-adjacent lane), re-evaluate reachability of all planned future standing cells; invalidate and re-plan if any become unreachable.",
+        "Never assume you can set up pushes on a box from both sides; in constrained layouts, explicitly classify which sides of each box are accessible and only plan pushes consistent with those accessible sides.",
+        "If a box is pushed onto a goal in a tight area, ensure it does not become a permanent blocker that prevents reaching other push positions; goals are not safe parking spots unless access is preserved.",
+        "Treat the player’s reachable area as a connected component; reject any push that splits the free space in a way that strands the player away from remaining work.",
+        "When multiple boxes share a lane, avoid advancing the front box if it prevents reaching the backside of a trailing box that you intend to push later."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "7d034ec5d3b43ec0ea786f1098bd7ed86e709580c7089c253cc2b0716132f732",
+        "prompt_hash": "663b97a1755ccad0bd0c08533162fac3d05515376f9c621222611c910e9cf0a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_248",
+      "after_attempt_index": 1,
+      "after_seed": 76,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161526Z_heuristic_same_level_iterative_boxoban_medium_valid_000_248_seed76_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "4c8aac4e685b299a4125b403c014e6f6a23e193a7608fd3d1260eef6a8b25921",
+      "heuristic_memory_hash": "365e391f474046f8af1fb34b616eeb4cdd77860858d22426bf97e1f2cb554371",
+      "heuristic_set_hash": "8f4dfc3f80cf4deca56c2a77bacfe16a4d35c57e5cf70b4143169f877e9b6c0e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify that the required standing cell (the square opposite the push direction) will remain reachable from the player’s current region after accounting for all boxes as obstacles.",
+        "Avoid push sequences that move a box across a corridor/doorway if that corridor is needed to access the standing cells for later pushes; treat narrow passages as critical connectivity resources.",
+        "Do not plan long runs of same-direction pushes (e.g., repeated 'Right') unless you have confirmed that the player can keep re-positioning to the new standing cell each step; each incremental push can cut off the next setup square.",
+        "When pushing a box toward a wall/edge, check for immediate loss of access behind the box; if the player cannot get around the box afterward, any future push requiring that side becomes impossible.",
+        "Prefer pushes that increase player mobility (open routes) early; postpone pushes that reduce walkable space or create one-way commitments until goals are clearly achievable.",
+        "After any push that changes a chokepoint (tight hallway, 1-tile gap, corner-adjacent lane), re-evaluate reachability of all planned future standing cells; invalidate and re-plan if any become unreachable.",
+        "Never assume you can set up pushes on a box from both sides; in constrained layouts, explicitly classify which sides of each box are accessible and only plan pushes consistent with those accessible sides.",
+        "If a box is pushed onto a goal in a tight area, ensure it does not become a permanent blocker that prevents reaching other push positions; goals are not safe parking spots unless access is preserved.",
+        "Treat the player’s reachable area as a connected component; reject any push that splits the free space in a way that strands the player away from remaining work.",
+        "When multiple boxes share a lane, avoid advancing the front box if it prevents reaching the backside of a trailing box that you intend to push later."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "7d034ec5d3b43ec0ea786f1098bd7ed86e709580c7089c253cc2b0716132f732",
+        "prompt_hash": "663b97a1755ccad0bd0c08533162fac3d05515376f9c621222611c910e9cf0a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_248",
+      "after_attempt_index": 2,
+      "after_seed": 77,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161526Z_heuristic_same_level_iterative_boxoban_medium_valid_000_248_seed77_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "c8a8b94b85c391139b6aae80e72455bf4c2b279beeff97a9361d22e75051d68b",
+      "heuristic_memory_hash": "bb71ed34dfb99cd3e69ac4c1c76fccb3c29b65818b483ca1d0ce4b2188a01176",
+      "heuristic_set_hash": "8f4dfc3f80cf4deca56c2a77bacfe16a4d35c57e5cf70b4143169f877e9b6c0e",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify that the required standing cell (the square opposite the push direction) will remain reachable from the player’s current region after accounting for all boxes as obstacles.",
+        "Avoid push sequences that move a box across a corridor/doorway if that corridor is needed to access the standing cells for later pushes; treat narrow passages as critical connectivity resources.",
+        "Do not plan long runs of same-direction pushes (e.g., repeated 'Right') unless you have confirmed that the player can keep re-positioning to the new standing cell each step; each incremental push can cut off the next setup square.",
+        "When pushing a box toward a wall/edge, check for immediate loss of access behind the box; if the player cannot get around the box afterward, any future push requiring that side becomes impossible.",
+        "Prefer pushes that increase player mobility (open routes) early; postpone pushes that reduce walkable space or create one-way commitments until goals are clearly achievable.",
+        "After any push that changes a chokepoint (tight hallway, 1-tile gap, corner-adjacent lane), re-evaluate reachability of all planned future standing cells; invalidate and re-plan if any become unreachable.",
+        "Never assume you can set up pushes on a box from both sides; in constrained layouts, explicitly classify which sides of each box are accessible and only plan pushes consistent with those accessible sides.",
+        "If a box is pushed onto a goal in a tight area, ensure it does not become a permanent blocker that prevents reaching other push positions; goals are not safe parking spots unless access is preserved.",
+        "Treat the player’s reachable area as a connected component; reject any push that splits the free space in a way that strands the player away from remaining work.",
+        "When multiple boxes share a lane, avoid advancing the front box if it prevents reaching the backside of a trailing box that you intend to push later."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "7d034ec5d3b43ec0ea786f1098bd7ed86e709580c7089c253cc2b0716132f732",
+        "prompt_hash": "663b97a1755ccad0bd0c08533162fac3d05515376f9c621222611c910e9cf0a4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_270",
+      "after_attempt_index": 0,
+      "after_seed": 60,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T155336Z_heuristic_same_level_iterative_boxoban_medium_valid_000_270_seed60_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "e0b0a50312362e015b3af1b4e57340855c79578b89244ee3825d3c829cfe6cbe",
+      "heuristic_memory_hash": "5d6af6b23677688a9b709a1262246cc8bf53628c5a2fc4fc1e55474d44627ca4",
+      "heuristic_set_hash": "909fe2572bcec2dc6f8e617d757347bbc1e6b04330bac444a71264d4fa2cfca4",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify that the required standing cell for that push will remain reachable after executing all earlier planned pushes (simulate accessibility, not just box destinations).",
+        "Avoid pushing boxes into narrow corridors or against walls if that move removes the only walking route to the side of another box you still need to push later.",
+        "Treat any push that places a box adjacent to another box in a 1-tile-wide passage as high risk: it can eliminate all future approach cells for one or both boxes.",
+        "When multiple boxes share a tight region, prioritize moves that increase player mobility (open space) before moves that advance boxes toward goals; do not \"pack\" boxes early.",
+        "Do not plan consecutive pushes on different boxes unless the intermediate player positions preserve access to the next box’s required standing cell; insert mobility-preserving pushes first if needed.",
+        "In planning, penalize states where a box occupies a chokepoint tile (a tile whose removal disconnects walkable space), unless that box is permanently finished on a goal and no longer needs to be passed.",
+        "If a future push requires approaching a box from a specific side, protect that side: avoid any earlier push that can block that approach cell with a box.",
+        "Prefer pushing boxes outward from constrained clusters (creating separation) rather than pushing them deeper into constrained corners/edges unless the goal is immediately secured and does not block routes.",
+        "After each planned push, re-check reachability of all still-needed push positions (for every remaining planned push) and re-plan immediately if any required standing cell becomes unreachable."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "492527c5ec93ccd41091cf92cda773b615711517fdf8a7f0cd1e2527b67b180f",
+        "prompt_hash": "137f0f2372c25fe8e02357a44c6067970488e31dfbafd560c1a98f1dbdf0f669",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_275",
+      "after_attempt_index": 0,
+      "after_seed": 63,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T155757Z_heuristic_same_level_iterative_boxoban_medium_valid_000_275_seed63_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "0d4691acd137d8ba1e578f3b61e3c3a7b4cbe41fa8a1a53be05119117ac735c0",
+      "heuristic_memory_hash": "c489428918f3a036a88f564bd3fc43f11640a85b710b1f50498c6674612dcefc",
+      "heuristic_set_hash": "8aa7213e06e3258e4b46deb1335256721336199c6d3be824a1e6acc13c025f4e",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify the player can reach the required standing cell (the cell opposite the push direction) given current walls/boxes; if unreachable, re-plan rather than assuming later pushes will open access.",
+        "Treat the required standing cell as a hard precondition: it must be floor/goal (not wall) and not occupied by any box; reject pushes that need standing on a box or in a cul-de-sac behind a box.",
+        "When planning a multi-push sequence on one box, ensure each successive push keeps at least one reachable approach route to the next required standing cell; avoid pushes that move the box into positions that block all future approach sides.",
+        "Avoid early pushes that seal off narrow corridors or doorways needed for later access; explicitly track whether a box move reduces player-reachable free-space connectivity (e.g., by filling a 1-tile chokepoint).",
+        "If a future push targets a box in an area separated by boxes acting as temporary walls, prioritize clearing a walking path first (by relocating blocking boxes) instead of pushing other boxes deeper into the maze.",
+        "Prefer pushes that increase player mobility (open space, avoid creating new barriers) until all boxes that must be approached from specific sides have a guaranteed access route.",
+        "For any intended push, also check the post-push state: the player ends up on the box’s old cell; ensure this does not trap the player in a region with no path to the next push’s standing cell.",
+        "In tight rooms, do not push a box adjacent to walls/other boxes in a way that eliminates the only side from which it (or neighboring boxes) can be pushed later; maintain at least one free side for required future manipulations.",
+        "Add a lookahead constraint: if the next intended push requires approaching a box from a specific side, confirm that side remains reachable after executing the current push (reachability of that standing cell, not just box destination emptiness)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "31735f2e4e577302c1937b97f4070b918b800d66a514acfbad12daff63b1c318",
+        "prompt_hash": "5a268f5392a1baf93ae357e177b091c5b56a70338e549f3532f1ae375bc646fb",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_275",
+      "after_attempt_index": 1,
+      "after_seed": 64,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160023Z_heuristic_same_level_iterative_boxoban_medium_valid_000_275_seed64_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "567b21b6de367262024a96be45267eb63ed25f80a66788337b9e11932867df55",
+      "heuristic_memory_hash": "3950004c2780581df0546398a827d97d4d9695a135ae13e3478ff9e5a10e3e6c",
+      "heuristic_set_hash": "8aa7213e06e3258e4b46deb1335256721336199c6d3be824a1e6acc13c025f4e",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify the player can reach the required standing cell (the cell opposite the push direction) given current walls/boxes; if unreachable, re-plan rather than assuming later pushes will open access.",
+        "Treat the required standing cell as a hard precondition: it must be floor/goal (not wall) and not occupied by any box; reject pushes that need standing on a box or in a cul-de-sac behind a box.",
+        "When planning a multi-push sequence on one box, ensure each successive push keeps at least one reachable approach route to the next required standing cell; avoid pushes that move the box into positions that block all future approach sides.",
+        "Avoid early pushes that seal off narrow corridors or doorways needed for later access; explicitly track whether a box move reduces player-reachable free-space connectivity (e.g., by filling a 1-tile chokepoint).",
+        "If a future push targets a box in an area separated by boxes acting as temporary walls, prioritize clearing a walking path first (by relocating blocking boxes) instead of pushing other boxes deeper into the maze.",
+        "Prefer pushes that increase player mobility (open space, avoid creating new barriers) until all boxes that must be approached from specific sides have a guaranteed access route.",
+        "For any intended push, also check the post-push state: the player ends up on the box’s old cell; ensure this does not trap the player in a region with no path to the next push’s standing cell.",
+        "In tight rooms, do not push a box adjacent to walls/other boxes in a way that eliminates the only side from which it (or neighboring boxes) can be pushed later; maintain at least one free side for required future manipulations.",
+        "Add a lookahead constraint: if the next intended push requires approaching a box from a specific side, confirm that side remains reachable after executing the current push (reachability of that standing cell, not just box destination emptiness)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "31735f2e4e577302c1937b97f4070b918b800d66a514acfbad12daff63b1c318",
+        "prompt_hash": "5a268f5392a1baf93ae357e177b091c5b56a70338e549f3532f1ae375bc646fb",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_275",
+      "after_attempt_index": 2,
+      "after_seed": 65,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T160023Z_heuristic_same_level_iterative_boxoban_medium_valid_000_275_seed65_plan_exhausted.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "a5e99619860d2217f373abc21b0accdf03713e53ecb8df92f29f9da4eaa19de6",
+      "heuristic_memory_hash": "c0dfd39b0005676a31e55c6dabcf96f5d6dcfdcaab1b3c196cd5fc51298f61b2",
+      "heuristic_set_hash": "8aa7213e06e3258e4b46deb1335256721336199c6d3be824a1e6acc13c025f4e",
+      "heuristic_count": 9,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, verify the player can reach the required standing cell (the cell opposite the push direction) given current walls/boxes; if unreachable, re-plan rather than assuming later pushes will open access.",
+        "Treat the required standing cell as a hard precondition: it must be floor/goal (not wall) and not occupied by any box; reject pushes that need standing on a box or in a cul-de-sac behind a box.",
+        "When planning a multi-push sequence on one box, ensure each successive push keeps at least one reachable approach route to the next required standing cell; avoid pushes that move the box into positions that block all future approach sides.",
+        "Avoid early pushes that seal off narrow corridors or doorways needed for later access; explicitly track whether a box move reduces player-reachable free-space connectivity (e.g., by filling a 1-tile chokepoint).",
+        "If a future push targets a box in an area separated by boxes acting as temporary walls, prioritize clearing a walking path first (by relocating blocking boxes) instead of pushing other boxes deeper into the maze.",
+        "Prefer pushes that increase player mobility (open space, avoid creating new barriers) until all boxes that must be approached from specific sides have a guaranteed access route.",
+        "For any intended push, also check the post-push state: the player ends up on the box’s old cell; ensure this does not trap the player in a region with no path to the next push’s standing cell.",
+        "In tight rooms, do not push a box adjacent to walls/other boxes in a way that eliminates the only side from which it (or neighboring boxes) can be pushed later; maintain at least one free side for required future manipulations.",
+        "Add a lookahead constraint: if the next intended push requires approaching a box from a specific side, confirm that side remains reachable after executing the current push (reachability of that standing cell, not just box destination emptiness)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "31735f2e4e577302c1937b97f4070b918b800d66a514acfbad12daff63b1c318",
+        "prompt_hash": "5a268f5392a1baf93ae357e177b091c5b56a70338e549f3532f1ae375bc646fb",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_medium_valid_000_290",
+      "after_attempt_index": 0,
+      "after_seed": 51,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T154000Z_heuristic_same_level_iterative_boxoban_medium_valid_000_290_seed51_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "b445305f8f6a5867381ddee476abf1de3a04a33d02dc21a3bdf9deaf4aea7d74",
+      "heuristic_memory_hash": "1ac3c2844bfab666a19b00ea825c4be0b17e815d0e44d0051ef3f5def449f34e",
+      "heuristic_set_hash": "ae901410d38829418962018b60161c8174b05b002e4cd456071be0460d7936d1",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to any push intent, verify the required standing cell (behind the box, opposite the push direction) will be reachable AFTER all earlier planned pushes; do not assume current reachability persists.",
+        "Avoid pushing a box into a corridor or alcove if that move removes the only walking route needed to get behind other boxes later (treat single-width passages as critical access resources).",
+        "Do not plan long same-direction push sequences on a box unless you have confirmed you can keep swapping sides (i.e., there is space to walk around the box at every intermediate position).",
+        "Prefer solving/pushing boxes that sit on chokepoints last; pushing a chokepoint box early commonly makes future required push positions unreachable.",
+        "When a future push requires approaching from a specific side, reserve a continuous player path to that side; never let boxes form a wall that separates the player from that approach region.",
+        "Treat any push that places a box adjacent to walls/blocks on two perpendicular sides (a corner-like deadlock) as forbidden unless it is directly onto a goal.",
+        "If a push moves a box next to another box in a one-tile-wide area, assume the pair can create an irreversible block of player access; require an explicit check that the player can still pass to all needed regions.",
+        "Between planned pushes, recompute player reachability regions with boxes as obstacles; if any upcoming push’s standing cell lies in a different region than the player, reject the plan and reorder pushes.",
+        "Use ‘access-first’ ordering: prioritize pushes that open space and walking loops; postpone pushes that reduce loop connectivity or convert loops into dead ends.",
+        "If a box is pushed against a boundary such that the player can no longer get to the outside side of that box, forbid any subsequent push intents that would require standing on that outside side."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "d1195bdda1fbb8200df7e242bcc0dde0910b11ba969b4799db8626e19cec9b1f",
+        "prompt_hash": "8e2a047503e3caa4600d8dd92a83285c9846b7f1744e6c4d8932baa1a855a7f4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_021",
+      "after_attempt_index": 0,
+      "after_seed": 78,
+      "after_status": "deadlock",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161607Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_021_seed78_deadlock.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "d435998d7a12b8aa3e53152a4b60c2d55fb52c593c1ad382e56a03ab5e0b1fc4",
+      "heuristic_memory_hash": "1ee20b79e7d3e12b2763048e273c4a8e2bee1e61c3d40edaef78d395cf626085",
+      "heuristic_set_hash": "4ce68fb11aba8480ae774eada837df4fbeb3b52c35dad6bc1edb5a7aafad3784",
+      "heuristic_count": 5,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, validate the entire walking path to the required standing cell step-by-step; reject intents whose intermediate walk positions enter a cul-de-sac or leave the player with no legal moves.",
+        "Treat any narrow 1-tile corridor pocket as hazardous: do not walk into it unless it has a clear return path or it directly ends on the required standing cell for the push.",
+        "Augment push feasibility with a 'walk-safety' check: after reaching the standing cell (and also after each intermediate walk move), ensure the player still has at least one non-backtracking escape route if the push cannot be executed immediately.",
+        "If the player must traverse a region with only a single exit (a choke point), require that the plan does not rely on later pushes to reopen that exit; otherwise mark the intent as likely deadlocking.",
+        "When multiple pushes are queued, re-verify reachability from the current state to the next intent’s standing cell; do not assume reachability from the initial state carries over after partial walking."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "aee365a25cb0845b0ec8713ae8175364ab28d7879e25110fee4b87f3d1553cc6",
+        "prompt_hash": "c20b6f90f4673703005d7143765e415fc070621d2223266f07d0c33b266dd70b",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_021",
+      "after_attempt_index": 1,
+      "after_seed": 79,
+      "after_status": "deadlock",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161734Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_021_seed79_deadlock.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "bfe916af5c9a2c0a827dd0cae532c810606f19df55ac37dcc7896cffe697028f",
+      "heuristic_memory_hash": "26f92b926f718696a039941bb36a856d441599b68b3661b4be31c1f0f61edba3",
+      "heuristic_set_hash": "88f5c7aa843a145fdb24d450bf1a5586e95c48fa1a3aa392cd24d51bd2cbea80",
+      "heuristic_count": 5,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Run a static deadlock scan on the current state before committing to any push plan; if any box is already in an irreversible dead square (corner/edge trap not containing a goal, or against walls with no goal in that wall segment), replan immediately instead of taking walking steps.",
+        "Treat the entire walk-to-standing path as part of plan validation: reject a push intent if any intermediate walking state is flagged as deadlocked by your detector (even if the final standing cell is reachable).",
+        "Avoid walking the player into 1-wide cul-de-sacs/tunnels unless the very next action is a verified push that exits the tunnel; require an \"escape path\" for the player after entering a dead-end corridor.",
+        "Prefer first pushes that increase accessibility (open space / connectivity) rather than pushes adjacent to heavy walling; if the standing cell lies in a narrow pocket with limited exits, delay that push until other boxes/spaces are cleared.",
+        "When selecting the next push, prioritize pushes whose required standing cell is reachable without crossing any cut-vertex region that could isolate the player from the main play area (connectivity-aware path feasibility)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "dfeaa95b418473dac8c3676f2df64a0fd0a5f04a607b179cfa18ce5454c72ad2",
+        "prompt_hash": "30169070a7bb970a483c0c87d4c8e70b6a6346126d0fb6dd0c6f4b1cbb43b960",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_021",
+      "after_attempt_index": 2,
+      "after_seed": 80,
+      "after_status": "deadlock",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T161923Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_021_seed80_deadlock.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "10e969e4c765b045df78ad43eaafe42d2ceeff61d33f6c715b9dd9aca68b304a",
+      "heuristic_memory_hash": "dc324e55ccdbfa48db0624af393aedd538d1ff9d32ef6a3889a32ff038ee4c60",
+      "heuristic_set_hash": "470f2f2888d81024d90800f84938dfc162bd19fc83b48e53541ebdad69f321dd",
+      "heuristic_count": 5,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Do not mark a plan as viable based only on the first macro-step toward a push; simulate the entire walk-to-standing-cell path and ensure the player still has at least one legal move and at least one reachable future push after every intermediate walking step.",
+        "Treat deadlock detection as push-induced: only declare deadlock after an actual box push (or after proving all boxes are immovable/reachable-push set is empty), not merely after a single walking move while en route to a planned push.",
+        "Before committing to the first push intent, verify that from the initial player region there exists a complete walk-to-stand + push sequence for at least one box (i.e., at least one push is executable without requiring passing through one-tile chokepoints that can strand the player).",
+        "When planning an initial push that requires approaching through a narrow corridor, add a safety check that the approach corridor has a return path (no one-way cul-de-sac), so abort/replan if the player would temporarily enter a region with zero access to any box faces needed for future pushes.",
+        "Recompute reachability and available pushes after every executed action (even walking); if the intended standing cell for the next push becomes unreachable at any point, immediately replan instead of continuing the stale macro-intent."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "754db52c6733fab740678ee6bc7286d6f3ae654bbd5d353d17d27804d2ed61ed",
+        "prompt_hash": "9517bf91994b371fd7f99458fb78e9a912150200be58cfd9d049f2ae6d599ab5",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_045",
+      "after_attempt_index": 0,
+      "after_seed": 90,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T162812Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_045_seed90_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "f91463a8b2afb1ec418f439d9c43f21da9a6d20a7e605545609053c87b7ca367",
+      "heuristic_memory_hash": "85b53a82c955158efcf2aa1d8cfae31ddfdd31e95cde0035dc18c183f38ea704",
+      "heuristic_set_hash": "52272e99c4afd204617de35b91bfc572ba25d3019cae20bc94da88aa7d701426",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to any push intent, verify the required standing cell is reachable by walking given the current box layout; reject/repair plans that assume access through currently blocked corridors.",
+        "When planning multi-push box “runs” down a corridor, re-check reachability after every push; a single intermediate box move can cut off the player from the next required standing cell.",
+        "Do not plan pushes that require the player to approach a box from the outside of the connected floor region the player currently occupies (i.e., standing cell is in a different region unless a path-opening action is planned first).",
+        "Avoid sliding boxes along walls or into narrow hallways unless you have confirmed there is still at least one side-access cell available for future pushes; boxes in 1-tile-wide passages often become unpushable from the needed side.",
+        "Treat any push that places a box against a wall/corner where it cannot be pulled back as a one-way commitment; only do it if that line is provably the final route to a goal.",
+        "Prevent self-lockout: do not move boxes in ways that block the player’s only route between key rooms/areas unless the plan explicitly finishes all work on the far side first.",
+        "Penalize oscillations (repeatedly pushing the same box back and forth or undoing prior progress); require a monotonic justification such as clearing a passage or aligning for a goal.",
+        "If a plan involves repositioning multiple boxes in the same corridor, enforce ordering constraints: move the deeper/farther box first so nearer boxes don’t block access to required standing cells.",
+        "When selecting which box at a coordinate to reference, ensure the intent’s box coordinate matches an actually reachable, pushable box instance; if multiple boxes traverse the same cells over time, add disambiguation by box identity or re-resolve just-in-time.",
+        "Prefer push intents that keep at least two distinct walk paths (alternate routes) available; if a push reduces the player’s reachable area, require an explicit benefit (e.g., goal placement or opening a new region)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "4ce6e834e066c5d2accbf398c7192d7ed7141be18d35746ddf6e538c80784a0b",
+        "prompt_hash": "d352b1684df18f9e24773c5aaaa219a05667bdd384607ed43b617d7bca88cd80",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_045",
+      "after_attempt_index": 1,
+      "after_seed": 91,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T163052Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_045_seed91_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "f83b0096b4342c2565d83d52eb24559ef6ab3edc94e9e047eb6527682b0219e7",
+      "heuristic_memory_hash": "96e35174a5724b1e09b02c637279b2e6371d13d38d0ddb755d7c83bd5f8b1eb5",
+      "heuristic_set_hash": "52272e99c4afd204617de35b91bfc572ba25d3019cae20bc94da88aa7d701426",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to any push intent, verify the required standing cell is reachable by walking given the current box layout; reject/repair plans that assume access through currently blocked corridors.",
+        "When planning multi-push box “runs” down a corridor, re-check reachability after every push; a single intermediate box move can cut off the player from the next required standing cell.",
+        "Do not plan pushes that require the player to approach a box from the outside of the connected floor region the player currently occupies (i.e., standing cell is in a different region unless a path-opening action is planned first).",
+        "Avoid sliding boxes along walls or into narrow hallways unless you have confirmed there is still at least one side-access cell available for future pushes; boxes in 1-tile-wide passages often become unpushable from the needed side.",
+        "Treat any push that places a box against a wall/corner where it cannot be pulled back as a one-way commitment; only do it if that line is provably the final route to a goal.",
+        "Prevent self-lockout: do not move boxes in ways that block the player’s only route between key rooms/areas unless the plan explicitly finishes all work on the far side first.",
+        "Penalize oscillations (repeatedly pushing the same box back and forth or undoing prior progress); require a monotonic justification such as clearing a passage or aligning for a goal.",
+        "If a plan involves repositioning multiple boxes in the same corridor, enforce ordering constraints: move the deeper/farther box first so nearer boxes don’t block access to required standing cells.",
+        "When selecting which box at a coordinate to reference, ensure the intent’s box coordinate matches an actually reachable, pushable box instance; if multiple boxes traverse the same cells over time, add disambiguation by box identity or re-resolve just-in-time.",
+        "Prefer push intents that keep at least two distinct walk paths (alternate routes) available; if a push reduces the player’s reachable area, require an explicit benefit (e.g., goal placement or opening a new region)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "4ce6e834e066c5d2accbf398c7192d7ed7141be18d35746ddf6e538c80784a0b",
+        "prompt_hash": "d352b1684df18f9e24773c5aaaa219a05667bdd384607ed43b617d7bca88cd80",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_045",
+      "after_attempt_index": 2,
+      "after_seed": 92,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T163052Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_045_seed92_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "b686889d6a6fef2e07e4d64e40d9648535c28e71a08e8275b8fca8f5d297518c",
+      "heuristic_memory_hash": "5d262566278e61e122f7286c2bd6af07512dfe045073a31270212dee202e065c",
+      "heuristic_set_hash": "52272e99c4afd204617de35b91bfc572ba25d3019cae20bc94da88aa7d701426",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to any push intent, verify the required standing cell is reachable by walking given the current box layout; reject/repair plans that assume access through currently blocked corridors.",
+        "When planning multi-push box “runs” down a corridor, re-check reachability after every push; a single intermediate box move can cut off the player from the next required standing cell.",
+        "Do not plan pushes that require the player to approach a box from the outside of the connected floor region the player currently occupies (i.e., standing cell is in a different region unless a path-opening action is planned first).",
+        "Avoid sliding boxes along walls or into narrow hallways unless you have confirmed there is still at least one side-access cell available for future pushes; boxes in 1-tile-wide passages often become unpushable from the needed side.",
+        "Treat any push that places a box against a wall/corner where it cannot be pulled back as a one-way commitment; only do it if that line is provably the final route to a goal.",
+        "Prevent self-lockout: do not move boxes in ways that block the player’s only route between key rooms/areas unless the plan explicitly finishes all work on the far side first.",
+        "Penalize oscillations (repeatedly pushing the same box back and forth or undoing prior progress); require a monotonic justification such as clearing a passage or aligning for a goal.",
+        "If a plan involves repositioning multiple boxes in the same corridor, enforce ordering constraints: move the deeper/farther box first so nearer boxes don’t block access to required standing cells.",
+        "When selecting which box at a coordinate to reference, ensure the intent’s box coordinate matches an actually reachable, pushable box instance; if multiple boxes traverse the same cells over time, add disambiguation by box identity or re-resolve just-in-time.",
+        "Prefer push intents that keep at least two distinct walk paths (alternate routes) available; if a push reduces the player’s reachable area, require an explicit benefit (e.g., goal placement or opening a new region)."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "4ce6e834e066c5d2accbf398c7192d7ed7141be18d35746ddf6e538c80784a0b",
+        "prompt_hash": "d352b1684df18f9e24773c5aaaa219a05667bdd384607ed43b617d7bca88cd80",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_127",
+      "after_attempt_index": 0,
+      "after_seed": 93,
+      "after_status": "plan_exhausted",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T163406Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_127_seed93_plan_exhausted.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "4bf06178a01258cd10ac1914ad3f71b800945e0be75b0b35213abebb378c4f6c",
+      "heuristic_memory_hash": "a223c5a7c0595ad87b49448255851faa61f64930444bdfe71a66c777d4103670",
+      "heuristic_set_hash": "2637a27b2790979aed1257c4c374bd67e5044154c21879509df2c2b6dee997e1",
+      "heuristic_count": 5,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Never output an empty push plan; if no obvious progress push exists, generate exploratory pushes that move at least one box toward a goal or into a more open area.",
+        "Before selecting a push intent, enumerate all currently reachable push positions (player can stand behind the box in the opposite direction of push) and pick from that feasible set to avoid stalling the planner.",
+        "If no pushes are feasible from the current state, prioritize pushes earlier that preserve player mobility (avoid sealing corridors behind boxes) so later states still contain at least one reachable push.",
+        "Add a fallback strategy: if the heuristic cannot rank pushes, choose the push that maximizes future push options (box moved to a tile with more empty neighbors) rather than doing nothing.",
+        "Treat 'no candidate pushes' as a planning failure requiring search broadening (increase depth/beam, relax pruning) rather than terminating with an empty plan."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "70c1e05a379c6470bab2960a56750880f3c1b56f730522a3285f4a1e7b395e5e",
+        "prompt_hash": "3738523a9acaae6b651149127a97440de199479ec58c9b6b2cf5934623eb2bd1",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_135",
+      "after_attempt_index": 0,
+      "after_seed": 96,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T163628Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_135_seed96_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "388b5e2e8ef06098bb158b65a37d890a6a9094eda6e39be653d8af637ce4447e",
+      "heuristic_memory_hash": "741e693058a1273e6f617f97380d2fd565c8d0b7bf21c929e37432a73cf9daf2",
+      "heuristic_set_hash": "a254c95eb9d85b12bff7a981130a1dec3a29f8ace6023410adde9b668d1586a7",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing a push intent, verify the required standing cell (behind the box, opposite the push direction) is reachable by the player in the *current* state; if not, re-plan instead of assuming a walk path exists.",
+        "Treat each planned push as state-dependent: after every executed push, re-evaluate reachability for the next push’s standing cell because box moves can seal corridors and invalidate previously reachable approach paths.",
+        "Avoid push sequences that require approaching the same box from alternating sides in a tight hallway unless you have confirmed there is a loop/space to reposition the player to the needed side after each push.",
+        "Do not push a box into a corridor chokepoint (width 1 or near-walls) if that box (or another nearby box) can later block the only route to the standing cell for subsequent pushes.",
+        "Prefer pushes that preserve at least one accessible \"staging\" tile adjacent to key boxes (a free neighbor cell the player can stand on later); deprioritize pushes that eliminate all approach-side access around a box.",
+        "If a push would place a box against a wall (or into a corner) and the level goals do not require it there, treat it as high-risk because it often removes approach options and causes future standing cells to be unreachable.",
+        "When multiple boxes are in the same region, avoid creating box-to-box adjacency that forms an impassable barrier for the player (e.g., two boxes spanning a narrow passage), unless the plan immediately resolves it.",
+        "In narrow vertical/horizontal shafts, avoid repeatedly pushing boxes \"forward\" without confirming there remains a traversable path for the player to get behind the next box for the next push.",
+        "Add a planner rule: any push intent is invalid if either (a) the standing cell is not reachable now, or (b) the push would reduce player connectivity by cutting off the only path to future required standing cells (connectivity/bridge check).",
+        "If a future push requires standing on a tile that is currently reachable only via passing through the destination cell of an earlier push, assume that earlier push may block it; require an explicit alternative route before proceeding."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "349ee62cb9562422021596571c862fb314f0433b0b232fe81d37e3b6b445ca8b",
+        "prompt_hash": "ae28c29e20abeabf28ad09fd7b0ed2637cc875705e41ae158aad094c6d030fb1",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_197",
+      "after_attempt_index": 0,
+      "after_seed": 108,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T164705Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_197_seed108_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "949c156b0ddcc412f202e8dc622edea71e037b59c179b88d949f67d98d4a2507",
+      "heuristic_memory_hash": "44db288428b7d5405c3fb1a87be1374144e79005ce9207485e467671f21c8733",
+      "heuristic_set_hash": "367f067ce5e347637a951f4cb943691c879526765a9f7940a2e927eb6ebc167b",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing a push intent, verify the required standing cell (opposite the push direction) is not occupied by any box; if it is, plan to move that blocking box first or choose a different push.",
+        "Treat box coordinates in intents as dynamic: re-resolve the target box by current board state (and/or stable box IDs), and reject intents that reference a stale location already vacated or now occupied by a different box.",
+        "For any sequence of repeated pushes on the same box (e.g., multiple Lefts), re-check after each push that the next required standing cell remains free and reachable; do not assume the corridor behind the box stays open.",
+        "When pushing a box along a corridor, ensure you are not moving another box into the corridor behind it, which will later prevent you from getting into position for subsequent pushes.",
+        "Add a lookahead rule: if a planned push would place a box such that it blocks access to a critical maneuver cell (a narrow doorway/1-tile passage needed as a standing position), forbid that push unless it also opens an alternate route.",
+        "Prefer plans that maintain at least one clear 'walk loop' around the active work area; avoid pushes that collapse the walkable region into a dead-end behind the boxes.",
+        "If a push requires standing in a cell that is only accessible through a 1-wide passage adjacent to boxes, treat it as fragile and enforce an extra constraint that no box may enter that passage before the push is executed."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "81558630ac776ca5e6147e03f56e7be81f8cc6dcbfd8c65f131c3fb753de101b",
+        "prompt_hash": "2c50d1a7a8ca414479033042448994518a32d4043776233970f3ee37642b3159",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_197",
+      "after_attempt_index": 1,
+      "after_seed": 109,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T164838Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_197_seed109_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 2,
+      "source_raw_memory_hash": "76de6b50a2a19518e87a7bf15e045abe54e7f9569c2628726a116850deba7ed7",
+      "heuristic_memory_hash": "c0c5eb330d11ebfea1bd805b070d5e8b3d7a6d8acffeb87a3c360346d7d4f9bb",
+      "heuristic_set_hash": "367f067ce5e347637a951f4cb943691c879526765a9f7940a2e927eb6ebc167b",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing a push intent, verify the required standing cell (opposite the push direction) is not occupied by any box; if it is, plan to move that blocking box first or choose a different push.",
+        "Treat box coordinates in intents as dynamic: re-resolve the target box by current board state (and/or stable box IDs), and reject intents that reference a stale location already vacated or now occupied by a different box.",
+        "For any sequence of repeated pushes on the same box (e.g., multiple Lefts), re-check after each push that the next required standing cell remains free and reachable; do not assume the corridor behind the box stays open.",
+        "When pushing a box along a corridor, ensure you are not moving another box into the corridor behind it, which will later prevent you from getting into position for subsequent pushes.",
+        "Add a lookahead rule: if a planned push would place a box such that it blocks access to a critical maneuver cell (a narrow doorway/1-tile passage needed as a standing position), forbid that push unless it also opens an alternate route.",
+        "Prefer plans that maintain at least one clear 'walk loop' around the active work area; avoid pushes that collapse the walkable region into a dead-end behind the boxes.",
+        "If a push requires standing in a cell that is only accessible through a 1-wide passage adjacent to boxes, treat it as fragile and enforce an extra constraint that no box may enter that passage before the push is executed."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "81558630ac776ca5e6147e03f56e7be81f8cc6dcbfd8c65f131c3fb753de101b",
+        "prompt_hash": "2c50d1a7a8ca414479033042448994518a32d4043776233970f3ee37642b3159",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_197",
+      "after_attempt_index": 2,
+      "after_seed": 110,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T164838Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_197_seed110_invalid_plan.json",
+      "used_by_next_attempt": false,
+      "next_attempt_index": null,
+      "source_raw_memory_hash": "3eb88c011898fdf78f4725a14513e7424f3ac68257dd9c93d61aaafcb4374e47",
+      "heuristic_memory_hash": "72d16a268d7fc14341f2fcf70a3dac5698df2290d380e59295de784467c5c633",
+      "heuristic_set_hash": "367f067ce5e347637a951f4cb943691c879526765a9f7940a2e927eb6ebc167b",
+      "heuristic_count": 7,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing a push intent, verify the required standing cell (opposite the push direction) is not occupied by any box; if it is, plan to move that blocking box first or choose a different push.",
+        "Treat box coordinates in intents as dynamic: re-resolve the target box by current board state (and/or stable box IDs), and reject intents that reference a stale location already vacated or now occupied by a different box.",
+        "For any sequence of repeated pushes on the same box (e.g., multiple Lefts), re-check after each push that the next required standing cell remains free and reachable; do not assume the corridor behind the box stays open.",
+        "When pushing a box along a corridor, ensure you are not moving another box into the corridor behind it, which will later prevent you from getting into position for subsequent pushes.",
+        "Add a lookahead rule: if a planned push would place a box such that it blocks access to a critical maneuver cell (a narrow doorway/1-tile passage needed as a standing position), forbid that push unless it also opens an alternate route.",
+        "Prefer plans that maintain at least one clear 'walk loop' around the active work area; avoid pushes that collapse the walkable region into a dead-end behind the boxes.",
+        "If a push requires standing in a cell that is only accessible through a 1-wide passage adjacent to boxes, treat it as fragile and enforce an extra constraint that no box may enter that passage before the push is executed."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "81558630ac776ca5e6147e03f56e7be81f8cc6dcbfd8c65f131c3fb753de101b",
+        "prompt_hash": "2c50d1a7a8ca414479033042448994518a32d4043776233970f3ee37642b3159",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_203",
+      "after_attempt_index": 0,
+      "after_seed": 87,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T162358Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_203_seed87_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "31e82053efed4b78c47168fc9981c5b33e4004d182ec4674f473328a094d55ca",
+      "heuristic_memory_hash": "a5e963bc4bea6be9447b7d481f1231ceb587ad3a0c60826bb350e1222f519f3e",
+      "heuristic_set_hash": "6df24b72019d7aec355f92d0253325ba7b8aacf66cbaf9392014ace7debe6f97",
+      "heuristic_count": 5,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before emitting a push intent, verify the required standing cell (opposite the push direction from the box) is reachable by the player through current free floor cells (treat all boxes as obstacles).",
+        "Do not assume a standing cell is reachable just because it is 'free'; explicitly check it is connected to the player via walkable space (same connected component).",
+        "If the standing cell lies in a sealed region (e.g., behind walls or in an isolated pocket), discard that push and instead plan moves that open access first (reposition boxes only if they can be pushed from reachable sides).",
+        "Prioritize pushes where the player can already access at least two sides of the target box; avoid committing to first pushes that require approaching the box from an inaccessible side.",
+        "When selecting a box+direction, ensure both constraints hold: (1) standing cell reachable, (2) destination cell free; failing either should block the push from being proposed."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "0e3d1823e23bb9055a24ec8043fa152ba3dcda5640dc5b0452d7a50a2f31c707",
+        "prompt_hash": "b5e7220eb4f65e835e86205ba68c6665108926c78ffdd2abd94c29aa8c6680e3",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    },
+    {
+      "level_id": "boxoban_unfiltered_valid_000_289",
+      "after_attempt_index": 0,
+      "after_seed": 99,
+      "after_status": "invalid_plan",
+      "result_file": "results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/20260531T164046Z_heuristic_same_level_iterative_boxoban_unfiltered_valid_000_289_seed99_invalid_plan.json",
+      "used_by_next_attempt": true,
+      "next_attempt_index": 1,
+      "source_raw_memory_hash": "5d92c9c813992b7777782d508524913765a57e2389d175c91b521f928e796e36",
+      "heuristic_memory_hash": "84f41ecf6e8d39dd72904dc19b22c3c8970cb12970723ce48bd1bbaeb69a970c",
+      "heuristic_set_hash": "638b6b6d9a5535793f47fa0badf13e64e3ca03c81247a04a9149c77a7c0245f3",
+      "heuristic_count": 10,
+      "heuristic_scopes": [
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed",
+        "global_allowed"
+      ],
+      "heuristics": [
+        "Before committing to a push intent, ensure the required standing cell (opposite the push direction) is not only currently reachable but will remain reachable after all earlier planned pushes; treat reachability as a hard precondition that can be invalidated by corridor-blocking moves.",
+        "Avoid pushing boxes into narrow corridors/1-tile-wide tunnels unless you have already planned (and verified) an exit path for the player; a single box in a choke point can permanently cut off access to future push positions.",
+        "Never plan a push that requires the player to stand in a cell that could become sealed by (wall + box) or (box + box) adjacency; if the standing cell has <=1 walkable neighbor besides the box edge, consider it fragile and require extra clearance checks.",
+        "When multiple boxes share the same region, prioritize pushes that increase player mobility (open space) over pushes that move boxes deeper; mobility-reducing pushes should be delayed until they are clearly final/goal-locking.",
+        "Do not chain many pushes on the same line/column in tight areas without re-validating player access after each push; small shifts can change which side of a box the player can reach.",
+        "If a future push requires approaching a box from a specific side, reserve that approach side by keeping at least one continuous walk path to the needed standing cell; avoid placing any box onto that path.",
+        "Treat corners and wall-adjacent cells as high-risk for creating unreachable push positions: if pushing would place a box against a wall while also blocking the only route around it, forbid the push unless it immediately solves/locks the box on a target.",
+        "Prefer pushing boxes onto targets only when the box is provably 'done' (cannot need to move again); otherwise, a box on a target can still act as a blocker that makes required push positions unreachable elsewhere.",
+        "When selecting a box by coordinates, verify identity consistency: if multiple boxes can move into similar coordinates over time, re-resolve the intended box at execution time and re-check the standing-cell path; stale box references often imply an unreachable setup.",
+        "Add a planner rule: after each executed push, recompute connected walkable components; if any remaining required standing cell lies in a different component than the player, backtrack and choose a push that preserves component connectivity."
+      ],
+      "reflection_metadata": {
+        "cache_hit": true,
+        "cache_key": "9b52a70393835b5681b5820cb40d19dc7558fff4ab2155eed08984cc4e0a2403",
+        "prompt_hash": "fbf0319e23d6155bd0f2d6dff265b9e6701320dd76b679a12ff53536982728b4",
+        "reflection_prompt_version": "reflection_v2",
+        "memory_caps": {
+          "max_memory_items": 3,
+          "max_steps_per_memory": 6,
+          "max_memory_chars": 4000
+        }
+      }
+    }
+  ]
+}

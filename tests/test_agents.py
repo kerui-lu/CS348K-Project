@@ -89,6 +89,7 @@ def test_cli_accepts_llm_model_and_api_key_env_args():
 
 
 def test_cli_accepts_v2_budget_memory_and_cache_args():
+    assert MIN_MAX_OUTPUT_TOKENS == 16384
     args = build_parser().parse_args(
         [
             "--agent",
