@@ -1,10 +1,13 @@
 import os
 
+import pytest
+
 from run_experiment import build_parser
 from sokoban_memory.agents import (
     DEFAULT_LLM_MODEL,
     DEFAULT_MAX_OUTPUT_TOKENS,
     LLMAgent,
+    MIN_MAX_OUTPUT_TOKENS,
     NoMemoryAgent,
     PROMPT_VERSION,
     RawTrajectoryMemoryAgent,
@@ -105,7 +108,7 @@ def test_cli_accepts_v2_budget_memory_and_cache_args():
             "--temperature",
             "0",
             "--max_output_tokens",
-            "8",
+            str(MIN_MAX_OUTPUT_TOKENS),
             "--cache_namespace",
             "main",
         ]
@@ -119,8 +122,13 @@ def test_cli_accepts_v2_budget_memory_and_cache_args():
     assert args.max_memory_chars == 500
     assert args.llm_cache_path == ".llm_cache/test"
     assert args.temperature == 0
-    assert args.max_output_tokens == 8
+    assert args.max_output_tokens == MIN_MAX_OUTPUT_TOKENS
     assert args.cache_namespace == "main"
+
+
+def test_cli_rejects_output_token_cap_below_minimum():
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["--agent", "llm", "--max_output_tokens", "8192"])
 
 
 def test_cli_accepts_same_level_iterative_mode():

@@ -10,6 +10,7 @@ from sokoban_memory.agents import (
     DEFAULT_LLM_MODEL,
     DEFAULT_MAX_OUTPUT_TOKENS,
     DEFAULT_TEMPERATURE,
+    MIN_MAX_OUTPUT_TOKENS,
     make_agent,
 )
 from sokoban_memory.env import SokobanEnv
@@ -20,6 +21,18 @@ from sokoban_memory.memory import HeuristicMemory, MemoryRenderConfig, build_raw
 from sokoban_memory.metrics import summarize_results
 from sokoban_memory.prompts import level_metadata
 from sokoban_memory.reflection import generate_reflection_memory
+
+
+def _max_output_tokens_at_least_min(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("--max_output_tokens must be an integer.") from exc
+    if parsed < MIN_MAX_OUTPUT_TOKENS:
+        raise argparse.ArgumentTypeError(
+            f"--max_output_tokens must be at least {MIN_MAX_OUTPUT_TOKENS}."
+        )
+    return parsed
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -40,7 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max_memory_chars", type=int, default=4000)
     parser.add_argument("--llm_cache_path", default=None)
     parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
-    parser.add_argument("--max_output_tokens", type=int, default=DEFAULT_MAX_OUTPUT_TOKENS)
+    parser.add_argument(
+        "--max_output_tokens",
+        type=_max_output_tokens_at_least_min,
+        default=DEFAULT_MAX_OUTPUT_TOKENS,
+    )
     parser.add_argument("--cache_namespace", default=DEFAULT_CACHE_NAMESPACE)
     return parser
 

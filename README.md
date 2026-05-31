@@ -114,7 +114,7 @@ python3 build_memory_bank.py \
   --llm_cache_path .llm_cache/responses \
   --cache_namespace main \
   --temperature 0 \
-  --max_output_tokens 512 \
+  --max_output_tokens 32768 \
   --raw_memory_path memory_banks/raw_failures.json \
   --heuristic_memory_path memory_banks/reflection_heuristics.json
 ```
@@ -131,7 +131,7 @@ python3 run_experiment.py \
   --llm_cache_path .llm_cache/responses \
   --cache_namespace main \
   --temperature 0 \
-  --max_output_tokens 512 \
+  --max_output_tokens 32768 \
   --results_dir results/v2_no_memory
 
 python3 run_experiment.py \
@@ -147,7 +147,7 @@ python3 run_experiment.py \
   --llm_cache_path .llm_cache/responses \
   --cache_namespace main \
   --temperature 0 \
-  --max_output_tokens 512 \
+  --max_output_tokens 32768 \
   --results_dir results/v2_raw
 
 python3 run_experiment.py \
@@ -163,7 +163,7 @@ python3 run_experiment.py \
   --llm_cache_path .llm_cache/responses \
   --cache_namespace main \
   --temperature 0 \
-  --max_output_tokens 512 \
+  --max_output_tokens 32768 \
   --results_dir results/v2_reflection
 ```
 
