@@ -123,6 +123,23 @@ def test_cli_accepts_v2_budget_memory_and_cache_args():
     assert args.cache_namespace == "main"
 
 
+def test_cli_accepts_same_level_iterative_mode():
+    args = build_parser().parse_args(
+        [
+            "--experiment_mode",
+            "same_level_iterative",
+            "--condition",
+            "raw_same_level_iterative",
+            "--attempt_budget",
+            "5",
+        ]
+    )
+
+    assert args.experiment_mode == "same_level_iterative"
+    assert args.condition == "raw_same_level_iterative"
+    assert args.attempt_budget == 5
+
+
 def test_cli_defaults_to_low_cost_llm_model():
     args = build_parser().parse_args(["--agent", "llm"])
 
@@ -198,6 +215,9 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert '"player_after": [row, col]' not in no_memory_prompt
     assert '"box_after": [row, col]' not in no_memory_prompt
     assert "Return JSON only" in no_memory_prompt
+    assert "reference_solution" not in no_memory_prompt
+    assert "solver_min_pushes" not in no_memory_prompt
+    assert "solver_min_steps" not in no_memory_prompt
     assert '{"box": [4, 4], "push": "Right"}' in no_memory_prompt
     assert "Prior trajectory records" in raw_prompt
     assert "executed_action: Right" in raw_prompt

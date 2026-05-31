@@ -189,7 +189,7 @@ class FullPathLLMAgent(BaseAgent):
         return self.memory_config.to_dict()
 
     def _build_prompt(self, state_text: str, context: dict[str, Any]) -> tuple[str, str, str]:
-        memory_text = self._render_memory()
+        memory_text = self._render_memory(context)
         rendered = render_full_path_prompt(
             policy_mode=self.policy_mode,
             prompt_version=self.prompt_version,
@@ -203,9 +203,32 @@ class FullPathLLMAgent(BaseAgent):
         )
         return rendered.prompt, rendered.memory_text, rendered.non_memory_template
 
-    def _render_memory(self) -> str:
+    def _render_memory(self, context: dict[str, Any] | None = None) -> str:
         if self.memory_condition == "none" or self.memory_store is None:
             return "No past experience is available for this condition."
+        if self.memory_condition == "generic_retry_feedback":
+            attempt_index = context.get("iteration_attempt_index") if context else None
+            if isinstance(attempt_index, int) and attempt_index > 0:
+                return (
+                    "Previous same-level attempt failed. Regenerate a complete plan "
+                    "from the original board and try a different solution."
+                )
+            return "No previous same-level attempt is available yet."
+        level_id = str(context.get("level_id")) if context and context.get("level_id") else None
+        if level_id and self.memory_condition == "raw_trajectory_memory" and hasattr(self.memory_store, "render_for_level"):
+            return self.memory_store.render_for_level(level_id, self.memory_config)
+        if (
+            level_id
+            and self.memory_condition == "verifier_summary_retry"
+            and hasattr(self.memory_store, "render_verifier_summary_for_level")
+        ):
+            return self.memory_store.render_verifier_summary_for_level(level_id, self.memory_config)
+        if (
+            level_id
+            and self.memory_condition == "heuristic_same_level_iterative"
+            and hasattr(self.memory_store, "render_for_level")
+        ):
+            return self.memory_store.render_for_level(level_id, self.memory_config)
         if hasattr(self.memory_store, "render"):
             return self.memory_store.render(self.memory_config)
         return str(self.memory_store)
@@ -283,9 +306,27 @@ class RawTrajectoryMemoryAgent(FullPathLLMAgent):
     memory_condition = "raw_trajectory_memory"
 
 
+class GenericRetryFeedbackAgent(FullPathLLMAgent):
+    agent_type = "generic_retry_feedback"
+    memory_condition = "generic_retry_feedback"
+
+    def __init__(self, **kwargs: Any):
+        super().__init__(memory_store={}, **kwargs)
+
+
+class VerifierSummaryRetryAgent(FullPathLLMAgent):
+    agent_type = "verifier_summary_retry"
+    memory_condition = "verifier_summary_retry"
+
+
 class ReflectionHeuristicAgent(FullPathLLMAgent):
     agent_type = "reflection_heuristic"
     memory_condition = "reflection_heuristic"
+
+
+class SameLevelHeuristicAgent(FullPathLLMAgent):
+    agent_type = "heuristic_same_level_iterative"
+    memory_condition = "heuristic_same_level_iterative"
 
 
 class LLMAgent(NoMemoryAgent):
@@ -379,6 +420,32 @@ def make_agent(
             max_output_tokens=max_output_tokens,
             cache_namespace=cache_namespace,
         )
+    if agent_name == "generic_retry_feedback":
+        return GenericRetryFeedbackAgent(
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            cache_namespace=cache_namespace,
+        )
+    if agent_name == "verifier_summary_retry":
+        return VerifierSummaryRetryAgent(
+            memory_store=memory,
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            cache_namespace=cache_namespace,
+            memory_path=memory_path,
+        )
     if agent_name in {"raw", "raw_trajectory", "raw_trajectory_memory"}:
         return RawTrajectoryMemoryAgent(
             memory_store=memory,
@@ -395,6 +462,20 @@ def make_agent(
         )
     if agent_name in {"reflection", "reflection_heuristic"}:
         return ReflectionHeuristicAgent(
+            memory_store=memory,
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            cache_namespace=cache_namespace,
+            memory_path=memory_path,
+        )
+    if agent_name == "heuristic_same_level_iterative":
+        return SameLevelHeuristicAgent(
             memory_store=memory,
             model=model,
             api_key_env=api_key_env,

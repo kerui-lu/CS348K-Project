@@ -14,7 +14,11 @@ from sokoban_memory.agents import (
 )
 from sokoban_memory.levels import load_levels
 from sokoban_memory.memory import HeuristicMemory, MemoryRenderConfig, RawTrajectoryMemory
-from sokoban_memory.experiment import run_experiment
+from sokoban_memory.experiment import (
+    SAME_LEVEL_ITERATIVE_CONDITIONS,
+    run_experiment,
+    run_same_level_iterative_experiment,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -27,8 +31,14 @@ def build_parser() -> argparse.ArgumentParser:
         "raw_trajectory_memory",
         "reflection",
         "reflection_heuristic",
+        "generic_retry_feedback",
+        "verifier_summary_retry",
+        "heuristic_same_level_iterative",
         "llm",
     ])
+    parser.add_argument("--experiment_mode", default="standard", choices=["standard", "same_level_iterative"])
+    parser.add_argument("--condition", default=None, choices=sorted(SAME_LEVEL_ITERATIVE_CONDITIONS))
+    parser.add_argument("--attempt_budget", type=int, default=5)
     parser.add_argument("--episodes", type=int, default=10)
     parser.add_argument("--levels", default="levels/simple.json")
     parser.add_argument("--level_split", default=None, choices=["train", "eval", "unspecified"])
@@ -74,6 +84,28 @@ def main() -> None:
         max_steps_per_memory=args.max_steps_per_memory,
         max_memory_chars=args.max_memory_chars,
     )
+    if args.experiment_mode == "same_level_iterative":
+        condition = args.condition or _condition_from_agent(args.agent)
+        summary = run_same_level_iterative_experiment(
+            levels=levels,
+            condition=condition,
+            attempts_per_level=args.attempt_budget,
+            max_steps=args.max_steps,
+            seed=args.seed,
+            results_dir=Path(args.results_dir),
+            model=args.model,
+            api_key_env=args.api_key_env,
+            max_llm_calls=args.max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=args.llm_cache_path,
+            temperature=args.temperature,
+            max_output_tokens=args.max_output_tokens,
+            cache_namespace=args.cache_namespace,
+            level_suite_path=args.levels,
+        )
+        print(json.dumps(summary, indent=2))
+        return
+
     agent = make_agent(
         args.agent,
         seed=args.seed,
@@ -96,8 +128,23 @@ def main() -> None:
         seed=args.seed,
         results_dir=Path(args.results_dir),
         max_repair_attempts=args.max_repair_attempts,
+        level_suite_path=args.levels,
     )
     print(json.dumps(summary, indent=2))
+
+
+def _condition_from_agent(agent_name: str) -> str:
+    if agent_name == "no_memory":
+        return "single_shot_no_memory"
+    if agent_name == "generic_retry_feedback":
+        return "generic_retry_feedback"
+    if agent_name == "verifier_summary_retry":
+        return "verifier_summary_retry"
+    if agent_name in {"raw", "raw_trajectory", "raw_trajectory_memory"}:
+        return "raw_same_level_iterative"
+    if agent_name in {"reflection", "reflection_heuristic", "heuristic_same_level_iterative"}:
+        return "heuristic_same_level_iterative"
+    raise ValueError(f"Agent {agent_name!r} cannot be used as a same-level iterative condition.")
 
 
 if __name__ == "__main__":

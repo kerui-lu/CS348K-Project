@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from sokoban_memory.v3_trajectory import assert_no_prompt_leakage
+
 
 @dataclass(frozen=True)
 class PromptRenderResult:
@@ -102,6 +104,7 @@ def render_full_path_prompt(
             repair_feedback,
         ])
     prompt = "\n".join(sections)
+    assert_no_prompt_leakage(prompt)
     non_memory_template = prompt.replace(memory_block, "Memory context:\n<MEMORY_BLOCK>")
     return PromptRenderResult(
         prompt=prompt,

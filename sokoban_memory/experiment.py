@@ -6,14 +6,39 @@ from pathlib import Path
 from typing import Any
 
 from sokoban_memory.action_parser import choose_fallback_action, parse_action
-from sokoban_memory.agents import BaseAgent, LLMBudgetExceeded
+from sokoban_memory.agents import (
+    DEFAULT_API_KEY_ENV,
+    DEFAULT_CACHE_NAMESPACE,
+    DEFAULT_LLM_MODEL,
+    DEFAULT_MAX_OUTPUT_TOKENS,
+    DEFAULT_TEMPERATURE,
+    BaseAgent,
+    LLMBudgetExceeded,
+    make_agent,
+)
 from sokoban_memory.env import DIRECTIONS, SokobanEnv
 from sokoban_memory.full_path import execute_push_plan, parse_push_plan, PushPlanParseError
 from sokoban_memory.logging_utils import save_episode, save_summary
-from sokoban_memory.memory import get_memory_source_level_ids, validate_no_eval_memory_leak
+from sokoban_memory.memory import (
+    HeuristicMemory,
+    MemoryRenderConfig,
+    RawTrajectoryMemory,
+    get_memory_source_level_ids,
+    validate_no_eval_memory_leak,
+)
 from sokoban_memory.metrics import summarize_results
 from sokoban_memory.prompts import level_metadata
+from sokoban_memory.reflection import generate_reflection_memory
 from sokoban_memory.types import EpisodeResult, Level, Position
+from sokoban_memory.v3_trajectory import (
+    RunIdentity,
+    board_after_last_successful_push,
+    board_before_failed_push,
+    build_v3_attempt_trace,
+    failure_subtype,
+    make_run_identity,
+    progress_metrics,
+)
 
 RULES_TEXT = (
     "Move Up/Down/Left/Right only; no diagonal moves. "
@@ -31,6 +56,8 @@ def run_episode(
     max_steps: int,
     seed: int,
     max_repair_attempts: int = 0,
+    run_identity: RunIdentity | None = None,
+    condition: str | None = None,
 ) -> EpisodeResult:
     if getattr(agent, "policy_mode", "") == "full_path":
         return run_full_path_episode(
@@ -39,6 +66,8 @@ def run_episode(
             max_steps=max_steps,
             seed=seed,
             max_repair_attempts=max_repair_attempts,
+            run_identity=run_identity,
+            condition=condition,
         )
 
     rng = random.Random(seed)
@@ -173,8 +202,13 @@ def run_full_path_episode(
     max_steps: int,
     seed: int,
     max_repair_attempts: int = 0,
+    run_identity: RunIdentity | None = None,
+    condition: str | None = None,
 ) -> EpisodeResult:
     state_text = env.reset()
+    initial_board = state_text
+    run_identity = run_identity or make_run_identity()
+    condition = condition or getattr(agent, "agent_type", "unknown")
     start_llm_calls = getattr(agent, "llm_call_count", 0)
     start_token_cost = getattr(agent, "token_cost", 0.0)
     start_cache_hits = getattr(agent, "cache_hits", 0)
@@ -193,11 +227,15 @@ def run_full_path_episode(
         state_text = env.reset()
         context = {
             "rules": RULES_TEXT,
+            "level_id": env.level.level_id,
             "state_summary": _state_summary(env),
             "max_steps": max_steps,
             "memory": _agent_memory(agent),
             "repair_feedback": repair_feedback,
         }
+        iteration_context = getattr(agent, "iteration_context", None)
+        if isinstance(iteration_context, dict):
+            context.update(iteration_context)
         try:
             if hasattr(agent, "select_plan"):
                 raw_plan = agent.select_plan(state_text, context)  # type: ignore[attr-defined]
@@ -207,24 +245,30 @@ def run_full_path_episode(
             final_status = "budget_exhausted"
             budget_exhausted = True
             final_metadata = {
+                "schema_version": "v3_trajectory_v1",
                 "failure_reason": "llm_call_budget_exhausted",
+                "failure_subtype": "budget_exhausted",
                 "budget_exhausted_at_attempt": attempt_index,
                 "budget_error": str(exc),
                 "planned_pushes": [],
                 "expanded_actions": [],
                 "push_execution_log": [],
+                "initial_board": initial_board,
             }
             break
         except Exception as exc:
             final_status = "api_error"
             final_metadata = {
+                "schema_version": "v3_trajectory_v1",
                 "failure_reason": "api_error",
+                "failure_subtype": "api_error",
                 "error_type": type(exc).__name__,
                 "error_message": str(exc),
                 "error_at_attempt": attempt_index,
                 "planned_pushes": [],
                 "expanded_actions": [],
                 "push_execution_log": [],
+                "initial_board": initial_board,
             }
             break
 
@@ -238,6 +282,13 @@ def run_full_path_episode(
                 "raw_plan_response": raw_plan,
                 "status": "invalid_plan",
                 "failure_reason": "invalid_push_plan_parse",
+                "failure_subtype": failure_subtype(
+                    status="invalid_plan",
+                    failure_reason="invalid_push_plan_parse",
+                    raw_output=raw_plan,
+                    error_message=str(exc),
+                ),
+                "call_metadata": call_metadata,
                 "error_type": type(exc).__name__,
                 "error_message": str(exc),
                 "planned_pushes": [],
@@ -246,7 +297,24 @@ def run_full_path_episode(
                 "expanded_primitive_step_count": 0,
                 "expanded_actions": [],
                 "push_execution_log": [],
+                "initial_board": initial_board,
+                "final_board": initial_board,
+                "board_before_failed_push": initial_board,
+                "board_after_last_successful_push": initial_board,
             }
+            attempt["v3_attempt_trace"] = build_v3_attempt_trace(
+                level=env.level,
+                run_identity=run_identity,
+                condition=condition,
+                attempt=attempt,
+                attempt_index=attempt_index,
+                seed=seed,
+                model=getattr(agent, "model", None),
+                prompt_version=getattr(agent, "prompt_version", None),
+                max_output_tokens=getattr(agent, "max_output_tokens", None),
+                initial_board=initial_board,
+                trajectory=[],
+            )
             repair_attempts.append(attempt)
             if attempt_index < max_repair_attempts:
                 repair_feedback = _repair_feedback_from_attempt(attempt)
@@ -268,6 +336,7 @@ def run_full_path_episode(
             "attempt_index": attempt_index,
             "raw_plan_response": raw_plan,
             "status": execution.status,
+            "call_metadata": call_metadata,
             "planned_pushes": planned_pushes,
             "expanded_actions": execution.expanded_actions,
             "push_execution_log": execution.push_execution_log,
@@ -278,13 +347,37 @@ def run_full_path_episode(
         final_board = _final_board_from_trajectory(execution.trajectory)
         if final_board:
             attempt["final_board"] = final_board
+        else:
+            attempt["final_board"] = initial_board
         deadlock_reason = _deadlock_reason_from_trajectory(execution.trajectory)
         if deadlock_reason:
             attempt["deadlock_reason"] = deadlock_reason
         if execution.failure_reason:
             attempt["failure_reason"] = execution.failure_reason
+        attempt["failure_subtype"] = failure_subtype(
+            status=execution.status,
+            failure_reason=attempt.get("failure_reason"),
+            raw_output=raw_plan,
+        )
         if execution.failure_push_index is not None:
             attempt["failure_push_index"] = execution.failure_push_index
+        attempt["initial_board"] = initial_board
+        attempt["board_before_failed_push"] = board_before_failed_push(attempt)
+        attempt["board_after_last_successful_push"] = board_after_last_successful_push(attempt, initial_board)
+        attempt.update(progress_metrics(env.level, initial_board, execution.trajectory))
+        attempt["v3_attempt_trace"] = build_v3_attempt_trace(
+            level=env.level,
+            run_identity=run_identity,
+            condition=condition,
+            attempt=attempt,
+            attempt_index=attempt_index,
+            seed=seed,
+            model=getattr(agent, "model", None),
+            prompt_version=getattr(agent, "prompt_version", None),
+            max_output_tokens=getattr(agent, "max_output_tokens", None),
+            initial_board=initial_board,
+            trajectory=execution.trajectory,
+        )
         repair_attempts.append(attempt)
 
         final_status = execution.status
@@ -302,6 +395,32 @@ def run_full_path_episode(
         repair_feedback = _repair_feedback_from_attempt(attempt)
 
     final_metadata.update(_repair_metadata(repair_attempts, final_status))
+    if "v3_attempt_trace" not in final_metadata and repair_attempts:
+        final_metadata["v3_attempt_trace"] = repair_attempts[-1].get("v3_attempt_trace")
+    if final_metadata.get("v3_attempt_trace"):
+        trace = final_metadata["v3_attempt_trace"]
+        for key in (
+            "schema_version",
+            "run_id",
+            "code_commit",
+            "level_suite_path",
+            "level_suite_hash",
+            "executor_version",
+            "prompt_renderer_version",
+            "memory_renderer_version",
+            "cache_key",
+            "failure_subtype",
+            "initial_board",
+            "board_before_failed_push",
+            "board_after_last_successful_push",
+            "best_boxes_on_targets",
+            "final_boxes_on_targets",
+            "target_placement_events_before_first_deadlock",
+            "best_goal_completion_rate",
+            "final_goal_completion_rate",
+            "normalized_target_placement_before_first_deadlock",
+        ):
+            final_metadata.setdefault(key, trace.get(key))
 
     return EpisodeResult(
         level_id=env.level.level_id,
@@ -341,12 +460,14 @@ def run_experiment(
     seed: int,
     results_dir: Path,
     max_repair_attempts: int = 0,
+    level_suite_path: str | Path | None = None,
 ) -> dict[str, Any]:
     memory_store = getattr(agent, "memory_store", None)
     if memory_store is not None and getattr(agent, "agent_type", "") != "no_memory":
         validate_no_eval_memory_leak(levels, memory_store)
 
     results: list[EpisodeResult] = []
+    run_identity = make_run_identity(level_suite_path)
     for episode_idx in range(episodes):
         level = levels[episode_idx % len(levels)]
         episode_seed = seed + episode_idx
@@ -357,6 +478,8 @@ def run_experiment(
             max_steps=max_steps,
             seed=episode_seed,
             max_repair_attempts=max_repair_attempts,
+            run_identity=run_identity,
+            condition=agent.agent_type,
         )
         save_episode(result, results_dir)
         results.append(result)
@@ -384,6 +507,10 @@ def run_experiment(
             "max_steps": max_steps,
             "max_repair_attempts": max_repair_attempts,
             "results_dir": str(results_dir),
+            "run_id": run_identity.run_id,
+            "code_commit": run_identity.code_commit,
+            "level_suite_path": run_identity.level_suite_path,
+            "level_suite_hash": run_identity.level_suite_hash,
             "memory_path": getattr(agent, "memory_path", None),
             "memory_hash": getattr(agent, "memory_hash", None),
             "memory_source_level_ids": source_level_ids,
@@ -394,6 +521,254 @@ def run_experiment(
     )
     save_summary(summary, results_dir)
     return summary
+
+
+SAME_LEVEL_ITERATIVE_CONDITIONS = {
+    "single_shot_no_memory",
+    "generic_retry_feedback",
+    "verifier_summary_retry",
+    "raw_same_level_iterative",
+    "heuristic_same_level_iterative",
+}
+
+
+def run_same_level_iterative_experiment(
+    *,
+    levels: list[Level],
+    condition: str,
+    attempts_per_level: int,
+    max_steps: int,
+    seed: int,
+    results_dir: Path,
+    model: str = DEFAULT_LLM_MODEL,
+    api_key_env: str = DEFAULT_API_KEY_ENV,
+    client: Any | None = None,
+    reflection_client: Any | None = None,
+    max_llm_calls: int | None = 50,
+    memory_config: MemoryRenderConfig | None = None,
+    llm_cache_path: str | Path | None = None,
+    temperature: float = DEFAULT_TEMPERATURE,
+    max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
+    level_suite_path: str | Path | None = None,
+) -> dict[str, Any]:
+    if condition not in SAME_LEVEL_ITERATIVE_CONDITIONS:
+        raise ValueError(f"Unknown same-level iterative condition: {condition}")
+    if attempts_per_level <= 0:
+        raise ValueError("attempts_per_level must be positive.")
+
+    config = memory_config or MemoryRenderConfig()
+    run_identity = make_run_identity(level_suite_path)
+    results: list[EpisodeResult] = []
+    effective_attempts = 1 if condition == "single_shot_no_memory" else attempts_per_level
+
+    for level_index, level in enumerate(levels):
+        raw_memory = _same_level_raw_memory(level, condition)
+        heuristic_memory = _same_level_heuristic_memory(level, condition)
+        agent = _make_same_level_agent(
+            condition=condition,
+            raw_memory=raw_memory,
+            heuristic_memory=heuristic_memory,
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            cache_namespace=cache_namespace,
+        )
+
+        for attempt_index in range(effective_attempts):
+            agent.iteration_context = {
+                "iteration_attempt_index": attempt_index,
+                "attempt_budget": effective_attempts,
+                "same_level_iterative_condition": condition,
+            }
+            if hasattr(agent, "memory_hash"):
+                agent.memory_hash = getattr(getattr(agent, "memory_store", None), "memory_hash", None)
+            attempt_seed = seed + (level_index * attempts_per_level) + attempt_index
+            result = run_episode(
+                SokobanEnv(level, seed=attempt_seed),
+                agent,
+                max_steps=max_steps,
+                seed=attempt_seed,
+                run_identity=run_identity,
+                condition=condition,
+            )
+            result.metadata.update(
+                {
+                    "condition": condition,
+                    "same_level_iterative": True,
+                    "iteration_attempt_index": attempt_index,
+                    "attempt_budget": effective_attempts,
+                }
+            )
+            save_episode(result, results_dir)
+            results.append(result)
+
+            if result.status == "success":
+                break
+            if result.status in {"budget_exhausted", "api_error", "invalid_failure"}:
+                break
+            _update_same_level_memory_after_failure(
+                condition=condition,
+                level=level,
+                raw_memory=raw_memory,
+                result=result,
+                agent=agent,
+                model=model,
+                api_key_env=api_key_env,
+                reflection_client=reflection_client,
+                llm_cache_path=llm_cache_path,
+                max_llm_calls=max_llm_calls,
+                memory_config=config,
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+                cache_namespace=cache_namespace,
+            )
+
+    summary = summarize_results(results)
+    summary.update(
+        {
+            "experiment_mode": "same_level_iterative",
+            "condition": condition,
+            "attempts_per_level": effective_attempts,
+            "requested_levels": len(levels),
+            **level_metadata(levels),
+            "model": model,
+            "temperature": temperature,
+            "max_output_tokens": max_output_tokens,
+            "seed": seed,
+            "max_steps": max_steps,
+            "results_dir": str(results_dir),
+            "run_id": run_identity.run_id,
+            "code_commit": run_identity.code_commit,
+            "level_suite_path": run_identity.level_suite_path,
+            "level_suite_hash": run_identity.level_suite_hash,
+            "memory_caps": config.to_dict(),
+            "max_llm_calls": max_llm_calls,
+            "cache_namespace": cache_namespace,
+        }
+    )
+    save_summary(summary, results_dir)
+    return summary
+
+
+def _same_level_raw_memory(level: Level, condition: str) -> RawTrajectoryMemory:
+    return RawTrajectoryMemory(
+        source_metadata={
+            "memory_scope": "same_level",
+            "condition": condition,
+            "source_level_ids": [level.level_id],
+        }
+    )
+
+
+def _same_level_heuristic_memory(level: Level, condition: str) -> HeuristicMemory:
+    return HeuristicMemory(
+        heuristics=[],
+        source_metadata={
+            "memory_scope": "same_level",
+            "condition": condition,
+            "source_level_ids": [level.level_id],
+        },
+    )
+
+
+def _make_same_level_agent(
+    *,
+    condition: str,
+    raw_memory: RawTrajectoryMemory,
+    heuristic_memory: HeuristicMemory,
+    model: str,
+    api_key_env: str,
+    client: Any | None,
+    max_llm_calls: int | None,
+    memory_config: MemoryRenderConfig,
+    llm_cache_path: str | Path | None,
+    temperature: float,
+    max_output_tokens: int,
+    cache_namespace: str,
+) -> BaseAgent:
+    agent_name = {
+        "single_shot_no_memory": "no_memory",
+        "generic_retry_feedback": "generic_retry_feedback",
+        "verifier_summary_retry": "verifier_summary_retry",
+        "raw_same_level_iterative": "raw_trajectory_memory",
+        "heuristic_same_level_iterative": "heuristic_same_level_iterative",
+    }[condition]
+    memory = heuristic_memory if condition == "heuristic_same_level_iterative" else raw_memory
+    return make_agent(
+        agent_name,
+        memory=memory,
+        model=model,
+        api_key_env=api_key_env,
+        client=client,
+        max_llm_calls=max_llm_calls,
+        memory_config=memory_config,
+        llm_cache_path=llm_cache_path,
+        temperature=temperature,
+        max_output_tokens=max_output_tokens,
+        cache_namespace=cache_namespace,
+    )
+
+
+def _update_same_level_memory_after_failure(
+    *,
+    condition: str,
+    level: Level,
+    raw_memory: RawTrajectoryMemory,
+    result: EpisodeResult,
+    agent: BaseAgent,
+    model: str,
+    api_key_env: str,
+    reflection_client: Any | None,
+    llm_cache_path: str | Path | None,
+    max_llm_calls: int | None,
+    memory_config: MemoryRenderConfig,
+    temperature: float,
+    max_output_tokens: int,
+    cache_namespace: str,
+) -> None:
+    if condition not in {"verifier_summary_retry", "raw_same_level_iterative", "heuristic_same_level_iterative"}:
+        return
+    raw_memory.add_episode(result)
+    raw_memory.source_metadata.update(
+        {
+            "memory_scope": "same_level",
+            "source_level_ids": [level.level_id],
+        }
+    )
+    raw_memory.memory_hash = raw_memory.compute_hash()
+    if condition in {"verifier_summary_retry", "raw_same_level_iterative"}:
+        agent.memory_store = raw_memory  # type: ignore[attr-defined]
+        agent.memory_hash = raw_memory.memory_hash  # type: ignore[attr-defined]
+        return
+
+    heuristic_memory = generate_reflection_memory(
+        raw_memory,
+        model=model,
+        api_key_env=api_key_env,
+        client=reflection_client,
+        llm_cache_path=str(llm_cache_path) if llm_cache_path is not None else None,
+        max_llm_calls=max_llm_calls,
+        memory_config=memory_config,
+        temperature=temperature,
+        max_output_tokens=max_output_tokens,
+        cache_namespace=cache_namespace,
+    )
+    heuristic_memory.source_metadata.update(
+        {
+            "memory_scope": "same_level",
+            "condition": condition,
+            "source_level_ids": [level.level_id],
+        }
+    )
+    heuristic_memory.memory_hash = heuristic_memory.compute_hash()
+    agent.memory_store = heuristic_memory  # type: ignore[attr-defined]
+    agent.memory_hash = heuristic_memory.memory_hash  # type: ignore[attr-defined]
 
 
 def _push_actions(env: SokobanEnv, legal_actions: list[str]) -> list[str]:
@@ -463,14 +838,18 @@ def _repair_feedback_from_attempt(attempt: dict[str, Any]) -> str:
 
     failed_log = _failed_push_log(attempt)
     if failed_log:
-        if failed_log.get("intent") is not None:
-            lines.append(f"Failed intent: {json.dumps(failed_log['intent'], sort_keys=True)}")
-        if failed_log.get("resolved_box") is not None:
-            lines.append(f"Resolved box: {_format_log_position(failed_log['resolved_box'])}")
-        if failed_log.get("box_destination") is not None:
-            lines.append(f"Destination: {_format_log_position(failed_log['box_destination'])}")
-        if failed_log.get("required_player_position") is not None:
-            lines.append(f"Required player standing cell: {_format_log_position(failed_log['required_player_position'])}")
+        intent = failed_log.get("model_intent") or failed_log.get("intent")
+        if intent is not None:
+            lines.append(f"Failed intent: {json.dumps(intent, sort_keys=True)}")
+        resolved_box = failed_log.get("resolved_box_before_push") or failed_log.get("resolved_box")
+        if resolved_box is not None:
+            lines.append(f"Resolved box: {_format_log_position(resolved_box)}")
+        destination = failed_log.get("destination_cell") or failed_log.get("box_destination")
+        if destination is not None:
+            lines.append(f"Destination: {_format_log_position(destination)}")
+        standing_cell = failed_log.get("standing_cell_required") or failed_log.get("required_player_position")
+        if standing_cell is not None:
+            lines.append(f"Required player standing cell: {_format_log_position(standing_cell)}")
         if failed_log.get("error"):
             lines.append(f"Why invalid: {failed_log['error']}.")
 

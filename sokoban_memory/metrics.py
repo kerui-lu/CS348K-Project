@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from statistics import median
 from typing import Any
 
@@ -33,6 +34,9 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
     first_attempt_invalid_plan_count = sum(
         1 for r in results if r.metadata.get("first_attempt_status") == "invalid_plan"
     )
+    failure_subtype_counts = _failure_subtype_counts(results)
+    progress_summary = _progress_summary(results)
+    iterative_summary = _iterative_summary(results)
     efficiency_values = [_solution_efficiency(r) for r in success_results]
     efficiency_values = [value for value in efficiency_values if value is not None]
     steps_over_optimal = [_steps_over_optimal(r) for r in success_results]
@@ -68,6 +72,13 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
             "success_after_repair_count": 0,
             "success_without_repair_count": 0,
             "first_attempt_invalid_plan_count": 0,
+            "failure_subtype_counts": {},
+            "average_best_goal_completion_rate": 0.0,
+            "average_final_goal_completion_rate": 0.0,
+            "average_target_placement_events_before_first_deadlock": 0.0,
+            "solve_rate_at_1": 0.0,
+            "solve_rate_at_k": 0.0,
+            "cumulative_solved_by_attempt": {},
             "per_level": {},
         }
 
@@ -102,6 +113,9 @@ def summarize_results(results: list[EpisodeResult]) -> dict[str, Any]:
         "success_after_repair_count": success_after_repair_count,
         "success_without_repair_count": success_without_repair_count,
         "first_attempt_invalid_plan_count": first_attempt_invalid_plan_count,
+        "failure_subtype_counts": failure_subtype_counts,
+        **progress_summary,
+        **iterative_summary,
         "per_level": summarize_by_level(results),
     }
 
@@ -145,6 +159,9 @@ def summarize_by_level(results: list[EpisodeResult]) -> dict[str, dict[str, Any]
             "first_attempt_invalid_plan_count": sum(
                 1 for r in level_results if r.metadata.get("first_attempt_status") == "invalid_plan"
             ),
+            "failure_subtype_counts": _failure_subtype_counts(level_results),
+            **_progress_summary(level_results),
+            **_iterative_summary(level_results),
         }
     return per_level
 
@@ -181,3 +198,96 @@ def _average(values: list[float | int]) -> float:
 def _metadata_int(result: EpisodeResult, key: str) -> int:
     value = result.metadata.get(key, 0)
     return value if isinstance(value, int) and not isinstance(value, bool) else 0
+
+
+def _metadata_float(result: EpisodeResult, key: str) -> float | None:
+    value = result.metadata.get(key)
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return float(value)
+    return None
+
+
+def _failure_subtype_counts(results: list[EpisodeResult]) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for result in results:
+        subtype = result.metadata.get("failure_subtype")
+        if isinstance(subtype, str) and subtype:
+            counts[subtype] += 1
+    return dict(sorted(counts.items()))
+
+
+def _progress_summary(results: list[EpisodeResult]) -> dict[str, float]:
+    best_rates = [
+        value for result in results
+        if (value := _metadata_float(result, "best_goal_completion_rate")) is not None
+    ]
+    final_rates = [
+        value for result in results
+        if (value := _metadata_float(result, "final_goal_completion_rate")) is not None
+    ]
+    placement_events = [
+        value
+        for result in results
+        if (value := _metadata_float(result, "target_placement_events_before_first_deadlock")) is not None
+    ]
+    normalized_events = [
+        value
+        for result in results
+        if (value := _metadata_float(result, "normalized_target_placement_before_first_deadlock")) is not None
+    ]
+    return {
+        "average_best_goal_completion_rate": _average(best_rates),
+        "average_final_goal_completion_rate": _average(final_rates),
+        "average_target_placement_events_before_first_deadlock": _average(placement_events),
+        "average_normalized_target_placement_before_first_deadlock": _average(normalized_events),
+    }
+
+
+def _iterative_summary(results: list[EpisodeResult]) -> dict[str, Any]:
+    grouped: dict[str, list[EpisodeResult]] = {}
+    for result in results:
+        grouped.setdefault(result.level_id, []).append(result)
+    if not grouped:
+        return {
+            "solve_rate_at_1": 0.0,
+            "solve_rate_at_k": 0.0,
+            "cumulative_solved_by_attempt": {},
+        }
+
+    max_attempt_index = 0
+    first_attempt_successes = 0
+    any_attempt_successes = 0
+    first_success_index_by_level: dict[str, int] = {}
+    for level_id, level_results in grouped.items():
+        indexed = []
+        for fallback_index, result in enumerate(level_results):
+            attempt_index = result.metadata.get("iteration_attempt_index")
+            if not isinstance(attempt_index, int) or isinstance(attempt_index, bool):
+                attempt_index = fallback_index
+            indexed.append((attempt_index, result))
+            max_attempt_index = max(max_attempt_index, attempt_index)
+        successes = [attempt_index for attempt_index, result in indexed if result.status == "success"]
+        if successes:
+            first_success = min(successes)
+            first_success_index_by_level[level_id] = first_success
+            any_attempt_successes += 1
+            if first_success == 0:
+                first_attempt_successes += 1
+
+    level_count = len(grouped)
+    cumulative = {
+        str(attempt_number): (
+            sum(
+                1
+                for first_success in first_success_index_by_level.values()
+                if first_success < attempt_number
+            )
+            / level_count
+        )
+        for attempt_number in range(1, max_attempt_index + 2)
+    }
+    return {
+        "solve_rate_at_1": first_attempt_successes / level_count,
+        "solve_rate_at_k": any_attempt_successes / level_count,
+        "cumulative_solved_by_attempt": cumulative,
+    }

@@ -170,6 +170,11 @@ def test_execute_push_plan_solves_simple_level_with_box_id():
     assert result.expanded_actions == ["Right"]
     assert result.executed_push_count == 1
     assert result.push_execution_log[0]["resolved_box"] == {"row": 1, "col": 2}
+    assert result.push_execution_log[0]["resolved_box_before_push"] == [1, 2]
+    assert result.push_execution_log[0]["standing_cell_required"] == [1, 1]
+    assert result.push_execution_log[0]["destination_cell"] == [1, 3]
+    assert result.push_execution_log[0]["board_before_push"] == "#####\n#@$.#\n#####"
+    assert result.push_execution_log[0]["board_after_push"] == "#####\n# @*#\n#####"
     assert result.push_execution_log[0]["box_positions_by_id_after"] == {"B0": [1, 3]}
 
 
@@ -229,6 +234,12 @@ def test_run_episode_full_path_blocked_push_is_invalid_plan():
 
     assert result.status == "invalid_plan"
     assert result.metadata["failure_reason"] == "box_destination_blocked_by_wall_or_boundary"
+    assert result.metadata["failure_subtype"] == "blocked_destination"
+    assert result.metadata["board_before_failed_push"] == "#####\n#@$.#\n#####"
+    assert result.metadata["board_after_last_successful_push"] == "#####\n#@$.#\n#####"
+    assert result.metadata["v3_attempt_trace"]["schema_version"] == "v3_trajectory_v1"
+    assert result.metadata["v3_attempt_trace"]["cache_key"]
+    assert result.metadata["v3_attempt_trace"]["code_commit"]
 
 
 def test_run_episode_full_path_empty_plan_is_plan_exhausted():
@@ -244,6 +255,8 @@ def test_run_episode_full_path_empty_plan_is_plan_exhausted():
     assert result.status == "plan_exhausted"
     assert result.metadata["planned_push_count"] == 0
     assert result.metadata["executed_push_count"] == 0
+    assert result.metadata["failure_subtype"] == "plan_exhausted"
+    assert result.metadata["board_before_failed_push"] == "#####\n#@$.#\n#####"
 
 
 def test_run_episode_full_path_push_can_deadlock():
@@ -260,7 +273,26 @@ def test_run_episode_full_path_push_can_deadlock():
 
     assert result.status == "deadlock"
     assert result.metadata["executed_push_count"] == 1
+    assert result.metadata["failure_subtype"] == "deadlock"
+    assert result.metadata["board_before_failed_push"] == "#####\n# $@#\n#   #\n#  .#\n#####"
+    assert result.metadata["board_after_last_successful_push"] == "#####\n#$@ #\n#   #\n#  .#\n#####"
     assert result.trajectory[-1]["info"]["deadlocked"] is True
+
+
+def test_run_episode_full_path_tracks_progress_metrics():
+    level = make_level([
+        "#####",
+        "#@$.#",
+        "#####",
+    ])
+    agent = LLMAgent(client=FakeClient('[{"box": [1, 2], "push": "Right"}]'))
+
+    result = run_episode(SokobanEnv(level), agent, max_steps=10, seed=0)
+
+    assert result.metadata["best_boxes_on_targets"] == 1
+    assert result.metadata["final_boxes_on_targets"] == 1
+    assert result.metadata["target_placement_events_before_first_deadlock"] == 1
+    assert result.metadata["best_goal_completion_rate"] == 1.0
 
 
 def test_run_episode_full_path_push_can_create_wall_no_exit_deadlock():

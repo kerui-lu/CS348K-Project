@@ -14,7 +14,17 @@ The final evaluation will compare memory conditions under matched settings:
 - `raw_trajectory_memory`
 - `reflection_heuristic`
 
-Each run uses the same levels, model, seed, temperature, output cap, step cap, memory budget, and prompt version. The current level suite has 12 train and 12 eval levels in `levels/v2_pilot.json`.
+Each run uses the same levels, model, seed, temperature, output cap, step cap, memory budget, and prompt version. `levels/v2_pilot.json` remains a 12-train/12-eval debugging suite, but it is no longer the final generalization benchmark.
+
+The final train-to-eval benchmark is `levels/v3_boxoban_balanced.json`:
+
+- 24 train levels: 12 `unfiltered/train` and 12 `medium/train`
+- 24 eval levels: 12 `unfiltered/valid` and 12 `medium/valid`
+- No hand-written calibration levels in the aggregate benchmark
+- Each source family has 4 open, 4 middle, and 4 constrained levels per split
+- Each level includes structural metadata: wall density, reachable ratio, initial legal push count, solver estimate, source split, difficulty bucket, and canonical grid hash
+
+`levels/v3_boxoban_ood.json` is optional and reported separately. It contains 8 held-out `medium/valid` levels and 8 `hard` levels, with hard levels marked as OOD because the official hard set has no train/eval split.
 
 Primary metrics:
 
@@ -37,6 +47,7 @@ Planned presentation artifacts:
 
 - Outcome table comparing prompt variants and memory conditions
 - Failure-reason table for invalid plans
+- Stratum table for `unfiltered`/`medium` and `open`/`middle`/`constrained`
 - Board examples showing a successful plan and representative invalid pushes
 - Trajectory logs for success and failure case studies
 

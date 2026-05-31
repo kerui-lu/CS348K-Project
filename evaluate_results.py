@@ -76,6 +76,10 @@ def evaluate_result_dirs(results_dirs: list[Path], levels_path: Path | None = No
     for agent_type in sorted({episode.agent_type for episode in episodes}):
         agent_results = [episode for episode in episodes if episode.agent_type == agent_type]
         by_agent[agent_type] = summarize_results(agent_results)
+    by_condition: dict[str, Any] = {}
+    for condition in sorted({_episode_condition(episode) for episode in episodes}):
+        condition_results = [episode for episode in episodes if _episode_condition(episode) == condition]
+        by_condition[condition] = summarize_results(condition_results)
 
     return {
         "results_dirs": [str(path) for path in results_dirs],
@@ -85,6 +89,9 @@ def evaluate_result_dirs(results_dirs: list[Path], levels_path: Path | None = No
         "validation_errors": validation_errors,
         "overall": summarize_results(episodes),
         "by_agent": by_agent,
+        "by_condition": by_condition,
+        "by_stratum": summarize_by_stratum(episodes, level_metadata),
+        "by_condition_stratum": summarize_by_condition_stratum(episodes, level_metadata),
         "per_level": summarize_results(episodes)["per_level"],
     }
 
@@ -154,14 +161,71 @@ def _load_level_metadata(levels_path: Path | None) -> dict[str, dict[str, Any]]:
     if levels_path is None:
         return {}
     levels = load_levels(levels_path)
-    return {
-        level.level_id: {
+    with levels_path.open("r", encoding="utf-8") as f:
+        raw_data = json.load(f)
+    raw_levels = raw_data["levels"] if isinstance(raw_data, dict) and "levels" in raw_data else raw_data
+    raw_by_id = {
+        str(item.get("level_id")): item
+        for item in raw_levels
+        if isinstance(item, dict) and item.get("level_id") is not None
+    }
+
+    metadata = {}
+    for level in levels:
+        raw = raw_by_id.get(level.level_id, {})
+        metadata[level.level_id] = {
             "split": level.split,
             "tags": level.tags,
             "optimal_steps": level.optimal_steps,
+            "source_family": raw.get("source_family"),
+            "source_split": raw.get("source_split"),
+            "difficulty_bucket": raw.get("difficulty_bucket"),
+            "wall_density": raw.get("wall_density"),
+            "player_reachable_ratio": raw.get("player_reachable_ratio"),
+            "initial_legal_push_count": raw.get("initial_legal_push_count"),
+            "solver_status": raw.get("solver_status"),
+            "solver_min_pushes": raw.get("solver_min_pushes"),
+            "solver_min_steps": raw.get("solver_min_steps"),
         }
-        for level in levels
-    }
+    return metadata
+
+
+def summarize_by_stratum(
+    episodes: list[EpisodeResult],
+    level_metadata: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    grouped: dict[str, list[EpisodeResult]] = {}
+    for episode in episodes:
+        metadata = level_metadata.get(episode.level_id, {})
+        source_family = metadata.get("source_family")
+        difficulty_bucket = metadata.get("difficulty_bucket")
+        if not source_family or not difficulty_bucket:
+            continue
+        key = f"{episode.level_split}:{source_family}:{difficulty_bucket}"
+        grouped.setdefault(key, []).append(episode)
+    return {key: summarize_results(group) for key, group in sorted(grouped.items())}
+
+
+def summarize_by_condition_stratum(
+    episodes: list[EpisodeResult],
+    level_metadata: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    grouped: dict[str, list[EpisodeResult]] = {}
+    for episode in episodes:
+        metadata = level_metadata.get(episode.level_id, {})
+        source_family = metadata.get("source_family")
+        difficulty_bucket = metadata.get("difficulty_bucket")
+        if not source_family or not difficulty_bucket:
+            continue
+        stratum = f"{episode.level_split}:{source_family}:{difficulty_bucket}"
+        key = f"{_episode_condition(episode)}:{stratum}"
+        grouped.setdefault(key, []).append(episode)
+    return {key: summarize_results(group) for key, group in sorted(grouped.items())}
+
+
+def _episode_condition(episode: EpisodeResult) -> str:
+    condition = episode.metadata.get("condition")
+    return str(condition) if condition else episode.agent_type
 
 
 def _error(path: Path, message: str) -> dict[str, str]:

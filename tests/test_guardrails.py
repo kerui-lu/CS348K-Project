@@ -57,10 +57,23 @@ def test_eval_memory_overlap_fails_hard(tmp_path):
         run_experiment([make_eval_level()], agent, episodes=1, max_steps=1, seed=0, results_dir=tmp_path)
 
 
+def test_same_level_eval_memory_overlap_is_allowed(tmp_path):
+    memory = RawTrajectoryMemory(
+        source_metadata={
+            "memory_scope": "same_level",
+            "source_train_level_ids": ["eval_001"],
+        }
+    )
+    agent = RawTrajectoryMemoryAgent(memory_store=memory, client=FakeClient("[]"), max_llm_calls=2)
+
+    summary = run_experiment([make_eval_level()], agent, episodes=1, max_steps=1, seed=0, results_dir=tmp_path)
+
+    assert summary["episodes"] == 1
+
+
 def test_eval_memory_missing_source_metadata_fails_hard(tmp_path):
     memory = RawTrajectoryMemory()
     agent = RawTrajectoryMemoryAgent(memory_store=memory, client=FakeClient("Right"), max_llm_calls=2)
 
     with pytest.raises(ValueError, match="missing source_train_level_ids"):
         run_experiment([make_eval_level()], agent, episodes=1, max_steps=1, seed=0, results_dir=tmp_path)
-

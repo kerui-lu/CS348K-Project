@@ -24,6 +24,18 @@ See [`docs/week8_checkpoint.md`](docs/week8_checkpoint.md).
 
 Week 8 summarizes the full-path prompt ablations and failure analysis. The active LLM prompt is `full_path_v2_1`, a coordinate-based full-path prompt with clearer Sokoban rule grounding.
 
+### Final level-suite design
+
+The checked-in `levels/v2_pilot.json` remains a debugging and prompt-ablation suite. It intentionally mixes hand-written calibration puzzles with Boxoban imports, so it should not be used as the final train-to-eval generalization benchmark.
+
+The main benchmark is now `levels/v3_boxoban_balanced.json`: 24 train and 24 eval Boxoban levels selected from official `unfiltered` and `medium` train/valid splits. Each source family contributes 4 open, 4 middle, and 4 constrained levels to train and eval. The optional harder suite is `levels/v3_boxoban_ood.json`, with 8 held-out medium-valid levels and 8 hard levels marked as OOD.
+
+Regenerate those files with:
+
+```bash
+python3 scripts/build_boxoban_level_suites.py
+```
+
 Completed in v1:
 
 - Deterministic grid-based Sokoban environment with movement, pushing, wall collision, two-box blocking, solved-state detection, and conservative local deadlock detection.
@@ -54,7 +66,7 @@ Memory conditions supported by the CLI:
 
 `rule_based` remains available as a cheap non-LLM baseline and debugging agent.
 
-The checked-in `levels/v2_pilot.json` now contains a 24-level evaluation suite with 12 `train` and 12 `eval` levels. It mixes small local calibration puzzles, older curated Boxoban examples, and newly imported Boxoban `medium` train/valid puzzles. Imported `medium` levels intentionally omit reference plans.
+The checked-in `levels/v2_pilot.json` contains a 24-level pilot suite with 12 `train` and 12 `eval` levels. It mixes small local calibration puzzles, older curated Boxoban examples, and Boxoban `medium` train/valid puzzles. Imported Boxoban levels intentionally omit reference plans.
 
 ## Quick Start
 
@@ -91,11 +103,11 @@ V2 uses an offline frozen-memory protocol:
 
 The runner refuses eval runs if a loaded memory bank was generated from any eval `level_id`.
 
-Build memory banks with a small budget:
+For final train-to-eval generalization, use `levels/v3_boxoban_balanced.json`; use `levels/v2_pilot.json` only for fast debugging. Build memory banks with a small budget:
 
 ```bash
 python3 build_memory_bank.py \
-  --levels levels/v2_pilot.json \
+  --levels levels/v3_boxoban_balanced.json \
   --episodes 5 \
   --max_steps 100 \
   --max_llm_calls 50 \
@@ -112,7 +124,7 @@ Run matched pilot evaluations:
 ```bash
 python3 run_experiment.py \
   --agent no_memory \
-  --levels levels/v2_pilot.json \
+  --levels levels/v3_boxoban_balanced.json \
   --level_split eval \
   --episodes 3 \
   --max_llm_calls 50 \
@@ -124,7 +136,7 @@ python3 run_experiment.py \
 
 python3 run_experiment.py \
   --agent raw_trajectory_memory \
-  --levels levels/v2_pilot.json \
+  --levels levels/v3_boxoban_balanced.json \
   --level_split eval \
   --episodes 3 \
   --memory_path memory_banks/raw_failures.json \
@@ -140,7 +152,7 @@ python3 run_experiment.py \
 
 python3 run_experiment.py \
   --agent reflection_heuristic \
-  --levels levels/v2_pilot.json \
+  --levels levels/v3_boxoban_balanced.json \
   --level_split eval \
   --episodes 3 \
   --memory_path memory_banks/reflection_heuristics.json \
