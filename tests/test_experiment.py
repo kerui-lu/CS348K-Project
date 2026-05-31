@@ -29,6 +29,8 @@ def test_cli_runs_complete_episode(tmp_path):
             "1",
             "--max_steps",
             "20",
+            "--level_id",
+            "simple_001",
             "--results_dir",
             str(tmp_path),
         ],
@@ -38,6 +40,7 @@ def test_cli_runs_complete_episode(tmp_path):
     )
     summary = json.loads(completed.stdout)
     assert summary["episodes"] == 1
+    assert summary["level_ids"] == ["simple_001"]
     assert (tmp_path / "summary.json").exists()
     episode_files = [p for p in tmp_path.glob("*.json") if p.name != "summary.json"]
     assert len(episode_files) == 1

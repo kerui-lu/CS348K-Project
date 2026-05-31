@@ -42,6 +42,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--episodes", type=int, default=10)
     parser.add_argument("--levels", default="levels/simple.json")
     parser.add_argument("--level_split", default=None, choices=["train", "eval", "unspecified"])
+    parser.add_argument(
+        "--level_id",
+        action="append",
+        default=None,
+        help="Run only the specified level id. May be passed multiple times.",
+    )
     parser.add_argument("--max_steps", type=int, default=100)
     parser.add_argument("--max_repair_attempts", type=int, default=0)
     parser.add_argument("--seed", type=int, default=42)
@@ -69,6 +75,13 @@ def main() -> None:
         levels = [level for level in levels if level.split == args.level_split]
         if not levels:
             raise ValueError(f"No levels found for split: {args.level_split}")
+    if args.level_id:
+        requested_level_ids = set(args.level_id)
+        levels = [level for level in levels if level.level_id in requested_level_ids]
+        missing_level_ids = requested_level_ids - {level.level_id for level in levels}
+        if missing_level_ids:
+            missing = ", ".join(sorted(missing_level_ids))
+            raise ValueError(f"No levels found for level_id: {missing}")
     memory = None
     if args.agent.startswith("raw"):
         memory = RawTrajectoryMemory()
