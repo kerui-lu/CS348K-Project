@@ -4,7 +4,7 @@
 
 This report documents the current V3 Sokoban memory-evaluation design and the results executed on `levels/v3_boxoban_balanced.json`.
 
-The current executed results include the planner-validity gate and three same-level retry conditions: `verifier_summary_retry`, `raw_same_level_iterative`, and `heuristic_same_level_iterative`. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode. All three retry conditions improve held-out eval solve rate under a fixed attempt budget, but train-to-eval heuristic generalization is not yet complete.
+The current executed results include the planner-validity gate, three same-level retry conditions, and one train-to-eval global heuristic condition. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode. All three same-level retry conditions improve held-out eval solve rate under a fixed attempt budget. The train-derived global heuristic condition gives a smaller cross-level improvement over the no-memory eval baseline.
 
 Main result:
 
@@ -19,6 +19,7 @@ Main result:
 - Same-level verifier-summary retry: eval `solve_rate@K` improves from `8/24 = 33.3%` to `13/24 = 54.2%` with `K = 3`.
 - Same-level raw trajectory retry: eval `solve_rate@K` also reaches `13/24 = 54.2%` with `K = 3`, but with a different solved-level set and a higher invalid-plan attempt count.
 - Same-level heuristic retry: eval `solve_rate@K` reaches `12/24 = 50.0%` with `K = 3`.
+- Train-to-eval one-shot global heuristic: eval solve rate reaches `9/24 = 37.5%`.
 
 Because invalid plans are still common, same-level raw/heuristic retry and train-to-eval heuristic generalization should be interpreted separately from verifier-guided scaffolding.
 
@@ -301,6 +302,48 @@ Same-level heuristic retry:
   --fail_on_validation_error
 ```
 
+Train-to-eval one-shot global heuristic:
+
+```bash
+.venv/bin/python build_memory_bank.py \
+  --levels levels/v3_boxoban_balanced.json \
+  --episodes 24 \
+  --max_steps 100 \
+  --max_llm_calls 50 \
+  --llm_cache_path .llm_cache/responses \
+  --cache_namespace v3_track0_train_gpt52_low_16384 \
+  --temperature 0 \
+  --max_output_tokens 16384 \
+  --results_dir results/v3_train_one_shot_memory_build_gpt52_low_16384 \
+  --raw_memory_path memory_banks/v3_train_one_shot_raw_failures.json \
+  --heuristic_memory_path memory_banks/v3_train_one_shot_global_heuristics.json \
+  --model gpt-5.2
+
+.venv/bin/python run_experiment.py \
+  --agent reflection_heuristic \
+  --model gpt-5.2 \
+  --levels levels/v3_boxoban_balanced.json \
+  --level_split eval \
+  --episodes 24 \
+  --max_steps 100 \
+  --max_llm_calls 24 \
+  --memory_path memory_banks/v3_train_one_shot_global_heuristics.json \
+  --max_memory_items 3 \
+  --max_steps_per_memory 6 \
+  --max_memory_chars 4000 \
+  --llm_cache_path .llm_cache/responses \
+  --cache_namespace v3_eval_train_one_shot_global_heuristic_gpt52_low_16384 \
+  --temperature 0 \
+  --max_output_tokens 16384 \
+  --results_dir results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384
+
+.venv/bin/python evaluate_results.py \
+  --results_dir results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384 \
+  --levels levels/v3_boxoban_balanced.json \
+  --output results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384/evaluation_summary.json \
+  --fail_on_validation_error
+```
+
 ## Token-Cap Smoke Results
 
 The original `8192` token cap was not sufficient for `gpt-5.2` with reasoning effort `low`.
@@ -546,9 +589,58 @@ Interpretation:
 - It has fewer invalid-plan attempts than raw retry but more plan-exhausted attempts, suggesting that some generated heuristics improve legality while still failing to produce complete plans.
 - The third attempt did not improve solved-level coverage in this run; all gains happened by attempt 2.
 
+## Train-To-Eval Global Heuristic Results
+
+The cross-level memory condition tested was `train_one_shot_global_heuristic`. The memory bank was built from one no-memory attempt on each of the 24 train levels. The train planner calls were cache hits from the Track 0 train run, producing 16 failed train records and 12 reflection heuristics. All 12 generated heuristics were classified as `global_allowed`; none were classified as `same_level_only` or `rejected`.
+
+The eval run used `reflection_heuristic` with the train-derived heuristic memory. The prompt rendered at most 3 heuristic items per episode to keep the memory budget aligned with the other memory conditions.
+
+| Eval condition | Levels | Attempts | Solve rate | Successful levels | Invalid-plan attempts | Deadlock attempts | Timeout attempts | Plan-exhausted attempts | Avg. best goal completion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| no-memory eval baseline | 24 | 24 | 33.3% | 8 | 13 | 2 | 0 | 1 | 51.0% |
+| train one-shot global heuristic | 24 | 24 | 37.5% | 9 | 12 | 1 | 1 | 1 | 59.4% |
+
+The train-derived global heuristic condition solved 3 levels not solved by the no-memory eval baseline:
+
+- `boxoban_medium_valid_000_168`
+- `boxoban_medium_valid_000_270`
+- `boxoban_unfiltered_valid_000_127`
+
+It failed 2 levels solved by the no-memory eval baseline:
+
+- `boxoban_medium_valid_000_290`
+- `boxoban_unfiltered_valid_000_135`
+
+Failure subtype counts:
+
+| Failure subtype | Count |
+| --- | ---: |
+| `unreachable_standing_cell` | 12 |
+| `deadlock` | 1 |
+| `timeout` | 1 |
+| `plan_exhausted` | 1 |
+
+Stratum-level train-to-eval results:
+
+| Eval stratum | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| medium / constrained | 4 | 25.0% | 25.0% | 0.0% | 25.0% | 25.0% | 56.2% |
+| medium / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 0.0% | 31.2% |
+| medium / open | 4 | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 37.5% |
+| unfiltered / constrained | 4 | 75.0% | 0.0% | 25.0% | 0.0% | 0.0% | 75.0% |
+| unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 0.0% | 68.8% |
+| unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 0.0% | 87.5% |
+
+Interpretation:
+
+- Train-derived global heuristics produce a small cross-level solve-rate gain over no memory: 9 solved eval levels instead of 8.
+- The cross-level condition does not match same-level retry coverage, which reached 12-13 solved eval levels under `K = 3`.
+- The invalid-plan rate remains high at 50.0%, so the train-derived heuristics do not solve the full-path legality problem.
+- Average best goal completion improves from 51.0% to 59.4%, suggesting that the heuristics may help partial progress even when the final plan remains invalid or incomplete.
+
 ## Interpretation
 
-The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24, while heuristic same-level retry improves it to 12/24. However, planner validity is still not clean enough for a final train-to-eval heuristic-memory claim.
+The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24, while heuristic same-level retry improves it to 12/24. Train-derived global heuristic memory gives a smaller cross-level improvement to 9/24. Planner validity remains the main bottleneck.
 
 Key observations:
 
@@ -560,25 +652,29 @@ Key observations:
 - `verifier_summary_retry` raises eval `solve_rate@K` to 54.2%, but it does not remove invalid push proposals.
 - `raw_same_level_iterative` also reaches 54.2% eval `solve_rate@K`, with a different solved-level set and more invalid-plan attempts.
 - `heuristic_same_level_iterative` reaches 50.0% eval `solve_rate@K`; it is useful relative to no memory, but it is not stronger than verifier-summary or raw retry in this run.
+- Train-to-eval global heuristics produce a small eval solve-rate gain and a larger progress-metric gain, but do not substantially reduce invalid push proposals.
 
 ## Current Gate Decision
 
-The current Track 0 and verifier-summary results trigger the planner-validity caution in the V3 design. Memory experiments can still be run, but any improvement must be interpreted carefully:
+The current Track 0, same-level retry, and train-to-eval results trigger the planner-validity caution in the V3 design. Memory helps some levels, but the primary failure mode remains invalid local Sokoban plans:
 
 - If memory reduces `invalid_plan_rate`, it may be improving local legality rather than high-level Sokoban planning.
 - If memory improves `best_goal_completion_rate` without improving solve rate, it may be helping partial progress but not complete planning.
-- If train-derived global heuristics improve eval solve rate while also reducing invalid pushes, that would be stronger evidence of useful abstraction.
+- Train-derived global heuristics improve eval solve rate slightly but do not reduce invalid pushes enough to support a strong generalization claim.
 
-The next experimental step is to decide whether to run train-side heuristic collection for train-to-eval generalization despite same-level heuristic retry not outperforming simpler same-level retry baselines.
+The executed V3 results support two narrower conclusions:
 
-## Next Runs
+- Same-level feedback is useful as an instance-level repair scaffold, especially verifier-summary and raw evidence.
+- Train-derived global heuristic memory shows limited cross-level transfer under the current planner and prompt.
 
-Recommended next execution order:
+## Optional Follow-Up Runs
 
-1. Inspect same-level heuristic outputs to estimate how many rules are `global_allowed`, `same_level_only`, or `rejected`.
-2. If enough `global_allowed` rules are produced, run train-side heuristic collection on `levels/v3_boxoban_balanced.json`.
-3. Run train-to-eval heuristic generalization with only `global_allowed` train-derived heuristics.
-4. Report train-to-eval results separately from same-level retry results.
+The current report covers the main V3 comparison. Additional runs can be used as follow-up rather than as prerequisites for the current result table:
+
+1. `train_iterated_global_heuristic`: build global heuristics from iterative train failures instead of one-shot train failures.
+2. `train_iterated_global_plus_eval_adapt`: combine train-derived global heuristics with eval same-level heuristic adaptation.
+3. `generic_sokoban_tips_eval`: compare against a fixed, hand-written global tips baseline.
+4. OOD evaluation on `levels/v3_boxoban_ood.json`.
 
 These runs should keep the same fixed settings:
 
@@ -602,10 +698,17 @@ Executed result directories:
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384`
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean`
 - `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384`
+- `results/v3_train_one_shot_memory_build_gpt52_low_16384`
+- `results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384`
 
 Combined evaluation summary:
 
 - `results/v3_track0_balanced_gpt52_low_16384_summary.json`
+
+Memory artifacts:
+
+- `memory_banks/v3_train_one_shot_raw_failures.json`
+- `memory_banks/v3_train_one_shot_global_heuristics.json`
 
 Validation:
 
@@ -614,3 +717,4 @@ Validation:
 - `results/v3_eval_verifier_retry_k3_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean/evaluation_summary.json`
 - `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/evaluation_summary.json`
+- `results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384/evaluation_summary.json`
