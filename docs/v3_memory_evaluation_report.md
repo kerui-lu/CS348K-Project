@@ -4,7 +4,7 @@
 
 This report documents the current V3 Sokoban memory-evaluation design and the results executed on `levels/v3_boxoban_balanced.json`.
 
-The current executed result is the planner-validity gate, not a final memory-effect claim. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode.
+The current executed results include the planner-validity gate and the first same-level retry condition, `verifier_summary_retry`. The gate shows that `gpt-5.2` with the active full-path prompt can solve some V3 Boxoban levels, but invalid local push plans remain the dominant failure mode. The verifier-summary retry improves held-out eval solve rate under a fixed attempt budget, but raw trajectory memory, heuristic same-level memory, and train-to-eval heuristic generalization are not yet complete.
 
 Main result:
 
@@ -16,8 +16,9 @@ Main result:
 - Overall single-shot solve rate: `16/48 = 33.3%`.
 - Overall invalid-plan rate: `23/48 = 47.9%`.
 - Dominant failure subtype: `unreachable_standing_cell`.
+- First same-level retry result: `verifier_summary_retry` on eval improves `solve_rate@K` from `8/24 = 33.3%` to `13/24 = 54.2%` with `K = 3`.
 
-Because invalid plans are still common, same-level raw/heuristic retry and train-to-eval heuristic generalization should be interpreted only after planner validity is improved or after verifier-guided retry is evaluated as a separate scaffold.
+Because invalid plans are still common, same-level raw/heuristic retry and train-to-eval heuristic generalization should be interpreted separately from verifier-guided scaffolding.
 
 ## Experimental Design
 
@@ -204,6 +205,31 @@ Track 0 planner-validity runs:
   --fail_on_validation_error
 ```
 
+Same-level verifier-summary retry:
+
+```bash
+.venv/bin/python run_experiment.py \
+  --experiment_mode same_level_iterative \
+  --condition verifier_summary_retry \
+  --model gpt-5.2 \
+  --levels levels/v3_boxoban_balanced.json \
+  --level_split eval \
+  --attempt_budget 3 \
+  --max_steps 100 \
+  --max_llm_calls 3 \
+  --llm_cache_path .llm_cache/responses \
+  --cache_namespace v3_eval_verifier_retry_k3_gpt52_low_16384 \
+  --temperature 0 \
+  --max_output_tokens 16384 \
+  --results_dir results/v3_eval_verifier_retry_k3_gpt52_low_16384
+
+.venv/bin/python evaluate_results.py \
+  --results_dir results/v3_eval_verifier_retry_k3_gpt52_low_16384 \
+  --levels levels/v3_boxoban_balanced.json \
+  --output results/v3_eval_verifier_retry_k3_gpt52_low_16384/evaluation_summary.json \
+  --fail_on_validation_error
+```
+
 ## Token-Cap Smoke Results
 
 The original `8192` token cap was not sufficient for `gpt-5.2` with reasoning effort `low`.
@@ -270,9 +296,51 @@ The dominant invalid-plan failure is `unreachable_standing_cell`: the LLM names 
 | eval / unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 43.8% |
 | eval / unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 75.0% |
 
+## Same-Level Verifier-Summary Retry Results
+
+The first memory/scaffold condition tested was `verifier_summary_retry` on the eval split with `K = 3`. This condition retries from the original board and shows a concise verifier summary from prior same-level failures.
+
+| Condition | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
+| `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
+
+The retry condition solved all 8 levels solved by the single-shot baseline and solved 5 additional eval levels:
+
+- `boxoban_medium_valid_000_168`
+- `boxoban_medium_valid_000_270`
+- `boxoban_unfiltered_valid_000_127`
+- `boxoban_unfiltered_valid_000_197`
+- `boxoban_unfiltered_valid_000_289`
+
+The cumulative solved-by-attempt curve was:
+
+| Attempt cutoff | Solved level rate |
+| ---: | ---: |
+| 1 | 29.2% |
+| 2 | 54.2% |
+| 3 | 54.2% |
+
+Failure subtype counts across all verifier-summary retry attempts:
+
+| Failure subtype | Count |
+| --- | ---: |
+| `unreachable_standing_cell` | 25 |
+| `deadlock` | 8 |
+| `empty_output` | 3 |
+| `blocked_standing_cell` | 1 |
+| `wrong_box_reference` | 1 |
+| `plan_exhausted` | 1 |
+
+Interpretation:
+
+- Verifier-summary retry improves same-level eval solve coverage from 8 to 13 solved levels.
+- Most gains occurred by the second attempt; the third attempt did not add more solved levels in this run.
+- The condition still produces many invalid plans, especially unreachable standing cells, so it improves solved-level coverage without fully solving the planner-legality problem.
+
 ## Interpretation
 
-The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. However, the planner-validity gate is not yet clean enough for a final memory-effect claim.
+The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The first same-level retry scaffold improves eval solved-level coverage. However, planner validity is still not clean enough for a final train-to-eval heuristic-memory claim.
 
 Key observations:
 
@@ -281,26 +349,26 @@ Key observations:
 - The main failure mode is not malformed JSON; it is locally invalid Sokoban planning.
 - The most common invalid-plan subtype is `unreachable_standing_cell`, meaning the proposed push is syntactically valid but not executable by the local verifier.
 - Medium levels are harder than unfiltered levels under the current prompt. Eval medium middle levels had 0% solve rate and 100% invalid-plan rate.
+- `verifier_summary_retry` raises eval `solve_rate@K` to 54.2%, but it does not remove invalid push proposals.
 
 ## Current Gate Decision
 
-The current Track 0 results trigger the planner-validity caution in the V3 design. Memory experiments can still be run, but any improvement must be interpreted carefully:
+The current Track 0 and verifier-summary results trigger the planner-validity caution in the V3 design. Memory experiments can still be run, but any improvement must be interpreted carefully:
 
 - If memory reduces `invalid_plan_rate`, it may be improving local legality rather than high-level Sokoban planning.
 - If memory improves `best_goal_completion_rate` without improving solve rate, it may be helping partial progress but not complete planning.
 - If train-derived global heuristics improve eval solve rate while also reducing invalid pushes, that would be stronger evidence of useful abstraction.
 
-The next experimental step should prioritize verifier-guided same-level retry before broad train-to-eval heuristic claims.
+The next experimental step is to compare verifier-summary retry against raw same-level evidence and same-level heuristic memory before broad train-to-eval heuristic claims.
 
 ## Next Runs
 
 Recommended next execution order:
 
-1. `verifier_summary_retry` on the balanced eval split with `K = 3`.
-2. `raw_same_level_iterative` on the same eval split with `K = 3`.
-3. `heuristic_same_level_iterative` on the same eval split with `K = 3`.
-4. If same-level retry improves validity, run the same conditions on train.
-5. Generate train-derived global heuristics only after same-level heuristic generation produces stable, non-rejected rules.
+1. `raw_same_level_iterative` on the eval split with `K = 3`.
+2. `heuristic_same_level_iterative` on the eval split with `K = 3`.
+3. If same-level retry improves validity, run the same conditions on train.
+4. Generate train-derived global heuristics only after same-level heuristic generation produces stable, non-rejected rules.
 
 These runs should keep the same fixed settings:
 
@@ -320,6 +388,7 @@ Executed result directories:
 - `results/v3_token_ablation_gpt52_low_16384`
 - `results/v3_track0_train_gpt52_low_16384`
 - `results/v3_track0_eval_gpt52_low_16384`
+- `results/v3_eval_verifier_retry_k3_gpt52_low_16384`
 
 Combined evaluation summary:
 
@@ -329,3 +398,4 @@ Validation:
 
 - `results/v3_track0_train_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_track0_eval_gpt52_low_16384/evaluation_summary.json`
+- `results/v3_eval_verifier_retry_k3_gpt52_low_16384/evaluation_summary.json`
