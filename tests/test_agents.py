@@ -88,6 +88,12 @@ def test_cli_accepts_llm_model_and_api_key_env_args():
     assert args.api_key_env == "OPENAI_API_KEY"
 
 
+def test_cli_accepts_reasoning_effort_override():
+    args = build_parser().parse_args(["--agent", "llm", "--reasoning_effort", "medium"])
+
+    assert args.reasoning_effort == "medium"
+
+
 def test_cli_accepts_v2_budget_memory_and_cache_args():
     assert MIN_MAX_OUTPUT_TOKENS == 16384
     args = build_parser().parse_args(
@@ -238,6 +244,45 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert "temperature" not in no_memory_client.responses.calls[0]
     assert no_memory_client.responses.calls[0]["reasoning"] == {"effort": "minimal"}
     assert no_memory_client.responses.calls[0]["max_output_tokens"] == DEFAULT_MAX_OUTPUT_TOKENS
+
+
+def test_gpt52_defaults_to_low_reasoning_effort():
+    client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    agent = LLMAgent(client=client, model="gpt-5.2")
+
+    agent.select_plan(
+        "#####\n#@$.#\n#####",
+        {
+            "rules": "Move Up/Down/Left/Right.",
+            "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+            "max_steps": 20,
+            "memory": None,
+        },
+    )
+
+    assert client.responses.calls[0]["reasoning"] == {"effort": "low"}
+    assert agent.last_call_metadata["reasoning_effort"] == "low"
+
+
+def test_explicit_reasoning_effort_changes_request_and_cache_key():
+    low_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    medium_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    low_agent = LLMAgent(client=low_client, model="gpt-5.2")
+    medium_agent = LLMAgent(client=medium_client, model="gpt-5.2", reasoning_effort="medium")
+    context = {
+        "rules": "Move Up/Down/Left/Right.",
+        "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+        "max_steps": 20,
+        "memory": None,
+    }
+
+    low_agent.select_plan("#####\n#@$.#\n#####", context)
+    medium_agent.select_plan("#####\n#@$.#\n#####", context)
+
+    assert low_client.responses.calls[0]["reasoning"] == {"effort": "low"}
+    assert medium_client.responses.calls[0]["reasoning"] == {"effort": "medium"}
+    assert medium_agent.last_call_metadata["reasoning_effort"] == "medium"
+    assert low_agent.last_call_metadata["cache_key"] != medium_agent.last_call_metadata["cache_key"]
 
 
 def test_non_gpt5_llm_agent_sends_temperature():

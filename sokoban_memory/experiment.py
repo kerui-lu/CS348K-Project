@@ -148,6 +148,7 @@ def run_episode(
                 "model": call_metadata.get("model"),
                 "temperature": call_metadata.get("temperature"),
                 "max_output_tokens": call_metadata.get("max_output_tokens"),
+                "reasoning_effort": call_metadata.get("reasoning_effort"),
                 "memory_hash": call_metadata.get("memory_hash"),
                 "cache_namespace": call_metadata.get("cache_namespace"),
                 "cache_hit": call_metadata.get("cache_hit", False),
@@ -421,6 +422,7 @@ def run_full_path_episode(
             "normalized_target_placement_before_first_deadlock",
         ):
             final_metadata.setdefault(key, trace.get(key))
+    final_metadata.setdefault("reasoning_effort", getattr(agent, "effective_reasoning_effort", None))
 
     return EpisodeResult(
         level_id=env.level.level_id,
@@ -502,6 +504,7 @@ def run_experiment(
             "model": getattr(agent, "model", None),
             "temperature": getattr(agent, "temperature", None),
             "max_output_tokens": getattr(agent, "max_output_tokens", None),
+            "reasoning_effort": getattr(agent, "effective_reasoning_effort", None),
             "prompt_version": getattr(agent, "prompt_version", None),
             "seed": seed,
             "max_steps": max_steps,
@@ -549,6 +552,7 @@ def run_same_level_iterative_experiment(
     llm_cache_path: str | Path | None = None,
     temperature: float = DEFAULT_TEMPERATURE,
     max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    reasoning_effort: str | None = None,
     cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
     level_suite_path: str | Path | None = None,
 ) -> dict[str, Any]:
@@ -577,6 +581,7 @@ def run_same_level_iterative_experiment(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
         )
 
@@ -626,6 +631,7 @@ def run_same_level_iterative_experiment(
                 memory_config=config,
                 temperature=temperature,
                 max_output_tokens=max_output_tokens,
+                reasoning_effort=reasoning_effort,
                 cache_namespace=cache_namespace,
             )
 
@@ -640,6 +646,7 @@ def run_same_level_iterative_experiment(
             "model": model,
             "temperature": temperature,
             "max_output_tokens": max_output_tokens,
+            "reasoning_effort": getattr(agent, "effective_reasoning_effort", None),
             "seed": seed,
             "max_steps": max_steps,
             "results_dir": str(results_dir),
@@ -690,6 +697,7 @@ def _make_same_level_agent(
     llm_cache_path: str | Path | None,
     temperature: float,
     max_output_tokens: int,
+    reasoning_effort: str | None,
     cache_namespace: str,
 ) -> BaseAgent:
     agent_name = {
@@ -711,6 +719,7 @@ def _make_same_level_agent(
         llm_cache_path=llm_cache_path,
         temperature=temperature,
         max_output_tokens=max_output_tokens,
+        reasoning_effort=reasoning_effort,
         cache_namespace=cache_namespace,
     )
 
@@ -730,6 +739,7 @@ def _update_same_level_memory_after_failure(
     memory_config: MemoryRenderConfig,
     temperature: float,
     max_output_tokens: int,
+    reasoning_effort: str | None,
     cache_namespace: str,
 ) -> None:
     if condition not in {"verifier_summary_retry", "raw_same_level_iterative", "heuristic_same_level_iterative"}:

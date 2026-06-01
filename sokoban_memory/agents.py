@@ -95,6 +95,7 @@ class FullPathLLMAgent(BaseAgent):
         llm_cache_path: str | Path | None = None,
         temperature: float = DEFAULT_TEMPERATURE,
         max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+        reasoning_effort: str | None = None,
         cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
         memory_path: str | Path | None = None,
     ):
@@ -106,6 +107,8 @@ class FullPathLLMAgent(BaseAgent):
         self.max_llm_calls = max_llm_calls
         self.temperature = temperature
         self.max_output_tokens = max_output_tokens
+        self.reasoning_effort = reasoning_effort
+        self.effective_reasoning_effort = _reasoning_effort_value(self.model, self.reasoning_effort)
         self.cache_namespace = cache_namespace
         self.memory_path = str(memory_path) if memory_path else None
         self.memory_hash = getattr(memory_store, "memory_hash", None)
@@ -127,7 +130,7 @@ class FullPathLLMAgent(BaseAgent):
             "policy_mode": self.policy_mode,
             "cache_namespace": self.cache_namespace,
         }
-        reasoning = reasoning_config(self.model)
+        reasoning = reasoning_config(self.model, self.reasoning_effort)
         if reasoning is not None:
             request["reasoning"] = reasoning
         cache_key = self.cache.make_key(request)
@@ -157,6 +160,7 @@ class FullPathLLMAgent(BaseAgent):
                 input_text=prompt,
                 temperature=self.temperature,
                 max_output_tokens=self.max_output_tokens,
+                reasoning_effort=self.reasoning_effort,
             )
         )
         self.llm_call_count += 1
@@ -169,6 +173,7 @@ class FullPathLLMAgent(BaseAgent):
                 "model": self.model,
                 "temperature": self.temperature,
                 "max_output_tokens": self.max_output_tokens,
+                "reasoning_effort": reasoning["effort"] if reasoning else None,
                 "cache_namespace": self.cache_namespace,
                 "prompt_hash": prompt_hash,
                 "output_text": output_text,
@@ -249,6 +254,7 @@ class FullPathLLMAgent(BaseAgent):
             "model": self.model,
             "temperature": self.temperature,
             "max_output_tokens": self.max_output_tokens,
+            "reasoning_effort": self.effective_reasoning_effort,
             "prompt_version": self.prompt_version,
             "prompt_hash": prompt_hash,
             "non_memory_template_hash": text_hash(non_memory_template),
@@ -370,6 +376,7 @@ def responses_create_kwargs(
     input_text: str,
     temperature: float,
     max_output_tokens: int,
+    reasoning_effort: str | None = None,
 ) -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "model": model,
@@ -378,18 +385,25 @@ def responses_create_kwargs(
     }
     if not model.startswith("gpt-5"):
         kwargs["temperature"] = temperature
-    reasoning = reasoning_config(model)
+    reasoning = reasoning_config(model, reasoning_effort)
     if reasoning is not None:
         kwargs["reasoning"] = reasoning
     return kwargs
 
 
-def reasoning_config(model: str) -> dict[str, str] | None:
+def reasoning_config(model: str, reasoning_effort: str | None = None) -> dict[str, str] | None:
+    if reasoning_effort:
+        return {"effort": reasoning_effort}
     if model.startswith("gpt-5.2"):
         return {"effort": "low"}
     if model.startswith("gpt-5"):
         return {"effort": "minimal"}
     return None
+
+
+def _reasoning_effort_value(model: str, reasoning_effort: str | None = None) -> str | None:
+    reasoning = reasoning_config(model, reasoning_effort)
+    return reasoning["effort"] if reasoning else None
 
 
 def make_agent(
@@ -404,6 +418,7 @@ def make_agent(
     llm_cache_path: str | Path | None = None,
     temperature: float = DEFAULT_TEMPERATURE,
     max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    reasoning_effort: str | None = None,
     cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
     memory_path: str | Path | None = None,
 ) -> BaseAgent:
@@ -419,6 +434,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
         )
     if agent_name == "generic_retry_feedback":
@@ -431,6 +447,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
         )
     if agent_name == "verifier_summary_retry":
@@ -444,6 +461,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -458,6 +476,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -472,6 +491,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -486,6 +506,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -499,6 +520,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
         )
     raise ValueError(f"Unknown agent: {agent_name}")

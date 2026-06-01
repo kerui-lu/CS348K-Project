@@ -212,6 +212,8 @@ def heuristic_scope(heuristic: str) -> str:
     lowered = text.lower()
     if not text:
         return "rejected"
+    if any(pattern in lowered for pattern in PROMPT_LEAKAGE_PATTERNS):
+        return "rejected"
     if _contains_board_row(text) or _contains_raw_direction_sequence(lowered):
         return "rejected"
     if _contains_coordinate(text) or "level_id" in lowered or "boxoban_" in lowered or "in this level" in lowered:

@@ -21,6 +21,8 @@ Main result:
 - Same-level raw trajectory retry: eval `solve_rate@K` also reaches `13/24 = 54.2%` with `K = 3`, but with a different solved-level set and a higher invalid-plan attempt count.
 - Same-level heuristic retry: eval `solve_rate@K` reaches `12/24 = 50.0%` with `K = 3`.
 - Train-to-eval one-shot global heuristic: eval solve rate reaches `9/24 = 37.5%`.
+- Rebuilt train-to-eval global heuristic from all 16 train failures: eval solve rate is `8/24 = 33.3%`.
+- Targeted medium-reasoning rescue run on the 16 failed train single-shot levels solves `5/16 = 31.2%` with `max_output_tokens = 32768` and `max_steps = 512`.
 
 Because invalid plans are still common, same-level raw/heuristic retry and train-to-eval heuristic generalization should be interpreted separately from verifier-guided scaffolding.
 
@@ -210,6 +212,47 @@ Track 0 planner-validity runs:
   --results_dir results/v3_track0_eval_gpt52_low_16384 \
   --levels levels/v3_boxoban_balanced.json \
   --output results/v3_track0_balanced_gpt52_low_16384_summary.json \
+  --fail_on_validation_error
+```
+
+Targeted medium-reasoning rescue run on the 16 train levels that failed under Track 0 low reasoning:
+
+```bash
+.venv/bin/python run_experiment.py \
+  --agent no_memory \
+  --model gpt-5.2 \
+  --reasoning_effort medium \
+  --levels levels/v3_boxoban_balanced.json \
+  --level_split train \
+  --level_id boxoban_medium_train_000_061 \
+  --level_id boxoban_medium_train_000_066 \
+  --level_id boxoban_medium_train_000_073 \
+  --level_id boxoban_medium_train_000_086 \
+  --level_id boxoban_medium_train_000_111 \
+  --level_id boxoban_medium_train_000_129 \
+  --level_id boxoban_medium_train_000_158 \
+  --level_id boxoban_medium_train_000_194 \
+  --level_id boxoban_medium_train_000_200 \
+  --level_id boxoban_medium_train_000_224 \
+  --level_id boxoban_medium_train_000_281 \
+  --level_id boxoban_unfiltered_train_000_065 \
+  --level_id boxoban_unfiltered_train_000_130 \
+  --level_id boxoban_unfiltered_train_000_194 \
+  --level_id boxoban_unfiltered_train_000_208 \
+  --level_id boxoban_unfiltered_train_000_297 \
+  --episodes 16 \
+  --max_steps 512 \
+  --max_llm_calls 16 \
+  --llm_cache_path .llm_cache/responses \
+  --cache_namespace v3_train_failed_single_shot_gpt52_medium_32768_512 \
+  --temperature 0 \
+  --max_output_tokens 32768 \
+  --results_dir results/v3_train_failed_single_shot_gpt52_medium_32768_512
+
+.venv/bin/python evaluate_results.py \
+  --results_dir results/v3_train_failed_single_shot_gpt52_medium_32768_512 \
+  --levels levels/v3_boxoban_balanced.json \
+  --output results/v3_train_failed_single_shot_gpt52_medium_32768_512/evaluation_summary.json \
   --fail_on_validation_error
 ```
 
@@ -415,6 +458,37 @@ The dominant invalid-plan failure is `unreachable_standing_cell`: the LLM names 
 | eval / unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 43.8% |
 | eval / unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 75.0% |
 
+### Targeted Medium-Reasoning Rescue Run
+
+This follow-up reran only the 16 train levels that failed in the original Track 0 low-reasoning train run. It used `gpt-5.2`, `reasoning_effort = medium`, `max_output_tokens = 32768`, and `max_steps = 512`. It is a targeted rescue ablation, not a replacement for the original 24-level train aggregate.
+
+| Condition | Levels retried | Newly solved | Invalid plans | Deadlocks | Plan exhausted | Avg. best goal completion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| original low, failed subset | 16 | 0 | 10 | 3 | 3 | 37.5% |
+| medium + 32768 + 512 | 16 | 5 | 9 | 2 | 0 | 46.9% |
+
+The newly solved levels were:
+
+- `boxoban_medium_train_000_281`
+- `boxoban_unfiltered_train_000_065`
+- `boxoban_unfiltered_train_000_130`
+- `boxoban_unfiltered_train_000_194`
+- `boxoban_unfiltered_train_000_208`
+
+The remaining failure subtypes were:
+
+| Failure subtype | Count |
+| --- | ---: |
+| `empty_output` | 6 |
+| `unreachable_standing_cell` | 3 |
+| `deadlock` | 2 |
+
+Interpretation:
+
+- Increasing reasoning effort, output tokens, and primitive-step budget rescued 5 levels from the original failed subset.
+- `plan_exhausted` was eliminated on this subset, but invalid plans remained common.
+- Six failures were `empty_output`, indicating that medium reasoning can still spend the output budget on reasoning without returning a visible JSON plan.
+
 ## Same-Level Verifier-Summary Retry Results
 
 The first memory/scaffold condition tested was `verifier_summary_retry` on the eval split with `K = 3`. This condition retries from the original board and shows a concise verifier summary from prior same-level failures.
@@ -596,14 +670,17 @@ Interpretation:
 
 ## Train-To-Eval Global Heuristic Results
 
-The cross-level memory condition tested was `train_one_shot_global_heuristic`. The memory bank was built from one no-memory attempt on each of the 24 train levels. The train planner calls were cache hits from the Track 0 train run, producing 16 failed train records and 12 reflection heuristics. All 12 generated heuristics were classified as `global_allowed`; none were classified as `same_level_only` or `rejected`.
+The cross-level memory condition tested was `train_one_shot_global_heuristic`. The first memory bank was built from one no-memory attempt on each of the 24 train levels. The train planner calls were cache hits from the Track 0 train run, producing 16 failed train records and 12 reflection heuristics. All 12 generated heuristics were classified as `global_allowed`; none were classified as `same_level_only` or `rejected`.
 
 The eval run used `reflection_heuristic` with the train-derived heuristic memory. The prompt rendered at most 3 heuristic items per episode to keep the memory budget aligned with the other memory conditions.
+
+A follow-up rebuild used the same 16 failed train records but generated reflection heuristics from all train one-shot failures under a larger memory budget. This produced 16 heuristics, all classified as `global_allowed`. The follow-up eval rendered all 16 global heuristics for every eval level with `max_memory_items = 999` and `max_memory_chars = 30000`.
 
 | Eval condition | Levels | Attempts | Solve rate | Successful levels | Invalid-plan attempts | Deadlock attempts | Timeout attempts | Plan-exhausted attempts | Avg. best goal completion |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | no-memory eval baseline | 24 | 24 | 33.3% | 8 | 13 | 2 | 0 | 1 | 51.0% |
-| train one-shot global heuristic | 24 | 24 | 37.5% | 9 | 12 | 1 | 1 | 1 | 59.4% |
+| train one-shot global heuristic, top 3 old bank | 24 | 24 | 37.5% | 9 | 12 | 1 | 1 | 1 | 59.4% |
+| rebuilt train one-shot global heuristic, all 16 global rules | 24 | 24 | 33.3% | 8 | 12 | 2 | 0 | 2 | 56.2% |
 
 The train-derived global heuristic condition solved 3 levels not solved by the no-memory eval baseline:
 
@@ -616,7 +693,7 @@ It failed 2 levels solved by the no-memory eval baseline:
 - `boxoban_medium_valid_000_290`
 - `boxoban_unfiltered_valid_000_135`
 
-Failure subtype counts:
+Failure subtype counts for the top-3 run:
 
 | Failure subtype | Count |
 | --- | ---: |
@@ -624,6 +701,16 @@ Failure subtype counts:
 | `deadlock` | 1 |
 | `timeout` | 1 |
 | `plan_exhausted` | 1 |
+
+Failure subtype counts for the rebuilt all-global run:
+
+| Failure subtype | Count |
+| --- | ---: |
+| `unreachable_standing_cell` | 10 |
+| `deadlock` | 2 |
+| `plan_exhausted` | 2 |
+| `blocked_standing_cell` | 1 |
+| `empty_output` | 1 |
 
 Stratum-level train-to-eval results:
 
@@ -636,16 +723,29 @@ Stratum-level train-to-eval results:
 | unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 0.0% | 68.8% |
 | unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 0.0% | 87.5% |
 
+Stratum-level rebuilt all-global results:
+
+| Eval stratum | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| medium / constrained | 4 | 25.0% | 50.0% | 0.0% | 0.0% | 25.0% | 43.8% |
+| medium / middle | 4 | 25.0% | 50.0% | 0.0% | 0.0% | 25.0% | 43.8% |
+| medium / open | 4 | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 31.2% |
+| unfiltered / constrained | 4 | 75.0% | 0.0% | 25.0% | 0.0% | 0.0% | 75.0% |
+| unfiltered / middle | 4 | 50.0% | 50.0% | 0.0% | 0.0% | 0.0% | 75.0% |
+| unfiltered / open | 4 | 25.0% | 50.0% | 25.0% | 0.0% | 0.0% | 68.8% |
+
 Interpretation:
 
 - Train-derived global heuristics produce a small cross-level solve-rate gain over no memory: 9 solved eval levels instead of 8.
+- Rebuilding global heuristics from all 16 train failures did not improve solve rate over the no-memory baseline in this run: both solved 8 eval levels.
+- The rebuilt all-global run solved the same three levels gained by the top-3 run over baseline, but it also lost three baseline-solved levels.
 - The cross-level condition does not match same-level retry coverage, which reached 12-13 solved eval levels under `K = 3`.
 - The invalid-plan rate remains high at 50.0%, so the train-derived heuristics do not solve the full-path legality problem.
-- Average best goal completion improves from 51.0% to 59.4%, suggesting that the heuristics may help partial progress even when the final plan remains invalid or incomplete.
+- Average best goal completion improves from 51.0% to 59.4% for the top-3 run and 56.2% for the rebuilt all-global run, suggesting that train-derived heuristics may help partial progress even when they do not improve solved-level coverage.
 
 ## Interpretation
 
-The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24, while heuristic same-level retry improves it to 12/24. Train-derived global heuristic memory gives a smaller cross-level improvement to 9/24. Planner validity remains the main bottleneck.
+The V3 balanced benchmark is runnable end to end, and the current full-path LLM planner solves a nontrivial fraction of levels without memory. The verifier-summary and raw same-level retry conditions both improve eval solved-level coverage to 13/24, while heuristic same-level retry improves it to 12/24. The original top-3 train-derived global heuristic memory gives a smaller cross-level improvement to 9/24; the rebuilt all-global train heuristic run remains at 8/24. Planner validity remains the main bottleneck.
 
 Key observations:
 
@@ -657,7 +757,7 @@ Key observations:
 - `verifier_summary_retry` raises eval `solve_rate@K` to 54.2%, but it does not remove invalid push proposals.
 - `raw_same_level_iterative` also reaches 54.2% eval `solve_rate@K`, with a different solved-level set and more invalid-plan attempts.
 - `heuristic_same_level_iterative` reaches 50.0% eval `solve_rate@K`; it is useful relative to no memory, but it is not stronger than verifier-summary or raw retry in this run.
-- Train-to-eval global heuristics produce a small eval solve-rate gain and a larger progress-metric gain, but do not substantially reduce invalid push proposals.
+- The original top-3 train-derived global heuristic run produces a small eval solve-rate gain and a larger progress-metric gain, but the rebuilt all-global run does not improve solve rate over no memory. This suggests that rendering more global heuristics is not automatically better under the current prompt.
 
 ## Current Gate Decision
 
@@ -665,7 +765,7 @@ The current Track 0, same-level retry, and train-to-eval results trigger the pla
 
 - If memory reduces `invalid_plan_rate`, it may be improving local legality rather than high-level Sokoban planning.
 - If memory improves `best_goal_completion_rate` without improving solve rate, it may be helping partial progress but not complete planning.
-- Train-derived global heuristics improve eval solve rate slightly but do not reduce invalid pushes enough to support a strong generalization claim.
+- Train-derived global heuristics have limited evidence for cross-level transfer under the current planner: the top-3 run improves eval solve rate slightly, while the rebuilt all-global run does not.
 
 The executed V3 results support two narrower conclusions:
 
@@ -705,6 +805,8 @@ Executed result directories:
 - `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384`
 - `results/v3_train_one_shot_memory_build_gpt52_low_16384`
 - `results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384`
+- `results/v3_eval_train_one_shot_global_heuristic_all_gpt52_low_16384`
+- `results/v3_train_failed_single_shot_gpt52_medium_32768_512`
 
 Combined evaluation summary:
 
@@ -723,3 +825,5 @@ Validation:
 - `results/v3_eval_raw_same_level_k3_gpt52_low_16384_clean/evaluation_summary.json`
 - `results/v3_eval_heuristic_same_level_k3_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384/evaluation_summary.json`
+- `results/v3_eval_train_one_shot_global_heuristic_all_gpt52_low_16384/evaluation_summary.json`
+- `results/v3_train_failed_single_shot_gpt52_medium_32768_512/evaluation_summary.json`
