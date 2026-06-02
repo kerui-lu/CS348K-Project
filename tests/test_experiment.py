@@ -5,7 +5,7 @@ import sys
 from sokoban_memory.agents import RuleBasedAgent
 from sokoban_memory.agents import LLMAgent
 from sokoban_memory.env import SokobanEnv
-from sokoban_memory.experiment import run_episode, run_same_level_iterative_experiment
+from sokoban_memory.experiment import run_episode, run_experiment, run_same_level_iterative_experiment
 from sokoban_memory.levels import load_levels
 from sokoban_memory.metrics import summarize_results
 
@@ -110,6 +110,29 @@ def test_summary_reports_v2_outcome_rates():
     assert summary["budget_exhausted_rate"] == 0.5
     assert summary["api_error_rate"] == 0.5
     assert summary["invalid_failure_rate"] == 0.0
+
+
+def test_run_experiment_summary_records_reasoning_effort(tmp_path):
+    level = load_levels("levels/simple.json")[0]
+    agent = LLMAgent(
+        client=FakeClient('[{"box": [2, 3], "push": "Right"}]'),
+        model="gpt-5.2",
+        reasoning_effort="medium",
+    )
+
+    summary = run_experiment(
+        levels=[level],
+        agent=agent,
+        episodes=1,
+        max_steps=20,
+        seed=0,
+        results_dir=tmp_path,
+    )
+
+    assert summary["reasoning_effort"] == "medium"
+    episode_files = [p for p in tmp_path.glob("*.json") if p.name != "summary.json"]
+    episode = json.loads(episode_files[0].read_text(encoding="utf-8"))
+    assert episode["metadata"]["reasoning_effort"] == "medium"
 
 
 def test_same_level_iterative_runner_retries_until_success(tmp_path):

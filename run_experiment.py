@@ -89,6 +89,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--llm_cache_path", default=None)
     parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
     parser.add_argument(
+        "--reasoning_effort",
+        default=None,
+        choices=["minimal", "low", "medium", "high"],
+        help="Optional reasoning effort override for reasoning-capable models.",
+    )
+    parser.add_argument(
         "--max_output_tokens",
         type=_max_output_tokens_at_least_min,
         default=DEFAULT_MAX_OUTPUT_TOKENS,
@@ -148,6 +154,7 @@ def main() -> None:
             llm_cache_path=args.llm_cache_path,
             temperature=args.temperature,
             max_output_tokens=args.max_output_tokens,
+            reasoning_effort=args.reasoning_effort,
             cache_namespace=args.cache_namespace,
             level_suite_path=args.levels,
             same_level_reflection_version=args.same_level_reflection_version,
@@ -166,6 +173,7 @@ def main() -> None:
         llm_cache_path=args.llm_cache_path,
         temperature=args.temperature,
         max_output_tokens=args.max_output_tokens,
+        reasoning_effort=args.reasoning_effort,
         cache_namespace=args.cache_namespace,
         memory_path=args.memory_path,
     )

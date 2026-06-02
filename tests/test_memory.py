@@ -176,12 +176,14 @@ def test_heuristic_classifier_and_cross_level_rendering_scopes():
             "Do not push boxes into non-target corners.",
             "In this level, avoid pushing the box at [3, 4] right.",
             "Use the sequence Right, Up, Left, Left.",
+            "Follow the solver_min_steps metadata when planning.",
         ]
     )
 
     assert classify_heuristic(memory.heuristics[0])["scope"] == "global_allowed"
     assert classify_heuristic(memory.heuristics[1])["scope"] == "same_level_only"
     assert classify_heuristic(memory.heuristics[2])["scope"] == "rejected"
+    assert classify_heuristic(memory.heuristics[3])["scope"] == "rejected"
     cross_level = memory.render(MemoryRenderConfig(max_memory_items=3, max_steps_per_memory=6, max_memory_chars=2000))
     same_level = memory.render_for_level(
         "target",
@@ -191,6 +193,7 @@ def test_heuristic_classifier_and_cross_level_rendering_scopes():
     assert "non-target corners" in cross_level
     assert "[3, 4]" not in cross_level
     assert "sequence Right" not in cross_level
+    assert "solver_min_steps" not in cross_level
     assert "[3, 4]" in same_level
     assert "sequence Right" not in same_level
 
