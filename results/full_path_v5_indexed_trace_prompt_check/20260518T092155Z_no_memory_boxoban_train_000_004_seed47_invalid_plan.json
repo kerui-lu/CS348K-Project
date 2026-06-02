@@ -1,0 +1,133 @@
+{
+  "level_id": "boxoban_train_000_004",
+  "agent_type": "no_memory",
+  "seed": 47,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v5",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 4096,
+  "cache_namespace": "full_path_v5_indexed_trace_prompt_check",
+  "level_split": "train",
+  "level_tags": [
+    "corner_trap",
+    "multi_box_optional"
+  ],
+  "optimal_steps": 24,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box_id\": 0, \"push\": \"Down\", \"player_after\": [3, 3], \"box_after\": [3, 2]},\n  {\"box_id\": 0, \"push\": \"Left\", \"player_after\": [3, 2], \"box_after\": [3, 1]},\n  {\"box_id\": 0, \"push\": \"Down\", \"player_after\": [4, 1], \"box_after\": [4, 1]},\n  {\"box_id\": 1, \"push\": \"Down\", \"player_after\": [5, 3], \"box_after\": [6, 3]},\n  {\"box_id\": 1, \"push\": \"Left\", \"player_after\": [6, 2], \"box_after\": [6, 2]},\n  {\"box_id\": 2, \"push\": \"Left\", \"player_after\": [4, 4], \"box_after\": [4, 4]},\n  {\"box_id\": 2, \"push\": \"Down\", \"player_after\": [5, 4], \"box_after\": [5, 4]},\n  {\"box_id\": 2, \"push\": \"Left\", \"player_after\": [5, 3], \"box_after\": [5, 3]}\n]",
+    "planned_pushes": [
+      {
+        "push": "Down",
+        "box_id": 0
+      },
+      {
+        "push": "Left",
+        "box_id": 0
+      },
+      {
+        "push": "Down",
+        "box_id": 0
+      },
+      {
+        "push": "Down",
+        "box_id": 1
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Left",
+        "box_id": 2
+      },
+      {
+        "push": "Down",
+        "box_id": 2
+      },
+      {
+        "push": "Left",
+        "box_id": 2
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Down",
+          "box_id": 0
+        },
+        "player_before": {
+          "row": 4,
+          "col": 3
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 2
+          },
+          {
+            "row": 3,
+            "col": 3
+          },
+          {
+            "row": 4,
+            "col": 5
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            2
+          ],
+          "B1": [
+            3,
+            3
+          ],
+          "B2": [
+            4,
+            5
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 2,
+          "col": 2
+        },
+        "resolved_box_id": 0,
+        "result": "invalid_plan",
+        "failure_reason": "box_destination_blocked_by_wall_or_boundary"
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 8,
+    "expanded_primitive_step_count": 0,
+    "failure_reason": "box_destination_blocked_by_wall_or_boundary",
+    "failure_push_index": 0
+  }
+}

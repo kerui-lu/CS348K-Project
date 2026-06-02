@@ -1,0 +1,390 @@
+{
+  "level_id": "boxoban_medium_train_000_003",
+  "agent_type": "no_memory",
+  "seed": 51,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5.2",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 8192,
+  "cache_namespace": "full_path_v2_gpt5_2_low_8192_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 3, \"push\": \"Up\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"}\n]",
+    "status": "invalid_plan",
+    "planned_pushes": [
+      {
+        "push": "Right",
+        "box_id": 2
+      },
+      {
+        "push": "Right",
+        "box_id": 2
+      },
+      {
+        "push": "Right",
+        "box_id": 2
+      },
+      {
+        "push": "Right",
+        "box_id": 2
+      },
+      {
+        "push": "Up",
+        "box_id": 3
+      },
+      {
+        "push": "Left",
+        "box_id": 0
+      },
+      {
+        "push": "Left",
+        "box_id": 0
+      },
+      {
+        "push": "Left",
+        "box_id": 0
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Down",
+        "box_id": 1
+      },
+      {
+        "push": "Down",
+        "box_id": 1
+      },
+      {
+        "push": "Down",
+        "box_id": 1
+      },
+      {
+        "push": "Down",
+        "box_id": 1
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Right",
+          "box_id": 2
+        },
+        "player_before": {
+          "row": 1,
+          "col": 7
+        },
+        "boxes_before": [
+          {
+            "row": 1,
+            "col": 6
+          },
+          {
+            "row": 2,
+            "col": 5
+          },
+          {
+            "row": 5,
+            "col": 2
+          },
+          {
+            "row": 7,
+            "col": 8
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            1,
+            6
+          ],
+          "B1": [
+            2,
+            5
+          ],
+          "B2": [
+            5,
+            2
+          ],
+          "B3": [
+            7,
+            8
+          ]
+        },
+        "resolved_box": {
+          "row": 5,
+          "col": 2
+        },
+        "resolved_box_id": 2,
+        "required_player_position": {
+          "row": 5,
+          "col": 1
+        },
+        "box_destination": {
+          "row": 5,
+          "col": 3
+        },
+        "result": "invalid_plan",
+        "failure_reason": "required_push_position_unreachable"
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 16,
+    "expanded_primitive_step_count": 0,
+    "failure_reason": "required_push_position_unreachable",
+    "failure_push_index": 0,
+    "repair_alternative_pushes": [
+      {
+        "box_id": 0,
+        "box": [
+          1,
+          6
+        ],
+        "push": "Left",
+        "required_player": [
+          1,
+          7
+        ],
+        "destination": [
+          1,
+          5
+        ]
+      },
+      {
+        "box_id": 1,
+        "box": [
+          2,
+          5
+        ],
+        "push": "Left",
+        "required_player": [
+          2,
+          6
+        ],
+        "destination": [
+          2,
+          4
+        ]
+      }
+    ],
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 2, \"push\": \"Right\"},\n  {\"box_id\": 3, \"push\": \"Up\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 0, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"},\n  {\"box_id\": 1, \"push\": \"Down\"}\n]",
+        "status": "invalid_plan",
+        "planned_pushes": [
+          {
+            "push": "Right",
+            "box_id": 2
+          },
+          {
+            "push": "Right",
+            "box_id": 2
+          },
+          {
+            "push": "Right",
+            "box_id": 2
+          },
+          {
+            "push": "Right",
+            "box_id": 2
+          },
+          {
+            "push": "Up",
+            "box_id": 3
+          },
+          {
+            "push": "Left",
+            "box_id": 0
+          },
+          {
+            "push": "Left",
+            "box_id": 0
+          },
+          {
+            "push": "Left",
+            "box_id": 0
+          },
+          {
+            "push": "Left",
+            "box_id": 1
+          },
+          {
+            "push": "Left",
+            "box_id": 1
+          },
+          {
+            "push": "Left",
+            "box_id": 1
+          },
+          {
+            "push": "Left",
+            "box_id": 1
+          },
+          {
+            "push": "Down",
+            "box_id": 1
+          },
+          {
+            "push": "Down",
+            "box_id": 1
+          },
+          {
+            "push": "Down",
+            "box_id": 1
+          },
+          {
+            "push": "Down",
+            "box_id": 1
+          }
+        ],
+        "expanded_actions": [],
+        "push_execution_log": [
+          {
+            "push_index": 0,
+            "intent": {
+              "push": "Right",
+              "box_id": 2
+            },
+            "player_before": {
+              "row": 1,
+              "col": 7
+            },
+            "boxes_before": [
+              {
+                "row": 1,
+                "col": 6
+              },
+              {
+                "row": 2,
+                "col": 5
+              },
+              {
+                "row": 5,
+                "col": 2
+              },
+              {
+                "row": 7,
+                "col": 8
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                1,
+                6
+              ],
+              "B1": [
+                2,
+                5
+              ],
+              "B2": [
+                5,
+                2
+              ],
+              "B3": [
+                7,
+                8
+              ]
+            },
+            "resolved_box": {
+              "row": 5,
+              "col": 2
+            },
+            "resolved_box_id": 2,
+            "required_player_position": {
+              "row": 5,
+              "col": 1
+            },
+            "box_destination": {
+              "row": 5,
+              "col": 3
+            },
+            "result": "invalid_plan",
+            "failure_reason": "required_push_position_unreachable"
+          }
+        ],
+        "executed_push_count": 0,
+        "planned_push_count": 16,
+        "expanded_primitive_step_count": 0,
+        "failure_reason": "required_push_position_unreachable",
+        "failure_push_index": 0,
+        "repair_alternative_pushes": [
+          {
+            "box_id": 0,
+            "box": [
+              1,
+              6
+            ],
+            "push": "Left",
+            "required_player": [
+              1,
+              7
+            ],
+            "destination": [
+              1,
+              5
+            ]
+          },
+          {
+            "box_id": 1,
+            "box": [
+              2,
+              5
+            ],
+            "push": "Left",
+            "required_player": [
+              2,
+              6
+            ],
+            "destination": [
+              2,
+              4
+            ]
+          }
+        ]
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "invalid_plan",
+    "first_attempt_failure_reason": "required_push_position_unreachable"
+  }
+}

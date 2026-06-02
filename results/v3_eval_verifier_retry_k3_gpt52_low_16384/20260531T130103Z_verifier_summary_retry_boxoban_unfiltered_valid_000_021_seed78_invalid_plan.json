@@ -1,0 +1,951 @@
+{
+  "level_id": "boxoban_unfiltered_valid_000_021",
+  "agent_type": "verifier_summary_retry",
+  "seed": 78,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5.2",
+  "prompt_version": "full_path_v2_1",
+  "memory_path": null,
+  "memory_hash": "b36702cca7c9d88b574c6644ed920613e31365a7535d9be660481ec0af9872df",
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 16384,
+  "cache_namespace": "v3_eval_verifier_retry_k3_gpt52_low_16384",
+  "level_split": "eval",
+  "level_tags": [
+    "boxoban",
+    "boxoban_unfiltered",
+    "multi_box",
+    "difficulty_constrained"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Down\"},\n  {\"box\": [3, 6], \"push\": \"Down\"},\n  {\"box\": [2, 7], \"push\": \"Up\"},\n  {\"box\": [2, 4], \"push\": \"Right\"},\n  {\"box\": [2, 5], \"push\": \"Right\"},\n  {\"box\": [2, 6], \"push\": \"Right\"},\n  {\"box\": [2, 7], \"push\": \"Right\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [1, 7], \"push\": \"Right\"}\n]",
+    "status": "invalid_plan",
+    "call_metadata": {
+      "policy_mode": "full_path",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 16384,
+      "prompt_version": "full_path_v2_1",
+      "prompt_hash": "70f34527d27ecd1f78478002fce7309fb6e0d984bc928868f1a576d0d8fa0a92",
+      "non_memory_template_hash": "21d91044c08eed83fda90d6423504377e064e9a85162c92a5089101890ecb4ff",
+      "prompt_char_count": 3337,
+      "memory_char_count": 82,
+      "memory_hash": "b36702cca7c9d88b574c6644ed920613e31365a7535d9be660481ec0af9872df",
+      "cache_namespace": "v3_eval_verifier_retry_k3_gpt52_low_16384",
+      "cache_hit": false,
+      "cache_key": "f799ea97fa3d8172e192654df3f5f9cae63d1f3ae69c252c8f030f2e49ca5db7",
+      "usage": {
+        "input_tokens": 866,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 4332,
+        "output_tokens_details": {
+          "reasoning_tokens": 4132
+        },
+        "total_tokens": 5198
+      }
+    },
+    "planned_pushes": [
+      {
+        "push": "Down",
+        "box": [
+          4,
+          4
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          5,
+          4
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          2,
+          6
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          3,
+          6
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          2,
+          7
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          2,
+          4
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          2,
+          5
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          2,
+          6
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          2,
+          7
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          2,
+          8
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          3,
+          8
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          1,
+          7
+        ]
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Down",
+          "box": [
+            4,
+            4
+          ]
+        },
+        "model_intent": {
+          "push": "Down",
+          "box": [
+            4,
+            4
+          ]
+        },
+        "board_before_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+        "player_before": {
+          "row": 6,
+          "col": 1
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 4
+          },
+          {
+            "row": 2,
+            "col": 6
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 4,
+            "col": 2
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            4
+          ],
+          "B1": [
+            2,
+            6
+          ],
+          "B2": [
+            2,
+            7
+          ],
+          "B3": [
+            4,
+            2
+          ]
+        },
+        "resolved_box": {
+          "row": 4,
+          "col": 4
+        },
+        "resolved_box_before_push": [
+          4,
+          4
+        ],
+        "required_player_position": {
+          "row": 3,
+          "col": 4
+        },
+        "box_destination": {
+          "row": 5,
+          "col": 4
+        },
+        "standing_cell_required": [
+          3,
+          4
+        ],
+        "destination_cell": [
+          5,
+          4
+        ],
+        "box_after_push_if_success": [
+          5,
+          4
+        ],
+        "destination_free": true,
+        "standing_cell_free": true,
+        "result": "invalid_plan",
+        "status": "failed",
+        "failure_reason": "box_coordinate_missing",
+        "failure_subtype": "wrong_box_reference",
+        "player_reachable_to_standing": false
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 12,
+    "expanded_primitive_step_count": 0,
+    "final_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+    "failure_reason": "box_coordinate_missing",
+    "failure_subtype": "wrong_box_reference",
+    "failure_push_index": 0,
+    "initial_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+    "board_before_failed_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+    "board_after_last_successful_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+    "best_boxes_on_targets": 0,
+    "final_boxes_on_targets": 0,
+    "target_placement_events_before_first_deadlock": 0,
+    "best_goal_completion_rate": 0.0,
+    "final_goal_completion_rate": 0.0,
+    "normalized_target_placement_before_first_deadlock": 0.0,
+    "v3_attempt_trace": {
+      "schema_version": "v3_trajectory_v1",
+      "run_id": "698ccc89648340fc99b7b3603b00ae05",
+      "code_commit": "b229de4",
+      "level_suite_path": "levels/v3_boxoban_balanced.json",
+      "level_suite_hash": "696e456c186698bf0ec0a3e6cf986b3805c6bbdca728a3d0a18453ac4e4725a7",
+      "executor_version": "full_path_executor_v3",
+      "prompt_renderer_version": "full_path_prompt_renderer_v3",
+      "memory_renderer_version": "memory_renderer_v3",
+      "cache_key": "f799ea97fa3d8172e192654df3f5f9cae63d1f3ae69c252c8f030f2e49ca5db7",
+      "level_id": "boxoban_unfiltered_valid_000_021",
+      "split": "eval",
+      "source_family": "unfiltered",
+      "difficulty_bucket": "constrained",
+      "condition": "verifier_summary_retry",
+      "attempt_index": 0,
+      "seed": 78,
+      "model": "gpt-5.2",
+      "prompt_version": "full_path_v2_1",
+      "prompt_hash": "70f34527d27ecd1f78478002fce7309fb6e0d984bc928868f1a576d0d8fa0a92",
+      "max_output_tokens": 16384,
+      "initial_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+      "final_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+      "board_before_failed_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+      "board_after_last_successful_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+      "raw_plan_response": "[\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Down\"},\n  {\"box\": [3, 6], \"push\": \"Down\"},\n  {\"box\": [2, 7], \"push\": \"Up\"},\n  {\"box\": [2, 4], \"push\": \"Right\"},\n  {\"box\": [2, 5], \"push\": \"Right\"},\n  {\"box\": [2, 6], \"push\": \"Right\"},\n  {\"box\": [2, 7], \"push\": \"Right\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [1, 7], \"push\": \"Right\"}\n]",
+      "parsed_plan": [
+        {
+          "push": "Down",
+          "box": [
+            4,
+            4
+          ]
+        },
+        {
+          "push": "Left",
+          "box": [
+            5,
+            4
+          ]
+        },
+        {
+          "push": "Down",
+          "box": [
+            2,
+            6
+          ]
+        },
+        {
+          "push": "Down",
+          "box": [
+            3,
+            6
+          ]
+        },
+        {
+          "push": "Up",
+          "box": [
+            2,
+            7
+          ]
+        },
+        {
+          "push": "Right",
+          "box": [
+            2,
+            4
+          ]
+        },
+        {
+          "push": "Right",
+          "box": [
+            2,
+            5
+          ]
+        },
+        {
+          "push": "Right",
+          "box": [
+            2,
+            6
+          ]
+        },
+        {
+          "push": "Right",
+          "box": [
+            2,
+            7
+          ]
+        },
+        {
+          "push": "Down",
+          "box": [
+            2,
+            8
+          ]
+        },
+        {
+          "push": "Down",
+          "box": [
+            3,
+            8
+          ]
+        },
+        {
+          "push": "Right",
+          "box": [
+            1,
+            7
+          ]
+        }
+      ],
+      "expanded_actions": [],
+      "push_execution_log": [
+        {
+          "push_index": 0,
+          "intent": {
+            "push": "Down",
+            "box": [
+              4,
+              4
+            ]
+          },
+          "model_intent": {
+            "push": "Down",
+            "box": [
+              4,
+              4
+            ]
+          },
+          "board_before_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+          "player_before": {
+            "row": 6,
+            "col": 1
+          },
+          "boxes_before": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 6
+            },
+            {
+              "row": 2,
+              "col": 7
+            },
+            {
+              "row": 4,
+              "col": 2
+            }
+          ],
+          "box_positions_by_id_before": {
+            "B0": [
+              2,
+              4
+            ],
+            "B1": [
+              2,
+              6
+            ],
+            "B2": [
+              2,
+              7
+            ],
+            "B3": [
+              4,
+              2
+            ]
+          },
+          "resolved_box": {
+            "row": 4,
+            "col": 4
+          },
+          "resolved_box_before_push": [
+            4,
+            4
+          ],
+          "required_player_position": {
+            "row": 3,
+            "col": 4
+          },
+          "box_destination": {
+            "row": 5,
+            "col": 4
+          },
+          "standing_cell_required": [
+            3,
+            4
+          ],
+          "destination_cell": [
+            5,
+            4
+          ],
+          "box_after_push_if_success": [
+            5,
+            4
+          ],
+          "destination_free": true,
+          "standing_cell_free": true,
+          "result": "invalid_plan",
+          "status": "failed",
+          "failure_reason": "box_coordinate_missing",
+          "failure_subtype": "wrong_box_reference",
+          "player_reachable_to_standing": false
+        }
+      ],
+      "status": "invalid_plan",
+      "failure_reason": "box_coordinate_missing",
+      "failure_subtype": "wrong_box_reference",
+      "failure_push_index": 0,
+      "best_boxes_on_targets": 0,
+      "final_boxes_on_targets": 0,
+      "target_placement_events_before_first_deadlock": 0,
+      "best_goal_completion_rate": 0.0,
+      "final_goal_completion_rate": 0.0,
+      "normalized_target_placement_before_first_deadlock": 0.0
+    },
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Down\"},\n  {\"box\": [3, 6], \"push\": \"Down\"},\n  {\"box\": [2, 7], \"push\": \"Up\"},\n  {\"box\": [2, 4], \"push\": \"Right\"},\n  {\"box\": [2, 5], \"push\": \"Right\"},\n  {\"box\": [2, 6], \"push\": \"Right\"},\n  {\"box\": [2, 7], \"push\": \"Right\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [1, 7], \"push\": \"Right\"}\n]",
+        "status": "invalid_plan",
+        "call_metadata": {
+          "policy_mode": "full_path",
+          "model": "gpt-5.2",
+          "temperature": 0.0,
+          "max_output_tokens": 16384,
+          "prompt_version": "full_path_v2_1",
+          "prompt_hash": "70f34527d27ecd1f78478002fce7309fb6e0d984bc928868f1a576d0d8fa0a92",
+          "non_memory_template_hash": "21d91044c08eed83fda90d6423504377e064e9a85162c92a5089101890ecb4ff",
+          "prompt_char_count": 3337,
+          "memory_char_count": 82,
+          "memory_hash": "b36702cca7c9d88b574c6644ed920613e31365a7535d9be660481ec0af9872df",
+          "cache_namespace": "v3_eval_verifier_retry_k3_gpt52_low_16384",
+          "cache_hit": false,
+          "cache_key": "f799ea97fa3d8172e192654df3f5f9cae63d1f3ae69c252c8f030f2e49ca5db7",
+          "usage": {
+            "input_tokens": 866,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 4332,
+            "output_tokens_details": {
+              "reasoning_tokens": 4132
+            },
+            "total_tokens": 5198
+          }
+        },
+        "planned_pushes": [
+          {
+            "push": "Down",
+            "box": [
+              4,
+              4
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              5,
+              4
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              2,
+              6
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              3,
+              6
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              2,
+              7
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              2,
+              4
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              2,
+              5
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              2,
+              6
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              2,
+              7
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              2,
+              8
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              3,
+              8
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              1,
+              7
+            ]
+          }
+        ],
+        "expanded_actions": [],
+        "push_execution_log": [
+          {
+            "push_index": 0,
+            "intent": {
+              "push": "Down",
+              "box": [
+                4,
+                4
+              ]
+            },
+            "model_intent": {
+              "push": "Down",
+              "box": [
+                4,
+                4
+              ]
+            },
+            "board_before_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+            "player_before": {
+              "row": 6,
+              "col": 1
+            },
+            "boxes_before": [
+              {
+                "row": 2,
+                "col": 4
+              },
+              {
+                "row": 2,
+                "col": 6
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 4,
+                "col": 2
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                2,
+                4
+              ],
+              "B1": [
+                2,
+                6
+              ],
+              "B2": [
+                2,
+                7
+              ],
+              "B3": [
+                4,
+                2
+              ]
+            },
+            "resolved_box": {
+              "row": 4,
+              "col": 4
+            },
+            "resolved_box_before_push": [
+              4,
+              4
+            ],
+            "required_player_position": {
+              "row": 3,
+              "col": 4
+            },
+            "box_destination": {
+              "row": 5,
+              "col": 4
+            },
+            "standing_cell_required": [
+              3,
+              4
+            ],
+            "destination_cell": [
+              5,
+              4
+            ],
+            "box_after_push_if_success": [
+              5,
+              4
+            ],
+            "destination_free": true,
+            "standing_cell_free": true,
+            "result": "invalid_plan",
+            "status": "failed",
+            "failure_reason": "box_coordinate_missing",
+            "failure_subtype": "wrong_box_reference",
+            "player_reachable_to_standing": false
+          }
+        ],
+        "executed_push_count": 0,
+        "planned_push_count": 12,
+        "expanded_primitive_step_count": 0,
+        "final_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+        "failure_reason": "box_coordinate_missing",
+        "failure_subtype": "wrong_box_reference",
+        "failure_push_index": 0,
+        "initial_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+        "board_before_failed_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+        "board_after_last_successful_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+        "best_boxes_on_targets": 0,
+        "final_boxes_on_targets": 0,
+        "target_placement_events_before_first_deadlock": 0,
+        "best_goal_completion_rate": 0.0,
+        "final_goal_completion_rate": 0.0,
+        "normalized_target_placement_before_first_deadlock": 0.0,
+        "v3_attempt_trace": {
+          "schema_version": "v3_trajectory_v1",
+          "run_id": "698ccc89648340fc99b7b3603b00ae05",
+          "code_commit": "b229de4",
+          "level_suite_path": "levels/v3_boxoban_balanced.json",
+          "level_suite_hash": "696e456c186698bf0ec0a3e6cf986b3805c6bbdca728a3d0a18453ac4e4725a7",
+          "executor_version": "full_path_executor_v3",
+          "prompt_renderer_version": "full_path_prompt_renderer_v3",
+          "memory_renderer_version": "memory_renderer_v3",
+          "cache_key": "f799ea97fa3d8172e192654df3f5f9cae63d1f3ae69c252c8f030f2e49ca5db7",
+          "level_id": "boxoban_unfiltered_valid_000_021",
+          "split": "eval",
+          "source_family": "unfiltered",
+          "difficulty_bucket": "constrained",
+          "condition": "verifier_summary_retry",
+          "attempt_index": 0,
+          "seed": 78,
+          "model": "gpt-5.2",
+          "prompt_version": "full_path_v2_1",
+          "prompt_hash": "70f34527d27ecd1f78478002fce7309fb6e0d984bc928868f1a576d0d8fa0a92",
+          "max_output_tokens": 16384,
+          "initial_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+          "final_board": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+          "board_before_failed_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+          "board_after_last_successful_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+          "raw_plan_response": "[\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Down\"},\n  {\"box\": [3, 6], \"push\": \"Down\"},\n  {\"box\": [2, 7], \"push\": \"Up\"},\n  {\"box\": [2, 4], \"push\": \"Right\"},\n  {\"box\": [2, 5], \"push\": \"Right\"},\n  {\"box\": [2, 6], \"push\": \"Right\"},\n  {\"box\": [2, 7], \"push\": \"Right\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [1, 7], \"push\": \"Right\"}\n]",
+          "parsed_plan": [
+            {
+              "push": "Down",
+              "box": [
+                4,
+                4
+              ]
+            },
+            {
+              "push": "Left",
+              "box": [
+                5,
+                4
+              ]
+            },
+            {
+              "push": "Down",
+              "box": [
+                2,
+                6
+              ]
+            },
+            {
+              "push": "Down",
+              "box": [
+                3,
+                6
+              ]
+            },
+            {
+              "push": "Up",
+              "box": [
+                2,
+                7
+              ]
+            },
+            {
+              "push": "Right",
+              "box": [
+                2,
+                4
+              ]
+            },
+            {
+              "push": "Right",
+              "box": [
+                2,
+                5
+              ]
+            },
+            {
+              "push": "Right",
+              "box": [
+                2,
+                6
+              ]
+            },
+            {
+              "push": "Right",
+              "box": [
+                2,
+                7
+              ]
+            },
+            {
+              "push": "Down",
+              "box": [
+                2,
+                8
+              ]
+            },
+            {
+              "push": "Down",
+              "box": [
+                3,
+                8
+              ]
+            },
+            {
+              "push": "Right",
+              "box": [
+                1,
+                7
+              ]
+            }
+          ],
+          "expanded_actions": [],
+          "push_execution_log": [
+            {
+              "push_index": 0,
+              "intent": {
+                "push": "Down",
+                "box": [
+                  4,
+                  4
+                ]
+              },
+              "model_intent": {
+                "push": "Down",
+                "box": [
+                  4,
+                  4
+                ]
+              },
+              "board_before_push": "##########\n#       .#\n##  $ $$ #\n#### #   #\n# $   . .#\n# #.  # ##\n#@########\n# ########\n# ########\n##########",
+              "player_before": {
+                "row": 6,
+                "col": 1
+              },
+              "boxes_before": [
+                {
+                  "row": 2,
+                  "col": 4
+                },
+                {
+                  "row": 2,
+                  "col": 6
+                },
+                {
+                  "row": 2,
+                  "col": 7
+                },
+                {
+                  "row": 4,
+                  "col": 2
+                }
+              ],
+              "box_positions_by_id_before": {
+                "B0": [
+                  2,
+                  4
+                ],
+                "B1": [
+                  2,
+                  6
+                ],
+                "B2": [
+                  2,
+                  7
+                ],
+                "B3": [
+                  4,
+                  2
+                ]
+              },
+              "resolved_box": {
+                "row": 4,
+                "col": 4
+              },
+              "resolved_box_before_push": [
+                4,
+                4
+              ],
+              "required_player_position": {
+                "row": 3,
+                "col": 4
+              },
+              "box_destination": {
+                "row": 5,
+                "col": 4
+              },
+              "standing_cell_required": [
+                3,
+                4
+              ],
+              "destination_cell": [
+                5,
+                4
+              ],
+              "box_after_push_if_success": [
+                5,
+                4
+              ],
+              "destination_free": true,
+              "standing_cell_free": true,
+              "result": "invalid_plan",
+              "status": "failed",
+              "failure_reason": "box_coordinate_missing",
+              "failure_subtype": "wrong_box_reference",
+              "player_reachable_to_standing": false
+            }
+          ],
+          "status": "invalid_plan",
+          "failure_reason": "box_coordinate_missing",
+          "failure_subtype": "wrong_box_reference",
+          "failure_push_index": 0,
+          "best_boxes_on_targets": 0,
+          "final_boxes_on_targets": 0,
+          "target_placement_events_before_first_deadlock": 0,
+          "best_goal_completion_rate": 0.0,
+          "final_goal_completion_rate": 0.0,
+          "normalized_target_placement_before_first_deadlock": 0.0
+        }
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "invalid_plan",
+    "first_attempt_failure_reason": "box_coordinate_missing",
+    "schema_version": "v3_trajectory_v1",
+    "run_id": "698ccc89648340fc99b7b3603b00ae05",
+    "code_commit": "b229de4",
+    "level_suite_path": "levels/v3_boxoban_balanced.json",
+    "level_suite_hash": "696e456c186698bf0ec0a3e6cf986b3805c6bbdca728a3d0a18453ac4e4725a7",
+    "executor_version": "full_path_executor_v3",
+    "prompt_renderer_version": "full_path_prompt_renderer_v3",
+    "memory_renderer_version": "memory_renderer_v3",
+    "cache_key": "f799ea97fa3d8172e192654df3f5f9cae63d1f3ae69c252c8f030f2e49ca5db7",
+    "condition": "verifier_summary_retry",
+    "same_level_iterative": true,
+    "iteration_attempt_index": 0,
+    "attempt_budget": 3
+  }
+}

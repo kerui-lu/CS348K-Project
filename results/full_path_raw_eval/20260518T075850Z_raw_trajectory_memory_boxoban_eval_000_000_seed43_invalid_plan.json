@@ -1,0 +1,117 @@
+{
+  "level_id": "boxoban_eval_000_000",
+  "agent_type": "raw_trajectory_memory",
+  "seed": 43,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v1",
+  "memory_path": "memory_banks/raw_failures.json",
+  "memory_hash": "99d1438549b1560619f5c5296a411295adcd085b7ed5c1f560134746ddcf12c5",
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_pilot",
+  "level_split": "eval",
+  "level_tags": [
+    "wall_trap",
+    "multi_box_optional"
+  ],
+  "optimal_steps": 23,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[{\"box\": [2, 7], \"push\": \"Left\"}, {\"box\": [3, 7], \"push\": \"Left\"}, {\"box\": [6, 6], \"push\": \"Right\"}, {\"box\": [7, 5], \"push\": \"Up\"}]",
+    "planned_pushes": [
+      {
+        "box": [
+          2,
+          7
+        ],
+        "push": "Left"
+      },
+      {
+        "box": [
+          3,
+          7
+        ],
+        "push": "Left"
+      },
+      {
+        "box": [
+          6,
+          6
+        ],
+        "push": "Right"
+      },
+      {
+        "box": [
+          7,
+          5
+        ],
+        "push": "Up"
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "box": [
+            2,
+            7
+          ],
+          "push": "Left"
+        },
+        "player_before": {
+          "row": 8,
+          "col": 5
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 3,
+            "col": 7
+          },
+          {
+            "row": 6,
+            "col": 6
+          },
+          {
+            "row": 7,
+            "col": 5
+          }
+        ],
+        "required_player_position": {
+          "row": 2,
+          "col": 8
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 6
+        },
+        "result": "invalid_plan",
+        "failure_reason": "required_push_position_unreachable"
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 4,
+    "expanded_primitive_step_count": 0,
+    "failure_reason": "required_push_position_unreachable",
+    "failure_push_index": 0
+  }
+}

@@ -1,0 +1,2449 @@
+{
+  "level_id": "corner_trap_001",
+  "agent_type": "rule_based",
+  "seed": 49,
+  "status": "timeout",
+  "step_count": 100,
+  "invalid_move_count": 0,
+  "total_reward": -9.99999999999998,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "#######\n#     #\n# @   #\n# $   #\n#    .#\n#     #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n# @   #\n# $  .#\n#     #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 1,
+      "state": "#######\n#     #\n#     #\n# @   #\n# $  .#\n#     #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 2,
+      "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#@   .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 3,
+      "state": "#######\n#     #\n#     #\n#     #\n#@   .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 4,
+      "state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 5,
+      "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 6,
+      "state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 7,
+      "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 8,
+      "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 9,
+      "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 10,
+      "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 11,
+      "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 12,
+      "state": "#######\n#     #\n#     #\n#     #\n# @  .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 13,
+      "state": "#######\n#     #\n#     #\n# @   #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 14,
+      "state": "#######\n#     #\n#     #\n#@    #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 15,
+      "state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 16,
+      "state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 17,
+      "state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 18,
+      "state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 19,
+      "state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 20,
+      "state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 21,
+      "state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 22,
+      "state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 23,
+      "state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 24,
+      "state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 25,
+      "state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 26,
+      "state": "#######\n#@    #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 27,
+      "state": "#######\n#     #\n#@    #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 28,
+      "state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 29,
+      "state": "#######\n# @   #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 30,
+      "state": "#######\n#     #\n# @   #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 31,
+      "state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 32,
+      "state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 33,
+      "state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 34,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 35,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 36,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 37,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 38,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 39,
+      "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 40,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 41,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 42,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 43,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 44,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 45,
+      "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 46,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 47,
+      "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 48,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 49,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 50,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 51,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#    @#\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 52,
+      "state": "#######\n#    @#\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 53,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 54,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 55,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 56,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 57,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 58,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 59,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 60,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 61,
+      "state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 62,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 63,
+      "state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 64,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 65,
+      "state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 66,
+      "state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 67,
+      "state": "#######\n#   @ #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 68,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 69,
+      "state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 70,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 71,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 72,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 73,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 74,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 75,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 76,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 77,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 78,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 79,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 80,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 81,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 82,
+      "state": "#######\n#     #\n#     #\n#    @#\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 83,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 84,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 85,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 86,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $  @#\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 87,
+      "state": "#######\n#     #\n#     #\n#     #\n#    +#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 88,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 89,
+      "state": "#######\n#     #\n#     #\n#   @ #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 90,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 91,
+      "state": "#######\n#     #\n#    @#\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 92,
+      "state": "#######\n#     #\n#   @ #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 93,
+      "state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 94,
+      "state": "#######\n#  @  #\n#     #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 95,
+      "state": "#######\n#     #\n#  @  #\n#     #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 96,
+      "state": "#######\n#     #\n#     #\n#  @  #\n#    .#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 97,
+      "state": "#######\n#     #\n#     #\n#     #\n#  @ .#\n# $   #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 98,
+      "state": "#######\n#     #\n#     #\n#     #\n#   @.#\n# $   #\n#######",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    },
+    {
+      "step": 99,
+      "state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $ @ #\n#######",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "#######\n#     #\n#     #\n#     #\n#    .#\n# $@  #\n#######",
+      "reward": -0.1,
+      "done": false,
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    }
+  ]
+}

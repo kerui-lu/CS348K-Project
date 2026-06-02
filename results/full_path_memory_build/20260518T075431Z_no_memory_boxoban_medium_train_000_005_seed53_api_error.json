@@ -1,0 +1,43 @@
+{
+  "level_id": "boxoban_medium_train_000_005",
+  "agent_type": "no_memory",
+  "seed": 53,
+  "status": "api_error",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v1",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_pilot",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 0,
+  "budget_exhausted": false,
+  "metadata": {
+    "failure_reason": "api_error",
+    "error_type": "APIConnectionError",
+    "error_message": "Connection error.",
+    "error_at_step": 0,
+    "planned_pushes": [],
+    "expanded_actions": [],
+    "push_execution_log": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "episodes": 10,
+  "solve_rate": 0.5,
+  "deadlock_rate": 0.3,
+  "timeout_rate": 0.2,
+  "failure_rate": 0.0,
+  "average_steps": 25.8,
+  "average_reward": 1.4200000000000041,
+  "invalid_move_count": 0,
+  "invalid_move_rate": 0.0,
+  "average_invalid_moves_per_episode": 0.0,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "agent_type": "rule_based",
+  "seed": 42,
+  "max_steps": 100,
+  "results_dir": "results/rule_based"
+}

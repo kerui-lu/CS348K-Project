@@ -1,0 +1,68 @@
+{
+  "level_id": "boxoban_medium_train_000_003",
+  "agent_type": "no_memory",
+  "seed": 51,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-mini",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_v2_gpt5_mini_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [1, 6], \"push\": \"Right\"},\n  {\"box\": [1, 7], \"push\": \"Right\"},\n  {\"box\": [1, 8], \"push\": \"Down\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [4, 8], \"push\": \"Down\"},\n  {\"box\": [5, 8], \"push\": \"Left\"},\n  {\"box\": [5, 7], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [3, 6], \"push\": \"Up\"},\n  {\"box\": [2, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Left\"},\n  {\"box\": [2, 4], \"push\": \"Down\"},\n  {\"box\": [3, 4], \"push\": \"Down\"},\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [5, 3], \"push\": \"Left\"},\n  {\"box\": [5, 2], \"push\": \"Left\"},\n  {\"box\": [5, 1], \"push\": \"Up\"},\n  {\"box\": [4, 1], \"push\": \"Up\"},\n  {\"box\": [3, 1], \"push\": \"Up\"},\n  {\"box\": [2, 1], \"push\": \"Up\"},\n  {\"box\": [1, 1], \"push\": \"Right\"},\n  {\"box\": [1, 2], \"push\": \"Right\"},\n  {\"box\": [1, 3], \"push\": \"Down\"},\n  {\"box\": [2, 3], \"push\": \"Down\"},\n  {\"box\": [3, 3], \"push\": \"Right\"},\n  {\"box\": [3, 4], \"push\": \"Right\"},\n  {\"box\": [3, 5], \"push\": \"",
+    "status": "invalid_plan",
+    "failure_reason": "invalid_push_plan_parse",
+    "error_type": "PushPlanParseError",
+    "error_message": "plan is not valid JSON: Unterminated string starting at",
+    "planned_pushes": [],
+    "executed_push_count": 0,
+    "planned_push_count": 0,
+    "expanded_primitive_step_count": 0,
+    "expanded_actions": [],
+    "push_execution_log": [],
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box\": [1, 6], \"push\": \"Right\"},\n  {\"box\": [1, 7], \"push\": \"Right\"},\n  {\"box\": [1, 8], \"push\": \"Down\"},\n  {\"box\": [2, 8], \"push\": \"Down\"},\n  {\"box\": [3, 8], \"push\": \"Down\"},\n  {\"box\": [4, 8], \"push\": \"Down\"},\n  {\"box\": [5, 8], \"push\": \"Left\"},\n  {\"box\": [5, 7], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [3, 6], \"push\": \"Up\"},\n  {\"box\": [2, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Left\"},\n  {\"box\": [2, 4], \"push\": \"Down\"},\n  {\"box\": [3, 4], \"push\": \"Down\"},\n  {\"box\": [4, 4], \"push\": \"Down\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [5, 3], \"push\": \"Left\"},\n  {\"box\": [5, 2], \"push\": \"Left\"},\n  {\"box\": [5, 1], \"push\": \"Up\"},\n  {\"box\": [4, 1], \"push\": \"Up\"},\n  {\"box\": [3, 1], \"push\": \"Up\"},\n  {\"box\": [2, 1], \"push\": \"Up\"},\n  {\"box\": [1, 1], \"push\": \"Right\"},\n  {\"box\": [1, 2], \"push\": \"Right\"},\n  {\"box\": [1, 3], \"push\": \"Down\"},\n  {\"box\": [2, 3], \"push\": \"Down\"},\n  {\"box\": [3, 3], \"push\": \"Right\"},\n  {\"box\": [3, 4], \"push\": \"Right\"},\n  {\"box\": [3, 5], \"push\": \"",
+        "status": "invalid_plan",
+        "failure_reason": "invalid_push_plan_parse",
+        "error_type": "PushPlanParseError",
+        "error_message": "plan is not valid JSON: Unterminated string starting at",
+        "planned_pushes": [],
+        "executed_push_count": 0,
+        "planned_push_count": 0,
+        "expanded_primitive_step_count": 0,
+        "expanded_actions": [],
+        "push_execution_log": []
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "invalid_plan",
+    "first_attempt_failure_reason": "invalid_push_plan_parse"
+  }
+}

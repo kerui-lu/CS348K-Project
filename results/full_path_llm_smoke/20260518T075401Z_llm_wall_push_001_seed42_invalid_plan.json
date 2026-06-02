@@ -1,0 +1,43 @@
+{
+  "level_id": "wall_push_001",
+  "agent_type": "llm",
+  "seed": 42,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v1",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_pilot",
+  "level_split": "eval",
+  "level_tags": [
+    "wall_trap",
+    "requires_repositioning"
+  ],
+  "optimal_steps": 4,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "failure_reason": "invalid_push_plan_parse",
+    "error_type": "PushPlanParseError",
+    "error_message": "plan is not valid JSON: Expecting value",
+    "raw_plan_response": "",
+    "planned_pushes": [],
+    "expanded_actions": [],
+    "push_execution_log": []
+  }
+}
