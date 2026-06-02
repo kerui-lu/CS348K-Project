@@ -1,0 +1,158 @@
+{
+  "level_id": "simple_001",
+  "agent_type": "no_memory",
+  "seed": 42,
+  "status": "success",
+  "step_count": 1,
+  "invalid_move_count": 0,
+  "total_reward": 10.9,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "#######\n#     #\n# @$. #\n#     #\n#     #\n#     #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#  @* #\n#     #\n#     #\n#     #\n#######",
+      "reward": 10.9,
+      "done": true,
+      "response_text": "[\n  {\"box\": [2, 3], \"push\": \"Right\"},\n  {\"box\": [2, 4], \"push\": \"Right\"}\n]",
+      "prompt_hash": "270c14f910826091a5c8e91ad1055065f4e6b439e5b3c0bf6120c1d3ae09bbdf",
+      "prompt_char_count": 2036,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "3323c0bd7b867ce4a14048c7ce21b69ca40ce84c4aef586b3dd962ab23247079",
+      "model": "gpt-5-nano",
+      "temperature": 0.0,
+      "max_output_tokens": 512,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_train_prompt_check",
+      "cache_hit": false,
+      "cache_key": "dc6c0b96a21f95b0749de2e45931ffced2050774c2aafb037801a7adcfbffad1",
+      "usage": {
+        "input_tokens": 504,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 556
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": true,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "push",
+        "planned_push": {
+          "box": [
+            2,
+            3
+          ],
+          "push": "Right"
+        }
+      }
+    }
+  ],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_v2_train_prompt_check",
+  "level_split": "train",
+  "level_tags": [
+    "easy_simple_push"
+  ],
+  "optimal_steps": 1,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [2, 3], \"push\": \"Right\"},\n  {\"box\": [2, 4], \"push\": \"Right\"}\n]",
+    "planned_pushes": [
+      {
+        "box": [
+          2,
+          3
+        ],
+        "push": "Right"
+      },
+      {
+        "box": [
+          2,
+          4
+        ],
+        "push": "Right"
+      }
+    ],
+    "expanded_actions": [
+      "Right"
+    ],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "box": [
+            2,
+            3
+          ],
+          "push": "Right"
+        },
+        "player_before": {
+          "row": 2,
+          "col": 2
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 3
+          }
+        ],
+        "required_player_position": {
+          "row": 2,
+          "col": 2
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 4
+        },
+        "path_to_push": [],
+        "result": "success",
+        "player_after": {
+          "row": 2,
+          "col": 3
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 4
+          }
+        ]
+      }
+    ],
+    "executed_push_count": 1,
+    "planned_push_count": 2,
+    "expanded_primitive_step_count": 1
+  }
+}

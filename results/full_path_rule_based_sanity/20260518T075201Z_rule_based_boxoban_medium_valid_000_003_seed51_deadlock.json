@@ -1,0 +1,69 @@
+{
+  "level_id": "boxoban_medium_valid_000_003",
+  "agent_type": "rule_based",
+  "seed": 51,
+  "status": "deadlock",
+  "step_count": 1,
+  "invalid_move_count": 0,
+  "total_reward": -5.1,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "##########\n##### @ ##\n#####.$$ #\n###### . #\n#######  #\n#######$.#\n#######. #\n#######$ #\n#######  #\n##########",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "##########\n#####   ##\n#####.@$ #\n######$. #\n#######  #\n#######$.#\n#######. #\n#######$ #\n#######  #\n##########",
+      "reward": -5.1,
+      "done": true,
+      "response_text": "Down",
+      "prompt_hash": null,
+      "prompt_char_count": 0,
+      "memory_char_count": 0,
+      "non_memory_template_hash": null,
+      "model": null,
+      "temperature": null,
+      "max_output_tokens": null,
+      "memory_hash": null,
+      "cache_namespace": null,
+      "cache_hit": false,
+      "cache_key": null,
+      "usage": {},
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": true,
+        "deadlock_reason": "box_at_non_target_corner:3,6",
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    }
+  ],
+  "policy_mode": "non_llm",
+  "model": null,
+  "prompt_version": null,
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {},
+  "temperature": null,
+  "max_output_tokens": null,
+  "cache_namespace": null,
+  "level_split": "eval",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 0,
+  "budget_exhausted": false,
+  "metadata": {}
+}

@@ -1,0 +1,183 @@
+{
+  "episodes": 1,
+  "success_count": 0,
+  "deadlock_count": 0,
+  "timeout_count": 0,
+  "invalid_plan_count": 0,
+  "plan_exhausted_count": 1,
+  "budget_exhausted_count": 0,
+  "api_error_count": 0,
+  "invalid_failure_count": 0,
+  "failure_count": 0,
+  "success_rate": 0.0,
+  "deadlock_rate": 0.0,
+  "timeout_rate": 0.0,
+  "invalid_plan_rate": 0.0,
+  "plan_exhausted_rate": 1.0,
+  "budget_exhausted_rate": 0.0,
+  "api_error_rate": 0.0,
+  "invalid_failure_rate": 0.0,
+  "failure_rate": 0.0,
+  "solve_rate": 0.0,
+  "average_steps": 3.0,
+  "average_success_steps": 0.0,
+  "average_reward": -0.30000000000000004,
+  "average_solution_efficiency": 0.0,
+  "median_solution_efficiency": 0.0,
+  "steps_over_optimal_average": 0.0,
+  "solution_efficiency_count": 0,
+  "solution_efficiency_skipped_count": 0,
+  "invalid_move_count": 0,
+  "invalid_move_rate": 0.0,
+  "average_invalid_moves_per_episode": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhaustion_count": 0,
+  "planned_push_count": 1,
+  "executed_push_count": 1,
+  "expanded_primitive_step_count": 3,
+  "average_planned_pushes_per_episode": 1.0,
+  "average_executed_pushes_per_episode": 1.0,
+  "per_level": {
+    "wall_push_001": {
+      "attempts": 1,
+      "successes": 0,
+      "deadlocks": 0,
+      "timeouts": 0,
+      "success_count": 0,
+      "deadlock_count": 0,
+      "timeout_count": 0,
+      "invalid_plan_count": 0,
+      "plan_exhausted_count": 1,
+      "budget_exhausted_count": 0,
+      "api_error_count": 0,
+      "invalid_failure_count": 0,
+      "failure_count": 0,
+      "solve_rate": 0.0,
+      "average_steps": 3.0,
+      "average_success_steps": 0.0,
+      "average_efficiency": 0.0,
+      "solution_efficiency_count": 0,
+      "solution_efficiency_skipped_count": 0,
+      "planned_push_count": 1,
+      "executed_push_count": 1,
+      "expanded_primitive_step_count": 3
+    }
+  },
+  "requested_episodes": 1,
+  "level_ids": [
+    "wall_push_001",
+    "boxoban_eval_000_000",
+    "boxoban_eval_000_002",
+    "boxoban_eval_000_003",
+    "boxoban_eval_000_006",
+    "boxoban_eval_000_009",
+    "boxoban_medium_valid_000_000",
+    "boxoban_medium_valid_000_001",
+    "boxoban_medium_valid_000_002",
+    "boxoban_medium_valid_000_003",
+    "boxoban_medium_valid_000_004",
+    "boxoban_medium_valid_000_005"
+  ],
+  "level_splits": {
+    "wall_push_001": "eval",
+    "boxoban_eval_000_000": "eval",
+    "boxoban_eval_000_002": "eval",
+    "boxoban_eval_000_003": "eval",
+    "boxoban_eval_000_006": "eval",
+    "boxoban_eval_000_009": "eval",
+    "boxoban_medium_valid_000_000": "eval",
+    "boxoban_medium_valid_000_001": "eval",
+    "boxoban_medium_valid_000_002": "eval",
+    "boxoban_medium_valid_000_003": "eval",
+    "boxoban_medium_valid_000_004": "eval",
+    "boxoban_medium_valid_000_005": "eval"
+  },
+  "level_tags": {
+    "wall_push_001": [
+      "wall_trap",
+      "requires_repositioning"
+    ],
+    "boxoban_eval_000_000": [
+      "wall_trap",
+      "multi_box_optional"
+    ],
+    "boxoban_eval_000_002": [
+      "narrow_corridor",
+      "requires_repositioning",
+      "multi_box_optional"
+    ],
+    "boxoban_eval_000_003": [
+      "corner_trap",
+      "multi_box_optional"
+    ],
+    "boxoban_eval_000_006": [
+      "narrow_corridor",
+      "wall_trap",
+      "multi_box_optional"
+    ],
+    "boxoban_eval_000_009": [
+      "multi_box_optional",
+      "requires_repositioning"
+    ],
+    "boxoban_medium_valid_000_000": [
+      "boxoban_medium",
+      "multi_box"
+    ],
+    "boxoban_medium_valid_000_001": [
+      "boxoban_medium",
+      "multi_box"
+    ],
+    "boxoban_medium_valid_000_002": [
+      "boxoban_medium",
+      "multi_box"
+    ],
+    "boxoban_medium_valid_000_003": [
+      "boxoban_medium",
+      "multi_box"
+    ],
+    "boxoban_medium_valid_000_004": [
+      "boxoban_medium",
+      "multi_box"
+    ],
+    "boxoban_medium_valid_000_005": [
+      "boxoban_medium",
+      "multi_box"
+    ]
+  },
+  "level_optimal_steps": {
+    "wall_push_001": 4,
+    "boxoban_eval_000_000": 23,
+    "boxoban_eval_000_002": 21,
+    "boxoban_eval_000_003": 30,
+    "boxoban_eval_000_006": 29,
+    "boxoban_eval_000_009": 22,
+    "boxoban_medium_valid_000_000": null,
+    "boxoban_medium_valid_000_001": null,
+    "boxoban_medium_valid_000_002": null,
+    "boxoban_medium_valid_000_003": null,
+    "boxoban_medium_valid_000_004": null,
+    "boxoban_medium_valid_000_005": null
+  },
+  "agent_type": "llm",
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "prompt_version": "full_path_v1",
+  "seed": 42,
+  "max_steps": 100,
+  "results_dir": "results/full_path_llm_smoke",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_source_level_ids": [],
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "max_llm_calls": 1,
+  "cache_namespace": "full_path_pilot"
+}

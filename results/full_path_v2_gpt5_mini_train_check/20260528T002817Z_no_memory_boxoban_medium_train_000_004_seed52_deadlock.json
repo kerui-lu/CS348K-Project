@@ -1,0 +1,564 @@
+{
+  "level_id": "boxoban_medium_train_000_004",
+  "agent_type": "no_memory",
+  "seed": 52,
+  "status": "deadlock",
+  "step_count": 1,
+  "invalid_move_count": 0,
+  "total_reward": -5.1,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##.@$ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##. @$####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -5.1,
+      "done": true,
+      "response_text": "[\n  {\"box\": [5, 4], \"push\": \"Right\"},\n  {\"box\": [5, 5], \"push\": \"Right\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [2, 7], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Left\"},\n  {\"box\": [2, 4], \"push\": \"Down\"},\n  {\"box\": [3, 4], \"push\": \"Down\"},\n  {\"box\": [4, 4], \"push\": \"Left\"},\n  {\"box\": [4, 3], \"push\": \"Left\"},\n  {\"box\": [4, 2], \"push\": \"Up\"},\n  {\"box\": [3, 2], \"push\": \"Up\"},\n  {\"box\": [2, 2], \"push\": \"Left\"},\n  {\"box\": [2, 1], \"push\": \"Down\"},\n  {\"box\": [3, 1], \"push\": \"Down\"}\n]",
+      "prompt_hash": "d068fafaf9c464ad54939ae641c4241a65d4a24311d8d813daeaca6cdf1b3346",
+      "prompt_char_count": 2138,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "d595ee05fe3b07ffd1ef7002e2e180be03030f42bb055c719c05ae2b6a215576",
+      "model": "gpt-5-mini",
+      "temperature": 0.0,
+      "max_output_tokens": 512,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_mini_train_check",
+      "cache_hit": false,
+      "cache_key": "35a8314df059967f7cb3a1483daaf155ad3ca4f9b4eb0b83cc525b83d9646de1",
+      "usage": {
+        "input_tokens": 559,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 276,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 835
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": true,
+        "deadlock_reason": "box_at_non_target_corner:5,5",
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "push",
+        "planned_push": {
+          "push": "Right",
+          "box": [
+            5,
+            4
+          ]
+        }
+      }
+    }
+  ],
+  "policy_mode": "full_path",
+  "model": "gpt-5-mini",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_v2_gpt5_mini_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [5, 4], \"push\": \"Right\"},\n  {\"box\": [5, 5], \"push\": \"Right\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [2, 7], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Left\"},\n  {\"box\": [2, 4], \"push\": \"Down\"},\n  {\"box\": [3, 4], \"push\": \"Down\"},\n  {\"box\": [4, 4], \"push\": \"Left\"},\n  {\"box\": [4, 3], \"push\": \"Left\"},\n  {\"box\": [4, 2], \"push\": \"Up\"},\n  {\"box\": [3, 2], \"push\": \"Up\"},\n  {\"box\": [2, 2], \"push\": \"Left\"},\n  {\"box\": [2, 1], \"push\": \"Down\"},\n  {\"box\": [3, 1], \"push\": \"Down\"}\n]",
+    "status": "deadlock",
+    "planned_pushes": [
+      {
+        "push": "Right",
+        "box": [
+          5,
+          4
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          5,
+          5
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          5,
+          6
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          4,
+          6
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          2,
+          7
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          2,
+          6
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          2,
+          5
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          2,
+          4
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          3,
+          4
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          4,
+          4
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          4,
+          3
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          4,
+          2
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          3,
+          2
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          2,
+          2
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          2,
+          1
+        ]
+      },
+      {
+        "push": "Down",
+        "box": [
+          3,
+          1
+        ]
+      }
+    ],
+    "expanded_actions": [
+      "Right"
+    ],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Right",
+          "box": [
+            5,
+            4
+          ]
+        },
+        "player_before": {
+          "row": 5,
+          "col": 3
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 3
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            3
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 5,
+          "col": 4
+        },
+        "resolved_box_id": 2,
+        "required_player_position": {
+          "row": 5,
+          "col": 3
+        },
+        "box_destination": {
+          "row": 5,
+          "col": 5
+        },
+        "path_to_push": [],
+        "result": "deadlock",
+        "player_after": {
+          "row": 5,
+          "col": 4
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 3
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 5
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_after": {
+          "B0": [
+            2,
+            3
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            5
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        }
+      }
+    ],
+    "executed_push_count": 1,
+    "planned_push_count": 16,
+    "expanded_primitive_step_count": 1,
+    "final_board": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##. @$####\n#  $ #####\n#.  ######\n#   ######\n##########",
+    "deadlock_reason": "box_at_non_target_corner:5,5",
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box\": [5, 4], \"push\": \"Right\"},\n  {\"box\": [5, 5], \"push\": \"Right\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [2, 7], \"push\": \"Left\"},\n  {\"box\": [2, 6], \"push\": \"Left\"},\n  {\"box\": [2, 5], \"push\": \"Left\"},\n  {\"box\": [2, 4], \"push\": \"Down\"},\n  {\"box\": [3, 4], \"push\": \"Down\"},\n  {\"box\": [4, 4], \"push\": \"Left\"},\n  {\"box\": [4, 3], \"push\": \"Left\"},\n  {\"box\": [4, 2], \"push\": \"Up\"},\n  {\"box\": [3, 2], \"push\": \"Up\"},\n  {\"box\": [2, 2], \"push\": \"Left\"},\n  {\"box\": [2, 1], \"push\": \"Down\"},\n  {\"box\": [3, 1], \"push\": \"Down\"}\n]",
+        "status": "deadlock",
+        "planned_pushes": [
+          {
+            "push": "Right",
+            "box": [
+              5,
+              4
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              5,
+              5
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              5,
+              6
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              4,
+              6
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              2,
+              7
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              2,
+              6
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              2,
+              5
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              2,
+              4
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              3,
+              4
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              4,
+              4
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              4,
+              3
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              4,
+              2
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              3,
+              2
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              2,
+              2
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              2,
+              1
+            ]
+          },
+          {
+            "push": "Down",
+            "box": [
+              3,
+              1
+            ]
+          }
+        ],
+        "expanded_actions": [
+          "Right"
+        ],
+        "push_execution_log": [
+          {
+            "push_index": 0,
+            "intent": {
+              "push": "Right",
+              "box": [
+                5,
+                4
+              ]
+            },
+            "player_before": {
+              "row": 5,
+              "col": 3
+            },
+            "boxes_before": [
+              {
+                "row": 2,
+                "col": 3
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                2,
+                3
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            },
+            "resolved_box": {
+              "row": 5,
+              "col": 4
+            },
+            "resolved_box_id": 2,
+            "required_player_position": {
+              "row": 5,
+              "col": 3
+            },
+            "box_destination": {
+              "row": 5,
+              "col": 5
+            },
+            "path_to_push": [],
+            "result": "deadlock",
+            "player_after": {
+              "row": 5,
+              "col": 4
+            },
+            "boxes_after": [
+              {
+                "row": 2,
+                "col": 3
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 5
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_after": {
+              "B0": [
+                2,
+                3
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                5
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            }
+          }
+        ],
+        "executed_push_count": 1,
+        "planned_push_count": 16,
+        "expanded_primitive_step_count": 1,
+        "final_board": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##. @$####\n#  $ #####\n#.  ######\n#   ######\n##########",
+        "deadlock_reason": "box_at_non_target_corner:5,5"
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "deadlock"
+  }
+}

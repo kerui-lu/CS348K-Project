@@ -1,0 +1,68 @@
+{
+  "level_id": "boxoban_medium_train_000_001",
+  "agent_type": "no_memory",
+  "seed": 49,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5.2",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 4096,
+  "cache_namespace": "full_path_v2_gpt5_2_low_4096_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "",
+    "status": "invalid_plan",
+    "failure_reason": "invalid_push_plan_parse",
+    "error_type": "PushPlanParseError",
+    "error_message": "plan is not valid JSON: Expecting value",
+    "planned_pushes": [],
+    "executed_push_count": 0,
+    "planned_push_count": 0,
+    "expanded_primitive_step_count": 0,
+    "expanded_actions": [],
+    "push_execution_log": [],
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "",
+        "status": "invalid_plan",
+        "failure_reason": "invalid_push_plan_parse",
+        "error_type": "PushPlanParseError",
+        "error_message": "plan is not valid JSON: Expecting value",
+        "planned_pushes": [],
+        "executed_push_count": 0,
+        "planned_push_count": 0,
+        "expanded_primitive_step_count": 0,
+        "expanded_actions": [],
+        "push_execution_log": []
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "invalid_plan",
+    "first_attempt_failure_reason": "invalid_push_plan_parse"
+  }
+}

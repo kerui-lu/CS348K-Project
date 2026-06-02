@@ -1,0 +1,38 @@
+{
+  "level_id": "simple_001",
+  "agent_type": "rule_based",
+  "seed": 46,
+  "status": "success",
+  "step_count": 1,
+  "invalid_move_count": 0,
+  "total_reward": 10.9,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "#######\n#     #\n# @$. #\n#     #\n#     #\n#     #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#  @* #\n#     #\n#     #\n#     #\n#######",
+      "reward": 10.9,
+      "done": true,
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": true,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null
+      }
+    }
+  ]
+}

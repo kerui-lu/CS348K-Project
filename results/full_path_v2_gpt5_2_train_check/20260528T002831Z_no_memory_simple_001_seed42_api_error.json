@@ -1,0 +1,46 @@
+{
+  "level_id": "simple_001",
+  "agent_type": "no_memory",
+  "seed": 42,
+  "status": "api_error",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 0,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5.2",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_v2_gpt5_2_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "easy_simple_push"
+  ],
+  "optimal_steps": 1,
+  "cache_hits": 0,
+  "cache_misses": 0,
+  "budget_exhausted": false,
+  "metadata": {
+    "failure_reason": "api_error",
+    "error_type": "BadRequestError",
+    "error_message": "Error code: 400 - {'error': {'message': \"Unsupported value: 'minimal' is not supported with the 'gpt-5.2' model. Supported values are: 'none', 'low', 'medium', 'high', and 'xhigh'.\", 'type': 'invalid_request_error', 'param': 'reasoning.effort', 'code': 'unsupported_value'}}",
+    "error_at_attempt": 0,
+    "planned_pushes": [],
+    "expanded_actions": [],
+    "push_execution_log": [],
+    "repair_attempts": [],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false
+  }
+}

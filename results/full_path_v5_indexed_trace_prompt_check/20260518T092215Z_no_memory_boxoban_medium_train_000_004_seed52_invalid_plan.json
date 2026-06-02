@@ -1,0 +1,117 @@
+{
+  "level_id": "boxoban_medium_train_000_004",
+  "agent_type": "no_memory",
+  "seed": 52,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v5",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 4096,
+  "cache_namespace": "full_path_v5_indexed_trace_prompt_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box_id\": 0, \"push\": \"Down\", \"player_after\": [3, 3], \"box_after\": [3, 3]},\n  {\"box_id\": 0, \"push\": \"Down\", \"player_after\": [4, 3], \"box_after\": [4, 3]},\n  {\"box_id\": 0, \"push\": \"Right\", \"player_after\": [4, 4], \"box_after\": [4, 4]},\n  {\"box_id\": 0, \"push\": \"Right\", \"player_after\": [4, 5], \"box_after\": [4, 5]}\n]",
+    "planned_pushes": [
+      {
+        "push": "Down",
+        "box_id": 0
+      },
+      {
+        "push": "Down",
+        "box_id": 0
+      },
+      {
+        "push": "Right",
+        "box_id": 0
+      },
+      {
+        "push": "Right",
+        "box_id": 0
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Down",
+          "box_id": 0
+        },
+        "player_before": {
+          "row": 5,
+          "col": 3
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 3
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            3
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 2,
+          "col": 3
+        },
+        "resolved_box_id": 0,
+        "result": "invalid_plan",
+        "failure_reason": "box_destination_blocked_by_wall_or_boundary"
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 4,
+    "expanded_primitive_step_count": 0,
+    "failure_reason": "box_destination_blocked_by_wall_or_boundary",
+    "failure_push_index": 0
+  }
+}

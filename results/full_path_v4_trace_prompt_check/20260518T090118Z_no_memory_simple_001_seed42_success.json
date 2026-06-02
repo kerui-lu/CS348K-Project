@@ -1,0 +1,165 @@
+{
+  "level_id": "simple_001",
+  "agent_type": "no_memory",
+  "seed": 42,
+  "status": "success",
+  "step_count": 1,
+  "invalid_move_count": 0,
+  "total_reward": 10.9,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "#######\n#     #\n# @$. #\n#     #\n#     #\n#     #\n#######",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "#######\n#     #\n#  @* #\n#     #\n#     #\n#     #\n#######",
+      "reward": 10.9,
+      "done": true,
+      "response_text": "[\n  {\"box\": [2, 3], \"push\": \"Right\", \"stand\": [2, 2], \"after\": {\"player\": [2, 3], \"boxes\": [[2, 4]]}},\n  {\"box\": [2, 4], \"push\": \"Right\", \"stand\": [2, 3], \"after\": {\"player\": [2, 4], \"boxes\": [[2, 5]]}},\n  {\"box\": [2, 5], \"push\": \"Left\", \"stand\": [2, 6], \"after\": {\"player\": [2, 5], \"boxes\": [[2, 4]]}}\n]",
+      "prompt_hash": "9453d6fd1623ec6994b251c2515e107bde2b14bea141da8a243d98fb6508b717",
+      "prompt_char_count": 2690,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "5f5d0a7dab6907f56f49abb2a788e89c891bf7f09c5f3ab53e5c1d70f5aa0c0a",
+      "model": "gpt-5-nano",
+      "temperature": 0.0,
+      "max_output_tokens": 1024,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v4_trace_prompt_check",
+      "cache_hit": false,
+      "cache_key": "2d3a7899adbe9d6b984704321dc4c0fd68fb619384cb40cbdd8ee517e609ef3c",
+      "usage": {
+        "input_tokens": 728,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 161,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 889
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": true,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "push",
+        "planned_push": {
+          "box": [
+            2,
+            3
+          ],
+          "push": "Right"
+        }
+      }
+    }
+  ],
+  "policy_mode": "full_path",
+  "model": "gpt-5-nano",
+  "prompt_version": "full_path_v4",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 1024,
+  "cache_namespace": "full_path_v4_trace_prompt_check",
+  "level_split": "train",
+  "level_tags": [
+    "easy_simple_push"
+  ],
+  "optimal_steps": 1,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [2, 3], \"push\": \"Right\", \"stand\": [2, 2], \"after\": {\"player\": [2, 3], \"boxes\": [[2, 4]]}},\n  {\"box\": [2, 4], \"push\": \"Right\", \"stand\": [2, 3], \"after\": {\"player\": [2, 4], \"boxes\": [[2, 5]]}},\n  {\"box\": [2, 5], \"push\": \"Left\", \"stand\": [2, 6], \"after\": {\"player\": [2, 5], \"boxes\": [[2, 4]]}}\n]",
+    "planned_pushes": [
+      {
+        "box": [
+          2,
+          3
+        ],
+        "push": "Right"
+      },
+      {
+        "box": [
+          2,
+          4
+        ],
+        "push": "Right"
+      },
+      {
+        "box": [
+          2,
+          5
+        ],
+        "push": "Left"
+      }
+    ],
+    "expanded_actions": [
+      "Right"
+    ],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "box": [
+            2,
+            3
+          ],
+          "push": "Right"
+        },
+        "player_before": {
+          "row": 2,
+          "col": 2
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 3
+          }
+        ],
+        "required_player_position": {
+          "row": 2,
+          "col": 2
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 4
+        },
+        "path_to_push": [],
+        "result": "success",
+        "player_after": {
+          "row": 2,
+          "col": 3
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 4
+          }
+        ]
+      }
+    ],
+    "executed_push_count": 1,
+    "planned_push_count": 3,
+    "expanded_primitive_step_count": 1
+  }
+}

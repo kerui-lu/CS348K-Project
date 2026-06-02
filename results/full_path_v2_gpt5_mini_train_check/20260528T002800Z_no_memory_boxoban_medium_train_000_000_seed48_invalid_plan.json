@@ -1,0 +1,424 @@
+{
+  "level_id": "boxoban_medium_train_000_000",
+  "agent_type": "no_memory",
+  "seed": 48,
+  "status": "invalid_plan",
+  "step_count": 0,
+  "invalid_move_count": 0,
+  "total_reward": 0.0,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [],
+  "policy_mode": "full_path",
+  "model": "gpt-5-mini",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 512,
+  "cache_namespace": "full_path_v2_gpt5_mini_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box\": [7, 7], \"push\": \"Right\"},\n  {\"box\": [7, 8], \"push\": \"Up\"},\n  {\"box\": [6, 8], \"push\": \"Up\"},\n  {\"box\": [5, 8], \"push\": \"Left\"},\n  {\"box\": [5, 7], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [5, 5], \"push\": \"Left\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [5, 3], \"push\": \"Up\"},\n  {\"box\": [4, 3], \"push\": \"Right\"},\n  {\"box\": [4, 4], \"push\": \"Up\"},\n  {\"box\": [3, 4], \"push\": \"Right\"},\n  {\"box\": [3, 5], \"push\": \"Right\"},\n  {\"box\": [3, 6], \"push\": \"Right\"},\n  {\"box\": [3, 7], \"push\": \"Right\"}\n]",
+    "status": "invalid_plan",
+    "planned_pushes": [
+      {
+        "push": "Right",
+        "box": [
+          7,
+          7
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          7,
+          8
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          6,
+          8
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          5,
+          8
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          5,
+          7
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          5,
+          6
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          4,
+          6
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          5,
+          5
+        ]
+      },
+      {
+        "push": "Left",
+        "box": [
+          5,
+          4
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          5,
+          3
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          4,
+          3
+        ]
+      },
+      {
+        "push": "Up",
+        "box": [
+          4,
+          4
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          3,
+          4
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          3,
+          5
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          3,
+          6
+        ]
+      },
+      {
+        "push": "Right",
+        "box": [
+          3,
+          7
+        ]
+      }
+    ],
+    "expanded_actions": [],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Right",
+          "box": [
+            7,
+            7
+          ]
+        },
+        "player_before": {
+          "row": 8,
+          "col": 4
+        },
+        "boxes_before": [
+          {
+            "row": 5,
+            "col": 5
+          },
+          {
+            "row": 5,
+            "col": 7
+          },
+          {
+            "row": 7,
+            "col": 6
+          },
+          {
+            "row": 7,
+            "col": 7
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            5,
+            5
+          ],
+          "B1": [
+            5,
+            7
+          ],
+          "B2": [
+            7,
+            6
+          ],
+          "B3": [
+            7,
+            7
+          ]
+        },
+        "resolved_box": {
+          "row": 7,
+          "col": 7
+        },
+        "resolved_box_id": 3,
+        "required_player_position": {
+          "row": 7,
+          "col": 6
+        },
+        "box_destination": {
+          "row": 7,
+          "col": 8
+        },
+        "result": "invalid_plan",
+        "failure_reason": "required_push_position_blocked_by_box"
+      }
+    ],
+    "executed_push_count": 0,
+    "planned_push_count": 16,
+    "expanded_primitive_step_count": 0,
+    "failure_reason": "required_push_position_blocked_by_box",
+    "failure_push_index": 0,
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box\": [7, 7], \"push\": \"Right\"},\n  {\"box\": [7, 8], \"push\": \"Up\"},\n  {\"box\": [6, 8], \"push\": \"Up\"},\n  {\"box\": [5, 8], \"push\": \"Left\"},\n  {\"box\": [5, 7], \"push\": \"Left\"},\n  {\"box\": [5, 6], \"push\": \"Up\"},\n  {\"box\": [4, 6], \"push\": \"Up\"},\n  {\"box\": [5, 5], \"push\": \"Left\"},\n  {\"box\": [5, 4], \"push\": \"Left\"},\n  {\"box\": [5, 3], \"push\": \"Up\"},\n  {\"box\": [4, 3], \"push\": \"Right\"},\n  {\"box\": [4, 4], \"push\": \"Up\"},\n  {\"box\": [3, 4], \"push\": \"Right\"},\n  {\"box\": [3, 5], \"push\": \"Right\"},\n  {\"box\": [3, 6], \"push\": \"Right\"},\n  {\"box\": [3, 7], \"push\": \"Right\"}\n]",
+        "status": "invalid_plan",
+        "planned_pushes": [
+          {
+            "push": "Right",
+            "box": [
+              7,
+              7
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              7,
+              8
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              6,
+              8
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              5,
+              8
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              5,
+              7
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              5,
+              6
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              4,
+              6
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              5,
+              5
+            ]
+          },
+          {
+            "push": "Left",
+            "box": [
+              5,
+              4
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              5,
+              3
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              4,
+              3
+            ]
+          },
+          {
+            "push": "Up",
+            "box": [
+              4,
+              4
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              3,
+              4
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              3,
+              5
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              3,
+              6
+            ]
+          },
+          {
+            "push": "Right",
+            "box": [
+              3,
+              7
+            ]
+          }
+        ],
+        "expanded_actions": [],
+        "push_execution_log": [
+          {
+            "push_index": 0,
+            "intent": {
+              "push": "Right",
+              "box": [
+                7,
+                7
+              ]
+            },
+            "player_before": {
+              "row": 8,
+              "col": 4
+            },
+            "boxes_before": [
+              {
+                "row": 5,
+                "col": 5
+              },
+              {
+                "row": 5,
+                "col": 7
+              },
+              {
+                "row": 7,
+                "col": 6
+              },
+              {
+                "row": 7,
+                "col": 7
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                5,
+                5
+              ],
+              "B1": [
+                5,
+                7
+              ],
+              "B2": [
+                7,
+                6
+              ],
+              "B3": [
+                7,
+                7
+              ]
+            },
+            "resolved_box": {
+              "row": 7,
+              "col": 7
+            },
+            "resolved_box_id": 3,
+            "required_player_position": {
+              "row": 7,
+              "col": 6
+            },
+            "box_destination": {
+              "row": 7,
+              "col": 8
+            },
+            "result": "invalid_plan",
+            "failure_reason": "required_push_position_blocked_by_box"
+          }
+        ],
+        "executed_push_count": 0,
+        "planned_push_count": 16,
+        "expanded_primitive_step_count": 0,
+        "failure_reason": "required_push_position_blocked_by_box",
+        "failure_push_index": 0
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "invalid_plan",
+    "first_attempt_failure_reason": "required_push_position_blocked_by_box"
+  }
+}

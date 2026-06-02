@@ -1,0 +1,2359 @@
+{
+  "level_id": "boxoban_medium_train_000_004",
+  "agent_type": "no_memory",
+  "seed": 52,
+  "status": "deadlock",
+  "step_count": 25,
+  "invalid_move_count": 0,
+  "total_reward": -6.5,
+  "llm_call_count": 1,
+  "token_cost": 0.0,
+  "trajectory": [
+    {
+      "step": 0,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .  #\n##.@$ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###@  .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 1,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###@  .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n### @ .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 2,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n### @ .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 3,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###  @.  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 4,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   +  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 5,
+      "state": "##########\n##       #\n## $ . $ #\n#######  #\n###   .@ #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "##########\n##       #\n## $ . $ #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 6,
+      "state": "##########\n##       #\n## $ . $ #\n#######@ #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## $ . $ #\n####### @#\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 7,
+      "state": "##########\n##       #\n## $ . $ #\n####### @#\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "##########\n##       #\n## $ . $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 8,
+      "state": "##########\n##       #\n## $ . $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "##########\n##      @#\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 9,
+      "state": "##########\n##      @#\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##     @ #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 10,
+      "state": "##########\n##     @ #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##    @  #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 11,
+      "state": "##########\n##    @  #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##   @   #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 12,
+      "state": "##########\n##   @   #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##  @    #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 13,
+      "state": "##########\n##  @    #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n## @     #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 14,
+      "state": "##########\n## @     #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##@      #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 15,
+      "state": "##########\n##@      #\n## $ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "##########\n##       #\n##@$ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 16,
+      "state": "##########\n##       #\n##@$ . $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n## @$. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 0,
+        "semantic_phase": "push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 17,
+      "state": "##########\n##       #\n## @$. $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##       #\n##  @* $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": 0.9,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 1,
+        "semantic_phase": "push",
+        "planned_push": {
+          "push": "Right",
+          "box_id": 0
+        }
+      }
+    },
+    {
+      "step": 18,
+      "state": "##########\n##       #\n##  @* $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Up",
+      "parsed_action": "Up",
+      "executed_action": "Up",
+      "next_state": "##########\n##  @    #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 19,
+      "state": "##########\n##  @    #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##   @   #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 20,
+      "state": "##########\n##   @   #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##    @  #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 21,
+      "state": "##########\n##    @  #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##     @ #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 22,
+      "state": "##########\n##     @ #\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Right",
+      "parsed_action": "Right",
+      "executed_action": "Right",
+      "next_state": "##########\n##      @#\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 23,
+      "state": "##########\n##      @#\n##   * $ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Down",
+      "parsed_action": "Down",
+      "executed_action": "Down",
+      "next_state": "##########\n##       #\n##   * $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -0.1,
+      "done": false,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": false,
+        "hit": null,
+        "solved": false,
+        "deadlocked": false,
+        "deadlock_reason": null,
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Left"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "walk_to_push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    },
+    {
+      "step": 24,
+      "state": "##########\n##       #\n##   * $@#\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "raw_action": "Left",
+      "parsed_action": "Left",
+      "executed_action": "Left",
+      "next_state": "##########\n##       #\n##   *$@ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+      "reward": -5.1,
+      "done": true,
+      "response_text": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+      "prompt_hash": "0c20d75e3627bea3393115ec9bb33604369a313377c31d6ec4565f923d1db109",
+      "prompt_char_count": 3654,
+      "memory_char_count": 51,
+      "non_memory_template_hash": "6378f3d55d12a29d05ace255be981a028b767723391cd04f21bff36ca7051df5",
+      "model": "gpt-5.2",
+      "temperature": 0.0,
+      "max_output_tokens": 4096,
+      "memory_hash": null,
+      "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+      "cache_hit": false,
+      "cache_key": "097c430fd21511b878ee3d72f83b7f3abb75e9e0556f9eafb76696d98e0689f8",
+      "usage": {
+        "input_tokens": 1148,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1266
+      },
+      "info": {
+        "moved": true,
+        "pushed_box": true,
+        "hit": null,
+        "solved": false,
+        "deadlocked": true,
+        "deadlock_reason": "box_in_2x2_freeze:2,6",
+        "legal_actions_after": [
+          "Up",
+          "Down",
+          "Right"
+        ],
+        "invalid_reason": null,
+        "push_index": 2,
+        "semantic_phase": "push",
+        "planned_push": {
+          "push": "Left",
+          "box_id": 1
+        }
+      }
+    }
+  ],
+  "policy_mode": "full_path",
+  "model": "gpt-5.2",
+  "prompt_version": "full_path_v2",
+  "memory_path": null,
+  "memory_hash": null,
+  "memory_caps": {
+    "max_memory_items": 3,
+    "max_steps_per_memory": 6,
+    "max_memory_chars": 4000
+  },
+  "temperature": 0.0,
+  "max_output_tokens": 4096,
+  "cache_namespace": "full_path_v2_gpt5_2_none_4096_train_check",
+  "level_split": "train",
+  "level_tags": [
+    "boxoban_medium",
+    "multi_box"
+  ],
+  "optimal_steps": null,
+  "cache_hits": 0,
+  "cache_misses": 1,
+  "budget_exhausted": false,
+  "metadata": {
+    "raw_plan_response": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+    "status": "deadlock",
+    "planned_pushes": [
+      {
+        "push": "Right",
+        "box_id": 0
+      },
+      {
+        "push": "Right",
+        "box_id": 0
+      },
+      {
+        "push": "Left",
+        "box_id": 1
+      },
+      {
+        "push": "Down",
+        "box_id": 3
+      },
+      {
+        "push": "Left",
+        "box_id": 3
+      },
+      {
+        "push": "Left",
+        "box_id": 3
+      },
+      {
+        "push": "Left",
+        "box_id": 2
+      },
+      {
+        "push": "Left",
+        "box_id": 2
+      }
+    ],
+    "expanded_actions": [
+      "Up",
+      "Right",
+      "Right",
+      "Right",
+      "Right",
+      "Up",
+      "Right",
+      "Up",
+      "Up",
+      "Left",
+      "Left",
+      "Left",
+      "Left",
+      "Left",
+      "Left",
+      "Down",
+      "Right",
+      "Right",
+      "Up",
+      "Right",
+      "Right",
+      "Right",
+      "Right",
+      "Down",
+      "Left"
+    ],
+    "push_execution_log": [
+      {
+        "push_index": 0,
+        "intent": {
+          "push": "Right",
+          "box_id": 0
+        },
+        "player_before": {
+          "row": 5,
+          "col": 3
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 3
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            3
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 2,
+          "col": 3
+        },
+        "resolved_box_id": 0,
+        "required_player_position": {
+          "row": 2,
+          "col": 2
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 4
+        },
+        "path_to_push": [
+          "Up",
+          "Right",
+          "Right",
+          "Right",
+          "Right",
+          "Up",
+          "Right",
+          "Up",
+          "Up",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Down"
+        ],
+        "result": "executed",
+        "player_after": {
+          "row": 2,
+          "col": 3
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 4
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_after": {
+          "B0": [
+            2,
+            4
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        }
+      },
+      {
+        "push_index": 1,
+        "intent": {
+          "push": "Right",
+          "box_id": 0
+        },
+        "player_before": {
+          "row": 2,
+          "col": 3
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 4
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            4
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 2,
+          "col": 4
+        },
+        "resolved_box_id": 0,
+        "required_player_position": {
+          "row": 2,
+          "col": 3
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 5
+        },
+        "path_to_push": [],
+        "result": "executed",
+        "player_after": {
+          "row": 2,
+          "col": 4
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 5
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_after": {
+          "B0": [
+            2,
+            5
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        }
+      },
+      {
+        "push_index": 2,
+        "intent": {
+          "push": "Left",
+          "box_id": 1
+        },
+        "player_before": {
+          "row": 2,
+          "col": 4
+        },
+        "boxes_before": [
+          {
+            "row": 2,
+            "col": 5
+          },
+          {
+            "row": 2,
+            "col": 7
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_before": {
+          "B0": [
+            2,
+            5
+          ],
+          "B1": [
+            2,
+            7
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        },
+        "resolved_box": {
+          "row": 2,
+          "col": 7
+        },
+        "resolved_box_id": 1,
+        "required_player_position": {
+          "row": 2,
+          "col": 8
+        },
+        "box_destination": {
+          "row": 2,
+          "col": 6
+        },
+        "path_to_push": [
+          "Up",
+          "Right",
+          "Right",
+          "Right",
+          "Right",
+          "Down"
+        ],
+        "result": "deadlock",
+        "player_after": {
+          "row": 2,
+          "col": 7
+        },
+        "boxes_after": [
+          {
+            "row": 2,
+            "col": 5
+          },
+          {
+            "row": 2,
+            "col": 6
+          },
+          {
+            "row": 5,
+            "col": 4
+          },
+          {
+            "row": 6,
+            "col": 3
+          }
+        ],
+        "box_positions_by_id_after": {
+          "B0": [
+            2,
+            5
+          ],
+          "B1": [
+            2,
+            6
+          ],
+          "B2": [
+            5,
+            4
+          ],
+          "B3": [
+            6,
+            3
+          ]
+        }
+      }
+    ],
+    "executed_push_count": 3,
+    "planned_push_count": 8,
+    "expanded_primitive_step_count": 25,
+    "final_board": "##########\n##       #\n##   *$@ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+    "deadlock_reason": "box_in_2x2_freeze:2,6",
+    "repair_alternative_pushes": [
+      {
+        "box_id": 2,
+        "box": [
+          5,
+          4
+        ],
+        "push": "Down",
+        "required_player": [
+          4,
+          4
+        ],
+        "destination": [
+          6,
+          4
+        ]
+      },
+      {
+        "box_id": 2,
+        "box": [
+          5,
+          4
+        ],
+        "push": "Left",
+        "required_player": [
+          5,
+          5
+        ],
+        "destination": [
+          5,
+          3
+        ]
+      },
+      {
+        "box_id": 2,
+        "box": [
+          5,
+          4
+        ],
+        "push": "Right",
+        "required_player": [
+          5,
+          3
+        ],
+        "destination": [
+          5,
+          5
+        ]
+      },
+      {
+        "box_id": 3,
+        "box": [
+          6,
+          3
+        ],
+        "push": "Up",
+        "required_player": [
+          7,
+          3
+        ],
+        "destination": [
+          5,
+          3
+        ]
+      },
+      {
+        "box_id": 3,
+        "box": [
+          6,
+          3
+        ],
+        "push": "Down",
+        "required_player": [
+          5,
+          3
+        ],
+        "destination": [
+          7,
+          3
+        ]
+      },
+      {
+        "box_id": 3,
+        "box": [
+          6,
+          3
+        ],
+        "push": "Right",
+        "required_player": [
+          6,
+          2
+        ],
+        "destination": [
+          6,
+          4
+        ]
+      }
+    ],
+    "repair_attempts": [
+      {
+        "attempt_index": 0,
+        "raw_plan_response": "[\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 0, \"push\": \"Right\"},\n  {\"box_id\": 1, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Down\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 3, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"},\n  {\"box_id\": 2, \"push\": \"Left\"}\n]",
+        "status": "deadlock",
+        "planned_pushes": [
+          {
+            "push": "Right",
+            "box_id": 0
+          },
+          {
+            "push": "Right",
+            "box_id": 0
+          },
+          {
+            "push": "Left",
+            "box_id": 1
+          },
+          {
+            "push": "Down",
+            "box_id": 3
+          },
+          {
+            "push": "Left",
+            "box_id": 3
+          },
+          {
+            "push": "Left",
+            "box_id": 3
+          },
+          {
+            "push": "Left",
+            "box_id": 2
+          },
+          {
+            "push": "Left",
+            "box_id": 2
+          }
+        ],
+        "expanded_actions": [
+          "Up",
+          "Right",
+          "Right",
+          "Right",
+          "Right",
+          "Up",
+          "Right",
+          "Up",
+          "Up",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Left",
+          "Down",
+          "Right",
+          "Right",
+          "Up",
+          "Right",
+          "Right",
+          "Right",
+          "Right",
+          "Down",
+          "Left"
+        ],
+        "push_execution_log": [
+          {
+            "push_index": 0,
+            "intent": {
+              "push": "Right",
+              "box_id": 0
+            },
+            "player_before": {
+              "row": 5,
+              "col": 3
+            },
+            "boxes_before": [
+              {
+                "row": 2,
+                "col": 3
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                2,
+                3
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            },
+            "resolved_box": {
+              "row": 2,
+              "col": 3
+            },
+            "resolved_box_id": 0,
+            "required_player_position": {
+              "row": 2,
+              "col": 2
+            },
+            "box_destination": {
+              "row": 2,
+              "col": 4
+            },
+            "path_to_push": [
+              "Up",
+              "Right",
+              "Right",
+              "Right",
+              "Right",
+              "Up",
+              "Right",
+              "Up",
+              "Up",
+              "Left",
+              "Left",
+              "Left",
+              "Left",
+              "Left",
+              "Left",
+              "Down"
+            ],
+            "result": "executed",
+            "player_after": {
+              "row": 2,
+              "col": 3
+            },
+            "boxes_after": [
+              {
+                "row": 2,
+                "col": 4
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_after": {
+              "B0": [
+                2,
+                4
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            }
+          },
+          {
+            "push_index": 1,
+            "intent": {
+              "push": "Right",
+              "box_id": 0
+            },
+            "player_before": {
+              "row": 2,
+              "col": 3
+            },
+            "boxes_before": [
+              {
+                "row": 2,
+                "col": 4
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                2,
+                4
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            },
+            "resolved_box": {
+              "row": 2,
+              "col": 4
+            },
+            "resolved_box_id": 0,
+            "required_player_position": {
+              "row": 2,
+              "col": 3
+            },
+            "box_destination": {
+              "row": 2,
+              "col": 5
+            },
+            "path_to_push": [],
+            "result": "executed",
+            "player_after": {
+              "row": 2,
+              "col": 4
+            },
+            "boxes_after": [
+              {
+                "row": 2,
+                "col": 5
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_after": {
+              "B0": [
+                2,
+                5
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            }
+          },
+          {
+            "push_index": 2,
+            "intent": {
+              "push": "Left",
+              "box_id": 1
+            },
+            "player_before": {
+              "row": 2,
+              "col": 4
+            },
+            "boxes_before": [
+              {
+                "row": 2,
+                "col": 5
+              },
+              {
+                "row": 2,
+                "col": 7
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_before": {
+              "B0": [
+                2,
+                5
+              ],
+              "B1": [
+                2,
+                7
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            },
+            "resolved_box": {
+              "row": 2,
+              "col": 7
+            },
+            "resolved_box_id": 1,
+            "required_player_position": {
+              "row": 2,
+              "col": 8
+            },
+            "box_destination": {
+              "row": 2,
+              "col": 6
+            },
+            "path_to_push": [
+              "Up",
+              "Right",
+              "Right",
+              "Right",
+              "Right",
+              "Down"
+            ],
+            "result": "deadlock",
+            "player_after": {
+              "row": 2,
+              "col": 7
+            },
+            "boxes_after": [
+              {
+                "row": 2,
+                "col": 5
+              },
+              {
+                "row": 2,
+                "col": 6
+              },
+              {
+                "row": 5,
+                "col": 4
+              },
+              {
+                "row": 6,
+                "col": 3
+              }
+            ],
+            "box_positions_by_id_after": {
+              "B0": [
+                2,
+                5
+              ],
+              "B1": [
+                2,
+                6
+              ],
+              "B2": [
+                5,
+                4
+              ],
+              "B3": [
+                6,
+                3
+              ]
+            }
+          }
+        ],
+        "executed_push_count": 3,
+        "planned_push_count": 8,
+        "expanded_primitive_step_count": 25,
+        "final_board": "##########\n##       #\n##   *$@ #\n#######  #\n###   .  #\n##. $ ####\n#  $ #####\n#.  ######\n#   ######\n##########",
+        "deadlock_reason": "box_in_2x2_freeze:2,6",
+        "repair_alternative_pushes": [
+          {
+            "box_id": 2,
+            "box": [
+              5,
+              4
+            ],
+            "push": "Down",
+            "required_player": [
+              4,
+              4
+            ],
+            "destination": [
+              6,
+              4
+            ]
+          },
+          {
+            "box_id": 2,
+            "box": [
+              5,
+              4
+            ],
+            "push": "Left",
+            "required_player": [
+              5,
+              5
+            ],
+            "destination": [
+              5,
+              3
+            ]
+          },
+          {
+            "box_id": 2,
+            "box": [
+              5,
+              4
+            ],
+            "push": "Right",
+            "required_player": [
+              5,
+              3
+            ],
+            "destination": [
+              5,
+              5
+            ]
+          },
+          {
+            "box_id": 3,
+            "box": [
+              6,
+              3
+            ],
+            "push": "Up",
+            "required_player": [
+              7,
+              3
+            ],
+            "destination": [
+              5,
+              3
+            ]
+          },
+          {
+            "box_id": 3,
+            "box": [
+              6,
+              3
+            ],
+            "push": "Down",
+            "required_player": [
+              5,
+              3
+            ],
+            "destination": [
+              7,
+              3
+            ]
+          },
+          {
+            "box_id": 3,
+            "box": [
+              6,
+              3
+            ],
+            "push": "Right",
+            "required_player": [
+              6,
+              2
+            ],
+            "destination": [
+              6,
+              4
+            ]
+          }
+        ]
+      }
+    ],
+    "repair_attempt_count": 0,
+    "success_after_repair": false,
+    "success_without_repair": false,
+    "first_attempt_status": "deadlock"
+  }
+}
