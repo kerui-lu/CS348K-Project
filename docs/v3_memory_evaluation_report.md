@@ -32,11 +32,13 @@ Because invalid plans are still common, same-level raw/heuristic retry and train
 
 The final benchmark uses Boxoban-based levels only.
 
-| Suite | Use | Contents |
-| --- | --- | --- |
-| `levels/v2_pilot.json` | Debugging and prompt sanity checks only | mixed hand-written and pilot Boxoban levels |
-| `levels/v3_boxoban_balanced.json` | Main benchmark | 24 train + 24 eval |
-| `levels/v3_boxoban_ood.json` | Optional OOD eval | 16 eval-only levels |
+
+| Suite                             | Use                                     | Contents                                    |
+| --------------------------------- | --------------------------------------- | ------------------------------------------- |
+| `levels/v2_pilot.json`            | Debugging and prompt sanity checks only | mixed hand-written and pilot Boxoban levels |
+| `levels/v3_boxoban_balanced.json` | Main benchmark                          | 24 train + 24 eval                          |
+| `levels/v3_boxoban_ood.json`      | Optional OOD eval                       | 16 eval-only levels                         |
+
 
 The balanced benchmark is stratified by:
 
@@ -46,10 +48,12 @@ The balanced benchmark is stratified by:
 
 Each split contains:
 
+
 | Source family | Open | Middle | Constrained | Total |
-| --- | ---: | ---: | ---: | ---: |
-| `medium` | 4 | 4 | 4 | 12 |
-| `unfiltered` | 4 | 4 | 4 | 12 |
+| ------------- | ---- | ------ | ----------- | ----- |
+| `medium`      | 4    | 4      | 4           | 12    |
+| `unfiltered`  | 4    | 4      | 4           | 12    |
+
 
 ### Memory Conditions
 
@@ -57,24 +61,28 @@ The intended V3 memory evaluation separates same-level adaptation from train-to-
 
 Same-level adaptation conditions:
 
-| Condition | Memory shown on retry |
-| --- | --- |
-| `single_shot_no_memory` | none |
-| `generic_retry_feedback` | only says the previous same-level attempt failed |
-| `verifier_summary_retry` | failed push index, failure subtype, and verifier reason |
-| `raw_same_level_iterative` | compact same-level raw evidence |
-| `heuristic_same_level_iterative` | heuristics generated from same-level failures |
+
+| Condition                        | Memory shown on retry                                   |
+| -------------------------------- | ------------------------------------------------------- |
+| `single_shot_no_memory`          | none                                                    |
+| `generic_retry_feedback`         | only says the previous same-level attempt failed        |
+| `verifier_summary_retry`         | failed push index, failure subtype, and verifier reason |
+| `raw_same_level_iterative`       | compact same-level raw evidence                         |
+| `heuristic_same_level_iterative` | heuristics generated from same-level failures           |
+
 
 Train-to-eval heuristic generalization conditions:
 
-| Condition | Description |
-| --- | --- |
-| `no_memory_eval` | held-out eval without memory |
-| `generic_sokoban_tips_eval` | fixed hand-written tips baseline |
-| `train_one_shot_global_heuristic` | global heuristics from one train attempt per level |
-| `train_iterated_global_heuristic` | global heuristics from iterative train failures |
-| `eval_same_level_heuristic_adapt_only` | eval-only same-level heuristic adaptation |
+
+| Condition                               | Description                                                     |
+| --------------------------------------- | --------------------------------------------------------------- |
+| `no_memory_eval`                        | held-out eval without memory                                    |
+| `generic_sokoban_tips_eval`             | fixed hand-written tips baseline                                |
+| `train_one_shot_global_heuristic`       | global heuristics from one train attempt per level              |
+| `train_iterated_global_heuristic`       | global heuristics from iterative train failures                 |
+| `eval_same_level_heuristic_adapt_only`  | eval-only same-level heuristic adaptation                       |
 | `train_iterated_global_plus_eval_adapt` | train-derived global heuristics plus eval same-level adaptation |
+
 
 Raw trajectory memory is same-level-only. Cross-level prompts may render only `global_allowed` heuristic rules.
 
@@ -396,10 +404,12 @@ Train-to-eval one-shot global heuristic:
 
 The original `8192` token cap was not sufficient for `gpt-5.2` with reasoning effort `low`.
 
-| Token cap | Episodes | Visible output | Status | Notes |
-| ---: | ---: | --- | --- | --- |
-| 8192 | 1 | no | `invalid_plan` | all 8192 output tokens were reasoning tokens |
-| 16384 | 1 | yes | `invalid_plan` | generated 11 planned pushes, executed 3, failed at unreachable standing cell |
+
+| Token cap | Episodes | Visible output | Status         | Notes                                                                        |
+| --------- | -------- | -------------- | -------------- | ---------------------------------------------------------------------------- |
+| 8192      | 1        | no             | `invalid_plan` | all 8192 output tokens were reasoning tokens                                 |
+| 16384     | 1        | yes            | `invalid_plan` | generated 11 planned pushes, executed 3, failed at unreachable standing cell |
+
 
 The 8192 smoke call recorded:
 
@@ -425,47 +435,55 @@ The main Track 0 run therefore used `max_output_tokens = 16384`.
 
 ### Overall Single-Shot Results
 
-| Split | Episodes | Success | Solve rate | Invalid plan | Deadlock | Plan exhausted | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| train | 24 | 8 | 33.3% | 10 | 3 | 3 | 58.3% |
-| eval | 24 | 8 | 33.3% | 13 | 2 | 1 | 51.0% |
-| combined | 48 | 16 | 33.3% | 23 | 5 | 4 | 54.7% |
+
+| Split    | Episodes | Success | Solve rate | Invalid plan | Deadlock | Plan exhausted | Avg. best goal completion |
+| -------- | -------- | ------- | ---------- | ------------ | -------- | -------------- | ------------------------- |
+| train    | 24       | 8       | 33.3%      | 10           | 3        | 3              | 58.3%                     |
+| eval     | 24       | 8       | 33.3%      | 13           | 2        | 1              | 51.0%                     |
+| combined | 48       | 16      | 33.3%      | 23           | 5        | 4              | 54.7%                     |
+
 
 ### Failure Subtypes
 
-| Split | `unreachable_standing_cell` | `deadlock` | `plan_exhausted` |
-| --- | ---: | ---: | ---: |
-| train | 10 | 3 | 3 |
-| eval | 13 | 2 | 1 |
-| combined | 23 | 5 | 4 |
+
+| Split    | `unreachable_standing_cell` | `deadlock` | `plan_exhausted` |
+| -------- | --------------------------- | ---------- | ---------------- |
+| train    | 10                          | 3          | 3                |
+| eval     | 13                          | 2          | 1                |
+| combined | 23                          | 5          | 4                |
+
 
 The dominant invalid-plan failure is `unreachable_standing_cell`: the LLM names a push whose required player standing cell cannot be reached from the current state while treating boxes and walls as blocked.
 
 ### Stratum Breakdown
 
-| Stratum | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| train / medium / constrained | 4 | 0.0% | 75.0% | 0.0% | 25.0% | 37.5% |
-| train / medium / middle | 4 | 0.0% | 50.0% | 0.0% | 50.0% | 25.0% |
-| train / medium / open | 4 | 25.0% | 25.0% | 50.0% | 0.0% | 62.5% |
-| train / unfiltered / constrained | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 81.2% |
-| train / unfiltered / middle | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 75.0% |
-| train / unfiltered / open | 4 | 25.0% | 50.0% | 25.0% | 0.0% | 68.8% |
-| eval / medium / constrained | 4 | 25.0% | 50.0% | 0.0% | 25.0% | 43.8% |
-| eval / medium / middle | 4 | 0.0% | 100.0% | 0.0% | 0.0% | 37.5% |
-| eval / medium / open | 4 | 0.0% | 75.0% | 25.0% | 0.0% | 31.2% |
-| eval / unfiltered / constrained | 4 | 75.0% | 0.0% | 25.0% | 0.0% | 75.0% |
-| eval / unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 43.8% |
-| eval / unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 75.0% |
+
+| Stratum                          | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
+| -------------------------------- | -------- | ---------- | ----------------- | ------------- | ------------------- | ------------------------- |
+| train / medium / constrained     | 4        | 0.0%       | 75.0%             | 0.0%          | 25.0%               | 37.5%                     |
+| train / medium / middle          | 4        | 0.0%       | 50.0%             | 0.0%          | 50.0%               | 25.0%                     |
+| train / medium / open            | 4        | 25.0%      | 25.0%             | 50.0%         | 0.0%                | 62.5%                     |
+| train / unfiltered / constrained | 4        | 75.0%      | 25.0%             | 0.0%          | 0.0%                | 81.2%                     |
+| train / unfiltered / middle      | 4        | 75.0%      | 25.0%             | 0.0%          | 0.0%                | 75.0%                     |
+| train / unfiltered / open        | 4        | 25.0%      | 50.0%             | 25.0%         | 0.0%                | 68.8%                     |
+| eval / medium / constrained      | 4        | 25.0%      | 50.0%             | 0.0%          | 25.0%               | 43.8%                     |
+| eval / medium / middle           | 4        | 0.0%       | 100.0%            | 0.0%          | 0.0%                | 37.5%                     |
+| eval / medium / open             | 4        | 0.0%       | 75.0%             | 25.0%         | 0.0%                | 31.2%                     |
+| eval / unfiltered / constrained  | 4        | 75.0%      | 0.0%              | 25.0%         | 0.0%                | 75.0%                     |
+| eval / unfiltered / middle       | 4        | 25.0%      | 75.0%             | 0.0%          | 0.0%                | 43.8%                     |
+| eval / unfiltered / open         | 4        | 75.0%      | 25.0%             | 0.0%          | 0.0%                | 75.0%                     |
+
 
 ### Targeted Medium-Reasoning Rescue Run
 
 This follow-up reran only the 16 train levels that failed in the original Track 0 low-reasoning train run. It used `gpt-5.2`, `reasoning_effort = medium`, `max_output_tokens = 32768`, and `max_steps = 512`. It is a targeted rescue ablation, not a replacement for the original 24-level train aggregate.
 
-| Condition | Levels retried | Newly solved | Invalid plans | Deadlocks | Plan exhausted | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| original low, failed subset | 16 | 0 | 10 | 3 | 3 | 37.5% |
-| medium + 32768 + 512 | 16 | 5 | 9 | 2 | 0 | 46.9% |
+
+| Condition                   | Levels retried | Newly solved | Invalid plans | Deadlocks | Plan exhausted | Avg. best goal completion |
+| --------------------------- | -------------- | ------------ | ------------- | --------- | -------------- | ------------------------- |
+| original low, failed subset | 16             | 0            | 10            | 3         | 3              | 37.5%                     |
+| medium + 32768 + 512        | 16             | 5            | 9             | 2         | 0              | 46.9%                     |
+
 
 The newly solved levels were:
 
@@ -477,11 +495,13 @@ The newly solved levels were:
 
 The remaining failure subtypes were:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `empty_output` | 6 |
-| `unreachable_standing_cell` | 3 |
-| `deadlock` | 2 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `empty_output`              | 6     |
+| `unreachable_standing_cell` | 3     |
+| `deadlock`                  | 2     |
+
 
 Interpretation:
 
@@ -493,10 +513,12 @@ Interpretation:
 
 The first memory/scaffold condition tested was `verifier_summary_retry` on the eval split with `K = 3`. This condition retries from the original board and shows a concise verifier summary from prior same-level failures.
 
-| Condition | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
-| `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
+
+| Condition                     | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
+| ----------------------------- | ------ | -------- | ------------ | ------------ | ----------------- | --------------------- | ----------------- | ----------------------- |
+| single-shot eval baseline     | 24     | 24       | 33.3%        | 33.3%        | 8                 | 13                    | 2                 | 1                       |
+| `verifier_summary_retry`, K=3 | 24     | 52       | 29.2%        | 54.2%        | 13                | 30                    | 8                 | 1                       |
+
 
 The retry condition solved all 8 levels solved by the single-shot baseline and solved 5 additional eval levels:
 
@@ -508,22 +530,26 @@ The retry condition solved all 8 levels solved by the single-shot baseline and s
 
 The cumulative solved-by-attempt curve was:
 
+
 | Attempt cutoff | Solved level rate |
-| ---: | ---: |
-| 1 | 29.2% |
-| 2 | 54.2% |
-| 3 | 54.2% |
+| -------------- | ----------------- |
+| 1              | 29.2%             |
+| 2              | 54.2%             |
+| 3              | 54.2%             |
+
 
 Failure subtype counts across all verifier-summary retry attempts:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `unreachable_standing_cell` | 25 |
-| `deadlock` | 8 |
-| `empty_output` | 3 |
-| `blocked_standing_cell` | 1 |
-| `wrong_box_reference` | 1 |
-| `plan_exhausted` | 1 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `unreachable_standing_cell` | 25    |
+| `deadlock`                  | 8     |
+| `empty_output`              | 3     |
+| `blocked_standing_cell`     | 1     |
+| `wrong_box_reference`       | 1     |
+| `plan_exhausted`            | 1     |
+
 
 Interpretation:
 
@@ -535,12 +561,14 @@ Interpretation:
 
 The second same-level retry condition tested was `raw_same_level_iterative` on the eval split with `K = 3`. This condition retries from the original board and renders compact same-level raw evidence from prior failed attempts, including the failed model intent, verifier reason, board before failure, and board after the last successful push.
 
-| Condition | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
-| `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
-| `raw_same_level_iterative`, K=3 | 24 | 55 | 25.0% | 54.2% | 13 | 34 | 4 | 4 |
-| `heuristic_same_level_iterative`, K=3 | 24 | 55 | 20.8% | 50.0% | 12 | 31 | 3 | 9 |
+
+| Condition                             | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
+| ------------------------------------- | ------ | -------- | ------------ | ------------ | ----------------- | --------------------- | ----------------- | ----------------------- |
+| single-shot eval baseline             | 24     | 24       | 33.3%        | 33.3%        | 8                 | 13                    | 2                 | 1                       |
+| `verifier_summary_retry`, K=3         | 24     | 52       | 29.2%        | 54.2%        | 13                | 30                    | 8                 | 1                       |
+| `raw_same_level_iterative`, K=3       | 24     | 55       | 25.0%        | 54.2%        | 13                | 34                    | 4                 | 4                       |
+| `heuristic_same_level_iterative`, K=3 | 24     | 55       | 20.8%        | 50.0%        | 12                | 31                    | 3                 | 9                       |
+
 
 Raw same-level retry solved 6 levels not solved by the single-shot eval baseline:
 
@@ -565,34 +593,40 @@ It also failed one level that verifier-summary retry solved:
 
 The cumulative solved-by-attempt curve was:
 
+
 | Attempt cutoff | Solved level rate |
-| ---: | ---: |
-| 1 | 25.0% |
-| 2 | 45.8% |
-| 3 | 54.2% |
+| -------------- | ----------------- |
+| 1              | 25.0%             |
+| 2              | 45.8%             |
+| 3              | 54.2%             |
+
 
 Failure subtype counts across all raw same-level retry attempts:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `unreachable_standing_cell` | 29 |
-| `deadlock` | 4 |
-| `plan_exhausted` | 4 |
-| `empty_output` | 2 |
-| `blocked_destination` | 1 |
-| `blocked_standing_cell` | 1 |
-| `truncated_output` | 1 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `unreachable_standing_cell` | 29    |
+| `deadlock`                  | 4     |
+| `plan_exhausted`            | 4     |
+| `empty_output`              | 2     |
+| `blocked_destination`       | 1     |
+| `blocked_standing_cell`     | 1     |
+| `truncated_output`          | 1     |
+
 
 Stratum-level raw retry results:
 
-| Eval stratum | Attempts | Solve rate@1 | Solve rate@K | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| medium / constrained | 10 | 25.0% | 25.0% | 50.0% | 10.0% | 30.0% | 32.5% |
-| medium / middle | 11 | 0.0% | 50.0% | 81.8% | 0.0% | 0.0% | 43.2% |
-| medium / open | 12 | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 35.4% |
-| unfiltered / constrained | 8 | 25.0% | 75.0% | 12.5% | 37.5% | 12.5% | 37.5% |
-| unfiltered / middle | 10 | 0.0% | 75.0% | 70.0% | 0.0% | 0.0% | 47.5% |
-| unfiltered / open | 4 | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 100.0% |
+
+| Eval stratum             | Attempts | Solve rate@1 | Solve rate@K | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
+| ------------------------ | -------- | ------------ | ------------ | ----------------- | ------------- | ------------------- | ------------------------- |
+| medium / constrained     | 10       | 25.0%        | 25.0%        | 50.0%             | 10.0%         | 30.0%               | 32.5%                     |
+| medium / middle          | 11       | 0.0%         | 50.0%        | 81.8%             | 0.0%          | 0.0%                | 43.2%                     |
+| medium / open            | 12       | 0.0%         | 0.0%         | 100.0%            | 0.0%          | 0.0%                | 35.4%                     |
+| unfiltered / constrained | 8        | 25.0%        | 75.0%        | 12.5%             | 37.5%         | 12.5%               | 37.5%                     |
+| unfiltered / middle      | 10       | 0.0%         | 75.0%        | 70.0%             | 0.0%          | 0.0%                | 47.5%                     |
+| unfiltered / open        | 4        | 100.0%       | 100.0%       | 0.0%              | 0.0%          | 0.0%                | 100.0%                    |
+
 
 Interpretation:
 
@@ -604,12 +638,14 @@ Interpretation:
 
 The third same-level retry condition tested was `heuristic_same_level_iterative` on the eval split with `K = 3`. This condition generates concise same-level reflection heuristics from prior failures, then renders the accepted same-level heuristics on later attempts for the same level.
 
-| Condition | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| single-shot eval baseline | 24 | 24 | 33.3% | 33.3% | 8 | 13 | 2 | 1 |
-| `verifier_summary_retry`, K=3 | 24 | 52 | 29.2% | 54.2% | 13 | 30 | 8 | 1 |
-| `raw_same_level_iterative`, K=3 | 24 | 55 | 25.0% | 54.2% | 13 | 34 | 4 | 4 |
-| `heuristic_same_level_iterative`, K=3 | 24 | 55 | 20.8% | 50.0% | 12 | 31 | 3 | 9 |
+
+| Condition                             | Levels | Attempts | Solve rate@1 | Solve rate@K | Successful levels | Invalid-plan attempts | Deadlock attempts | Plan-exhausted attempts |
+| ------------------------------------- | ------ | -------- | ------------ | ------------ | ----------------- | --------------------- | ----------------- | ----------------------- |
+| single-shot eval baseline             | 24     | 24       | 33.3%        | 33.3%        | 8                 | 13                    | 2                 | 1                       |
+| `verifier_summary_retry`, K=3         | 24     | 52       | 29.2%        | 54.2%        | 13                | 30                    | 8                 | 1                       |
+| `raw_same_level_iterative`, K=3       | 24     | 55       | 25.0%        | 54.2%        | 13                | 34                    | 4                 | 4                       |
+| `heuristic_same_level_iterative`, K=3 | 24     | 55       | 20.8%        | 50.0%        | 12                | 31                    | 3                 | 9                       |
+
 
 Heuristic same-level retry solved 4 levels not solved by the single-shot eval baseline:
 
@@ -635,32 +671,38 @@ Compared with verifier-summary retry, heuristic same-level retry did not solve a
 
 The cumulative solved-by-attempt curve was:
 
+
 | Attempt cutoff | Solved level rate |
-| ---: | ---: |
-| 1 | 20.8% |
-| 2 | 50.0% |
-| 3 | 50.0% |
+| -------------- | ----------------- |
+| 1              | 20.8%             |
+| 2              | 50.0%             |
+| 3              | 50.0%             |
+
 
 Failure subtype counts across all heuristic same-level retry attempts:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `unreachable_standing_cell` | 26 |
-| `plan_exhausted` | 9 |
-| `empty_output` | 4 |
-| `deadlock` | 3 |
-| `blocked_standing_cell` | 1 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `unreachable_standing_cell` | 26    |
+| `plan_exhausted`            | 9     |
+| `empty_output`              | 4     |
+| `deadlock`                  | 3     |
+| `blocked_standing_cell`     | 1     |
+
 
 Stratum-level heuristic retry results:
 
-| Eval stratum | Attempts | Solve rate@1 | Solve rate@K | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| medium / constrained | 10 | 0.0% | 50.0% | 40.0% | 0.0% | 40.0% | 30.0% |
-| medium / middle | 11 | 0.0% | 25.0% | 54.5% | 0.0% | 36.4% | 22.7% |
-| medium / open | 12 | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 25.0% |
-| unfiltered / constrained | 7 | 50.0% | 75.0% | 14.3% | 42.9% | 0.0% | 42.9% |
-| unfiltered / middle | 9 | 0.0% | 75.0% | 55.6% | 0.0% | 11.1% | 61.1% |
-| unfiltered / open | 6 | 75.0% | 75.0% | 50.0% | 0.0% | 0.0% | 70.8% |
+
+| Eval stratum             | Attempts | Solve rate@1 | Solve rate@K | Invalid-plan rate | Deadlock rate | Plan-exhausted rate | Avg. best goal completion |
+| ------------------------ | -------- | ------------ | ------------ | ----------------- | ------------- | ------------------- | ------------------------- |
+| medium / constrained     | 10       | 0.0%         | 50.0%        | 40.0%             | 0.0%          | 40.0%               | 30.0%                     |
+| medium / middle          | 11       | 0.0%         | 25.0%        | 54.5%             | 0.0%          | 36.4%               | 22.7%                     |
+| medium / open            | 12       | 0.0%         | 0.0%         | 100.0%            | 0.0%          | 0.0%                | 25.0%                     |
+| unfiltered / constrained | 7        | 50.0%        | 75.0%        | 14.3%             | 42.9%         | 0.0%                | 42.9%                     |
+| unfiltered / middle      | 9        | 0.0%         | 75.0%        | 55.6%             | 0.0%          | 11.1%               | 61.1%                     |
+| unfiltered / open        | 6        | 75.0%        | 75.0%        | 50.0%             | 0.0%          | 0.0%                | 70.8%                     |
+
 
 Interpretation:
 
@@ -676,11 +718,13 @@ The eval run used `reflection_heuristic` with the train-derived heuristic memory
 
 A follow-up rebuild used the same 16 failed train records but generated reflection heuristics from all train one-shot failures under a larger memory budget. This produced 16 heuristics, all classified as `global_allowed`. The follow-up eval rendered all 16 global heuristics for every eval level with `max_memory_items = 999` and `max_memory_chars = 30000`.
 
-| Eval condition | Levels | Attempts | Solve rate | Successful levels | Invalid-plan attempts | Deadlock attempts | Timeout attempts | Plan-exhausted attempts | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| no-memory eval baseline | 24 | 24 | 33.3% | 8 | 13 | 2 | 0 | 1 | 51.0% |
-| train one-shot global heuristic, top 3 old bank | 24 | 24 | 37.5% | 9 | 12 | 1 | 1 | 1 | 59.4% |
-| rebuilt train one-shot global heuristic, all 16 global rules | 24 | 24 | 33.3% | 8 | 12 | 2 | 0 | 2 | 56.2% |
+
+| Eval condition                                               | Levels | Attempts | Solve rate | Successful levels | Invalid-plan attempts | Deadlock attempts | Timeout attempts | Plan-exhausted attempts | Avg. best goal completion |
+| ------------------------------------------------------------ | ------ | -------- | ---------- | ----------------- | --------------------- | ----------------- | ---------------- | ----------------------- | ------------------------- |
+| no-memory eval baseline                                      | 24     | 24       | 33.3%      | 8                 | 13                    | 2                 | 0                | 1                       | 51.0%                     |
+| train one-shot global heuristic, top 3 old bank              | 24     | 24       | 37.5%      | 9                 | 12                    | 1                 | 1                | 1                       | 59.4%                     |
+| rebuilt train one-shot global heuristic, all 16 global rules | 24     | 24       | 33.3%      | 8                 | 12                    | 2                 | 0                | 2                       | 56.2%                     |
+
 
 The train-derived global heuristic condition solved 3 levels not solved by the no-memory eval baseline:
 
@@ -695,44 +739,52 @@ It failed 2 levels solved by the no-memory eval baseline:
 
 Failure subtype counts for the top-3 run:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `unreachable_standing_cell` | 12 |
-| `deadlock` | 1 |
-| `timeout` | 1 |
-| `plan_exhausted` | 1 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `unreachable_standing_cell` | 12    |
+| `deadlock`                  | 1     |
+| `timeout`                   | 1     |
+| `plan_exhausted`            | 1     |
+
 
 Failure subtype counts for the rebuilt all-global run:
 
-| Failure subtype | Count |
-| --- | ---: |
-| `unreachable_standing_cell` | 10 |
-| `deadlock` | 2 |
-| `plan_exhausted` | 2 |
-| `blocked_standing_cell` | 1 |
-| `empty_output` | 1 |
+
+| Failure subtype             | Count |
+| --------------------------- | ----- |
+| `unreachable_standing_cell` | 10    |
+| `deadlock`                  | 2     |
+| `plan_exhausted`            | 2     |
+| `blocked_standing_cell`     | 1     |
+| `empty_output`              | 1     |
+
 
 Stratum-level train-to-eval results:
 
-| Eval stratum | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| medium / constrained | 4 | 25.0% | 25.0% | 0.0% | 25.0% | 25.0% | 56.2% |
-| medium / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 0.0% | 31.2% |
-| medium / open | 4 | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 37.5% |
-| unfiltered / constrained | 4 | 75.0% | 0.0% | 25.0% | 0.0% | 0.0% | 75.0% |
-| unfiltered / middle | 4 | 25.0% | 75.0% | 0.0% | 0.0% | 0.0% | 68.8% |
-| unfiltered / open | 4 | 75.0% | 25.0% | 0.0% | 0.0% | 0.0% | 87.5% |
+
+| Eval stratum             | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
+| ------------------------ | -------- | ---------- | ----------------- | ------------- | ------------ | ------------------- | ------------------------- |
+| medium / constrained     | 4        | 25.0%      | 25.0%             | 0.0%          | 25.0%        | 25.0%               | 56.2%                     |
+| medium / middle          | 4        | 25.0%      | 75.0%             | 0.0%          | 0.0%         | 0.0%                | 31.2%                     |
+| medium / open            | 4        | 0.0%       | 100.0%            | 0.0%          | 0.0%         | 0.0%                | 37.5%                     |
+| unfiltered / constrained | 4        | 75.0%      | 0.0%              | 25.0%         | 0.0%         | 0.0%                | 75.0%                     |
+| unfiltered / middle      | 4        | 25.0%      | 75.0%             | 0.0%          | 0.0%         | 0.0%                | 68.8%                     |
+| unfiltered / open        | 4        | 75.0%      | 25.0%             | 0.0%          | 0.0%         | 0.0%                | 87.5%                     |
+
 
 Stratum-level rebuilt all-global results:
 
-| Eval stratum | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| medium / constrained | 4 | 25.0% | 50.0% | 0.0% | 0.0% | 25.0% | 43.8% |
-| medium / middle | 4 | 25.0% | 50.0% | 0.0% | 0.0% | 25.0% | 43.8% |
-| medium / open | 4 | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 31.2% |
-| unfiltered / constrained | 4 | 75.0% | 0.0% | 25.0% | 0.0% | 0.0% | 75.0% |
-| unfiltered / middle | 4 | 50.0% | 50.0% | 0.0% | 0.0% | 0.0% | 75.0% |
-| unfiltered / open | 4 | 25.0% | 50.0% | 25.0% | 0.0% | 0.0% | 68.8% |
+
+| Eval stratum             | Episodes | Solve rate | Invalid-plan rate | Deadlock rate | Timeout rate | Plan-exhausted rate | Avg. best goal completion |
+| ------------------------ | -------- | ---------- | ----------------- | ------------- | ------------ | ------------------- | ------------------------- |
+| medium / constrained     | 4        | 25.0%      | 50.0%             | 0.0%          | 0.0%         | 25.0%               | 43.8%                     |
+| medium / middle          | 4        | 25.0%      | 50.0%             | 0.0%          | 0.0%         | 25.0%               | 43.8%                     |
+| medium / open            | 4        | 0.0%       | 100.0%            | 0.0%          | 0.0%         | 0.0%                | 31.2%                     |
+| unfiltered / constrained | 4        | 75.0%      | 0.0%              | 25.0%         | 0.0%         | 0.0%                | 75.0%                     |
+| unfiltered / middle      | 4        | 50.0%      | 50.0%             | 0.0%          | 0.0%         | 0.0%                | 75.0%                     |
+| unfiltered / open        | 4        | 25.0%      | 50.0%             | 25.0%         | 0.0%         | 0.0%                | 68.8%                     |
+
 
 Interpretation:
 
@@ -827,3 +879,4 @@ Validation:
 - `results/v3_eval_train_one_shot_global_heuristic_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_eval_train_one_shot_global_heuristic_all_gpt52_low_16384/evaluation_summary.json`
 - `results/v3_train_failed_single_shot_gpt52_medium_32768_512/evaluation_summary.json`
+

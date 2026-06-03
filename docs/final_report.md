@@ -3,38 +3,50 @@
 **Aditri Patil** — apatil26@stanford.edu  
 **Kerui Lu** — keruilu@stanford.edu
 
-CS348K (Practical Large Language Models) · June 2026
+CS348K (Visual Computing Systems) · 2nd June 2026
 
 ---
 
 ## Main Takeaways
 
-1. **GPT-5.2 single-shot solve rate is 33.3%** (8/24 eval levels) on our stratified Boxoban benchmark; failures are mostly **invalid plans** (~48%), especially **unreachable standing cells**—local legality errors, not abstract strategy mistakes.
+1. Overall, memory helps, but different memory representations improve different aspects of gameplay. Heuristics improve legality but make less progress. Raw memory trajectory keeps richer spatial context reducing deadlock failures. Compact summary provides a clearer signal. 
 
-2. **Same-level memory retry works.** With **K = 3** attempts, compact summary and raw trajectory both reach **54.2%** solve rate (+5 levels); same-level heuristics reach **50.0%** (+4 levels). Most gains appear by **attempt 2**.
+2. **Instance-specific feedback beats global rules.** Same-level retry at 54.2% vs. train-to-eval global heuristics at **37.5%** (top-3 rules). 
 
-3. **Instance-specific feedback beats global rules.** Same-level retry at 54.2% vs. train-to-eval global heuristics at **37.5%** (top-3 rules). Abstract heuristics help **partial progress** (best goal completion ~51% → ~59%) more than full solves.
-
-4. **Memory format matters for *how* the model fails.** Compact summary best reduces unreachable pushes; raw trajectory rescues a **different** level subset at the same solve rate; heuristics improve legality language but add **plan_exhausted** and an extra LLM call.
-
-5. **Harness quality was the technical crux**—full-path JSON planning, local verifier (BFS + deadlock checks), token-budgeted memory renderers, and stratified levels—not raw API usage.
-
-6. **Next bottleneck:** expose **enumerated legal pushes** from the verifier; refine same-level reflection prompts (`v1_specific` / `v3_hybrid_verifier`) beyond generic `reflection_v2`.
-
+3. **Harness quality was the technical crux**—full-path JSON planning, local verifier (BFS + deadlock checks), token-budgeted memory renderers, and stratified levels—not raw API usage.
 ---
 
 ## Background and Setup
 
 ### What is Sokoban?
 
-Sokoban is a grid puzzle: push every box onto a target square. The player moves one cell at a time and can only push boxes (never pull). A single bad push can create an irreversible deadlock, so mistakes compound over a long horizon.
+Sokoban is a grid puzzle where the goal is to push every box onto a target square. The player moves one cell at a time and can only push boxes into open spaces, never through walls or into another box (also  trying to say if 2 boxes adjacent cant push).
+
+![Sokoban Example](reference_gifs/boxoban_eval_000_000_reference_solution_success.gif)
+
+Here is an example of a Sokoban puzzle where the blue circle is the user who is pushing the the brown boxes onto the yellow target loactions. Any box can go on any target location.
+
 
 ### Why is Sokoban hard for LLMs?
 
-Our presentation frames three core challenges:
+ A single bad push can create an irreversible deadlock, so mistakes compound over a long horizon.
 
-1. **Irreversible moves → deadlocks** — one corner push can make the level unsolvable.
-2. **Coordinate tracking of multiple boxes** — each push updates box coordinates; one wrong `[row, col]` invalidates the rest of the plan.
+The main three core challenges:
+
+1. **Irreversible moves lead to deadlocks** — As you can only push boxes, many moves lead to irreversable states like deadlocks. This figure shows various kinds of deadlocks found in the game: 
+
+![Deadlock Examples](figures/deadlock_examples.png)
+
+For example, in the figure above, all the deadlocks are because a single push leads to the box being trapped against a box and a wall or a box pushed against a wall. For example, Deadlock 3 is caused a non-target corner push which the box cannot escape and deadlock 5 is caused by a single push that creates a 2x2 freeze of boxes.
+
+While it is possible to check for deadlocks before executing a push, a irreversible mistake 5 steps prior may lead the LLM to make a mistake that leads to a deadlock.
+
+2. **Coordinate tracking of multiple boxes** — The LLM has to track various spatial aspects like the coordinates of the boxes, target locations, player position, and walls.
+each push updates box coordinates; one wrong `[row, col]` invalidates the rest of the plan.
+
+
+
+
 3. **Long-horizon planning** — solutions require many dependent pushes; early errors prune valid futures.
 
 ### Problem definition
