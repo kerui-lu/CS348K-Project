@@ -1,6 +1,6 @@
 # The Impact of Memory Strategies on LLM-Based Sokoban Gameplay
 
-**Aditri Patil** — apatil26@stanford.edu
+**Aditri Patil** — apatil26@stanford.edu  
 **Kerui Lu** — keruilu@stanford.edu
 
 CS348K (Visual Computing Systems) · 2nd June 2026
@@ -20,34 +20,42 @@ CS348K (Visual Computing Systems) · 2nd June 2026
 
 ### What is Sokoban?
 
-Sokoban is a grid puzzle where the goal is to push every box onto a target square. The player moves one cell at a time and can only push boxes into open spaces, never through walls or into another box (also  trying to say if 2 boxes adjacent cant push).
+Sokoban is a grid puzzle in which the goal is to push every box onto a target square. The player moves one cell at a time and can only push boxes into open cells; boxes cannot be pushed through walls or into other boxes (two adjacent boxes also cannot be pushed together).
 
 <img src="reference_gifs/boxoban_eval_000_000_reference_solution_success.gif" alt="Sokoban Example" width="360">
 
-Here is an example of a Sokoban puzzle where the blue circle is the user who is pushing the the brown boxes onto the yellow target loactions. Any box can go on any target location.
+The figure above shows a representative Boxoban level: the blue circle is the player, brown squares are boxes, and yellow squares are targets. Any box can be placed on any target, but each push changes the board and can affect future reachability.
 
 
 ### Why is Sokoban hard for LLMs?
 
- A single bad push can create an irreversible deadlock, so mistakes compound over a long horizon.
+A single bad push can create an irreversible deadlock, so mistakes compound over a long horizon.
 
 The main three core challenges:
 
-1. **Irreversible moves lead to deadlocks** — As you can only push boxes, many moves lead to irreversable states like deadlocks. This figure shows various kinds of deadlocks found in the game:
+1. **Irreversible moves lead to deadlocks** — Because you can only push boxes, many moves lead to irreversible states such as deadlocks. This figure shows several deadlock patterns found in the game:
 
 <img src="figures/deadlock_examples.png" alt="Deadlock Examples" width="480">
 
-For example, in the figure above, all the deadlocks are because a single push leads to the box being trapped against a box and a wall or a box pushed against a wall. For example, Deadlock 3 is caused a non-target corner push which the box cannot escape and deadlock 5 is caused by a single push that creates a 2x2 freeze of boxes.
+For example, in the figure above, a single push can trap a box against a wall or another box (Deadlock 3: non-target corner). Another can create a 2×2 box freeze (Deadlock 5). The verifier can detect these patterns before executing a push, but an earlier legal move can still leave the board in a state that later becomes a deadlock.
 
-While it is possible to check for deadlocks before executing a push, a irreversible mistake 5 steps prior may lead the LLM to make a mistake that leads to a deadlock.
+2. **Coordinate tracking of multiple boxes** — The LLM must track spatial details such as box coordinates, target locations, player position, and walls.
 
-2. **Coordinate tracking of multiple boxes** — The LLM has to track various spatial aspects like the coordinates of the boxes, target locations, player position, and walls.
-each push updates box coordinates; one wrong `[row, col]` invalidates the rest of the plan.
+<img src="figures/coordinate_tracking_example.png" alt="Coordinate Tracking Example" width="480">
 
+The model must keep these coordinates consistent across every push in the plan; a single wrong `[row, col]` invalidates the rest of the plan.
 
+3. **Long-horizon planning** — The search space for Sokoban grows quickly with plan length: with \(n\) pushes, there are on the order of \(4^n\) possible action sequences. A move that looks good locally can therefore create a later deadlock. Sparse reward structure also makes long-term planning harder for LLMs.
 
+<img src="figures/long_horizon_planning.png" alt="Long-horizon Planning Example" width="480">
 
-3. **Long-horizon planning** — solutions require many dependent pushes; early errors prune valid futures.
+### Our Baselines
+
+Before building memory, we first tested whether a plain LLM agent could solve Sokoban under different prompt formats. We ran a no-memory LLM agent on 12 training levels with temperature 0 and a verifier that checks each proposed push.
+
+<img src="figures/baseline_results.png" alt="Baseline Results" width="480">
+
+We tried several prompt variants to improve the low solve rate. Even our best early prompt solved only 2 of 12 training levels, and most failures were invalid plans. This matches prior work: LMGame Bench reports that many models score zero on Sokoban without additional harness support. That result motivated our project: plain prompting is not enough. The open question is whether the scaffold should use raw trajectory memory or distilled heuristics.
 
 ### Problem definition
 
