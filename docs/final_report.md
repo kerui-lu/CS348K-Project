@@ -1,6 +1,6 @@
 # The Impact of Memory Strategies on LLM-Based Sokoban Gameplay
 
-**Aditri Patil** — apatil26@stanford.edu  
+**Aditri Patil** — apatil26@stanford.edu
 **Kerui Lu** — keruilu@stanford.edu
 
 CS348K (Visual Computing Systems) · 2nd June 2026
@@ -9,9 +9,9 @@ CS348K (Visual Computing Systems) · 2nd June 2026
 
 ## Main Takeaways
 
-1. Overall, memory helps, but different memory representations improve different aspects of gameplay. Heuristics improve legality but make less progress. Raw memory trajectory keeps richer spatial context reducing deadlock failures. Compact summary provides a clearer signal. 
+1. Overall, memory helps, but different memory representations improve different aspects of gameplay. Heuristics improve legality but make less progress. Raw memory trajectory keeps richer spatial context reducing deadlock failures. Compact summary provides a clearer signal.
 
-2. **Instance-specific feedback beats global rules.** Same-level retry at 54.2% vs. train-to-eval global heuristics at **37.5%** (top-3 rules). 
+2. **Instance-specific feedback beats global rules.** Same-level retry at 54.2% vs. train-to-eval global heuristics at **37.5%** (top-3 rules).
 
 3. **Harness quality was the technical crux**—full-path JSON planning, local verifier (BFS + deadlock checks), token-budgeted memory renderers, and stratified levels—not raw API usage.
 ---
@@ -22,7 +22,7 @@ CS348K (Visual Computing Systems) · 2nd June 2026
 
 Sokoban is a grid puzzle where the goal is to push every box onto a target square. The player moves one cell at a time and can only push boxes into open spaces, never through walls or into another box (also  trying to say if 2 boxes adjacent cant push).
 
-![Sokoban Example](reference_gifs/boxoban_eval_000_000_reference_solution_success.gif)
+<img src="reference_gifs/boxoban_eval_000_000_reference_solution_success.gif" alt="Sokoban Example" width="360">
 
 Here is an example of a Sokoban puzzle where the blue circle is the user who is pushing the the brown boxes onto the yellow target loactions. Any box can go on any target location.
 
@@ -33,9 +33,9 @@ Here is an example of a Sokoban puzzle where the blue circle is the user who is 
 
 The main three core challenges:
 
-1. **Irreversible moves lead to deadlocks** — As you can only push boxes, many moves lead to irreversable states like deadlocks. This figure shows various kinds of deadlocks found in the game: 
+1. **Irreversible moves lead to deadlocks** — As you can only push boxes, many moves lead to irreversable states like deadlocks. This figure shows various kinds of deadlocks found in the game:
 
-![Deadlock Examples](figures/deadlock_examples.png)
+<img src="figures/deadlock_examples.png" alt="Deadlock Examples" width="480">
 
 For example, in the figure above, all the deadlocks are because a single push leads to the box being trapped against a box and a wall or a box pushed against a wall. For example, Deadlock 3 is caused a non-target corner push which the box cannot escape and deadlock 5 is caused by a single push that creates a 2x2 freeze of boxes.
 
@@ -89,6 +89,10 @@ LMGame Bench (Zhang et al.) reports weak LLM Sokoban performance with visual + m
 
 ## Approach
 
+### What we started with
+
+We built the Sokoban memory system from scratch in this repo: the environment, full-path LLM planner, local executor/verifier, v3 Boxoban benchmark suite, memory renderers, same-level retry pipeline, train-to-eval heuristic pipeline, and evaluation scripts.
+
 ### Research motivation
 
 Prior work motivates three memory families:
@@ -116,9 +120,13 @@ We ask: *which representation* helps Sokoban full-path planning under a fixed ve
 
 The planner LLM outputs one JSON push plan per attempt. A **local verifier** (not the LLM) parses each intent, checks standing-cell reachability with BFS, executes walking moves plus pushes, and records structured failure evidence. On retry, that evidence is rendered as raw trajectory memory, compact verifier summary, or—after a separate reflection LLM call—heuristic rules.
 
-![Planner, verifier, and memory pipeline](figures/memory_dataflow.png)
+<img src="figures/report_images/Same-Level%20Memory%20Retry%20Pipeline.png" alt="Same-level memory retry pipeline" width="720">
 
-*Figure 1. End-to-end pipeline (slides: “Our System” / “Memory Creation”). The LLM never executes moves; the harness does. Heuristic conditions add a reflection step between failures that distills rules for the next attempt.*
+*Figure 1. Same-level memory retry pipeline. The model retries the same level with memory accumulated from previous failed attempts on that level.*
+
+<img src="figures/report_images/Train-to-Eval%20Heuristic%20Pipeline.png" alt="Train-to-eval heuristic pipeline" width="720">
+
+*Figure 2. Train-to-eval heuristic pipeline. Train failures are distilled into global heuristics and rendered on held-out eval levels.*
 
 ### Full-path planning loop
 
@@ -148,9 +156,11 @@ Levels come from [Boxoban](https://github.com/google-deepmind/boxoban-levels). W
 | **H2** | Reflection heuristics outperform raw memory on **deadlock avoidance** | **Not supported** — compact summary increases deadlock share vs. raw |
 | **H3** | Fair memory comparison requires a working harness | **Supported** — token and prompt ablations preceded memory experiments |
 
-### What we started with
+### Iteration Process
 
-We began from the course Sokoban scaffold (grid env, baseline agents) and the Week 6 one-step LLM policy. **Our work:** full-path JSON planning, V3 verifier executor, four memory conditions, stratified Boxoban benchmark, evaluation/plotting scripts, and reflection pipeline (`sokoban_memory/`).
+We iterated by measuring solve rate, invalid-plan rate, deadlock rate, plan-exhausted rate, failure subtypes, and partial progress metrics such as best goal completion rate. Early one-step prompting was not enough because it did not preserve long-horizon push structure, so we switched to full-path plans. We also tried smaller token budgets; 8192 tokens was too low for the reasoning model and often failed before returning usable JSON, so v3 settled on 16384. Medium reasoning effort sometimes helped on hard failed train levels, but it was much slower, so the main controlled runs use low reasoning effort.
+
+Some memory ideas helped less than expected. Generic retry feedback gives almost no useful information beyond "try again." Global heuristics from train levels improved less than same-level memory because rules like "check standing-cell reachability" are still abstract; the model must re-apply them to a new board. Rendering too many heuristics can also bloat the prompt. In contrast, same-level raw and compact trajectory memory give concrete local evidence about the exact failed board, which is why they are the main focus of the v3 system.
 
 ---
 
@@ -199,17 +209,17 @@ We began from the course Sokoban scaffold (grid env, baseline agents) and the We
 
 The harness visualizes where execution stops: invalid plans fail on the first illegal push; deadlocks occur after one or more successful pushes when the board enters a locally detected trap.
 
-![Example invalid-plan and deadlock trajectories on the same board family](figures/trajectory_examples_labeled.png)
+<img src="figures/trajectory_examples_labeled.png" alt="Example invalid-plan and deadlock trajectories on the same board family" width="720">
 
-*Figure 2. Representative failure trajectories. Invalid plans (left) fail before meaningful progress when the verifier rejects a push. Deadlocks (right) execute several legal pushes then trap the board. This is the evidence raw memory compresses and compact summary abstracts.*
+*Figure 3. Representative failure trajectories. Invalid plans (left) fail before meaningful progress when the verifier rejects a push. Deadlocks (right) execute several legal pushes then trap the board. This is the evidence raw memory compresses and compact summary abstracts.*
 
 ### Same-level retry results
 
 We compare four conditions on the **eval split** with up to three attempts per level: single-shot baseline, compact verifier-summary retry, raw same-level trajectory retry, and same-level heuristic retry.
 
-![Eval solve rate after up to K=3 attempts per level](figures/same_level_retry_condition_solve_rate_k3.png)
+<img src="figures/same_level_retry_condition_solve_rate_k3.png" alt="Eval solve rate after up to K=3 attempts per level" width="480">
 
-*Figure 3. **Solve rate @ K=3** on 24 eval levels. Compact summary and raw trajectory both reach **13/24 (54.2%)**, up from **8/24 (33.3%)** single-shot. Heuristic same-level reaches **12/24 (50.0%)**. This is the primary evidence that instance-specific memory helps under a fixed attempt budget.*
+*Figure 4. **Solve rate @ K=3** on 24 eval levels. Compact summary and raw trajectory both reach **13/24 (54.2%)**, up from **8/24 (33.3%)** single-shot. Heuristic same-level reaches **12/24 (50.0%)**. This is the primary evidence that instance-specific memory helps under a fixed attempt budget.*
 
 | Condition | Solve @ 1 | Solve @ 3 | Levels gained vs. baseline |
 |-----------|----------:|----------:|---------------------------:|
@@ -222,33 +232,33 @@ We compare four conditions on the **eval split** with up to three attempts per l
 
 **Why solve @ 3 matters:** Compact and raw **tie** at 54.2% but solve **different** level subsets—raw rescues at least one level compact misses. Heuristic lags slightly but still gains four levels over baseline, at the cost of an extra reflection LLM call per failure.
 
-![Cumulative count of eval levels solved by attempt index](figures/same_level_retry_cumulative_solved_by_attempt.png)
+<img src="figures/same_level_retry_cumulative_solved_by_attempt.png" alt="Cumulative count of eval levels solved by attempt index" width="480">
 
-*Figure 4. **Cumulative levels solved** (compact, raw, heuristic vs. flat baseline). Most improvement appears by **attempt 2**; attempt 3 shows diminishing returns. This matches the presentation narrative: memory helps quickly once verifier feedback is available, then plateaus.*
+*Figure 5. **Cumulative levels solved** (compact, raw, heuristic vs. flat baseline). Most improvement appears by **attempt 2**; attempt 3 shows diminishing returns. This matches the presentation narrative: memory helps quickly once verifier feedback is available, then plateaus.*
 
 ### Partial progress improves even when solve rate lags
 
 Not every retry produces a full solve. **Best goal completion** tracks the maximum fraction of boxes placed on targets before failure, averaged across levels.
 
-![Average best goal completion @ K=3 by memory condition](figures/same_level_retry_condition_avg_best_goal_completion_k3.png)
+<img src="figures/same_level_retry_condition_avg_best_goal_completion_k3.png" alt="Average best goal completion @ K=3 by memory condition" width="480">
 
-*Figure 5. **Avg. best goal completion @ K=3.** Memory raises partial progress even when a level never reaches 100% solved—supporting the slide claim that “compact improves partial progress.” Compact and raw sit above heuristic; all three beat the implicit single-shot baseline on this metric.*
+*Figure 6. **Avg. best goal completion @ K=3.** Memory raises partial progress even when a level never reaches 100% solved—supporting the slide claim that “compact improves partial progress.” Compact and raw sit above heuristic; all three beat the implicit single-shot baseline on this metric.*
 
 ### Failure analysis: what memory changes
 
 Failures are still common after memory; the question is whether the **mix** of failure types shifts in a useful way.
 
-![Failure subtype mix across all K=3 attempts, by condition](figures/same_level_retry_failure_subtype_mix_k3.png)
+<img src="figures/same_level_retry_failure_subtype_mix_k3.png" alt="Failure subtype mix across all K=3 attempts, by condition" width="560">
 
-*Figure 6. **Overall failure subtype mix** (all attempts, K=3). **Unreachable standing cell** remains the largest bucket everywhere, confirming that local legality is still the bottleneck. Memory narrows that bucket relative to baseline attempts but does not eliminate it.*
+*Figure 7. **Overall failure subtype mix** (all attempts, K=3). **Unreachable standing cell** remains the largest bucket everywhere, confirming that local legality is still the bottleneck. Memory narrows that bucket relative to baseline attempts but does not eliminate it.*
 
-![Failure status and subtype breakdown by memory condition](figures/same_level_retry_failure_subtypes_by_condition.png)
+<img src="figures/same_level_retry_failure_subtypes_by_condition.png" alt="Failure status and subtype breakdown by memory condition" width="720">
 
-*Figure 7. **Failure subtypes stacked by condition.** Compact summary reduces unreachable-standing-cell share versus baseline (~60% vs. ~81% of failed attempts) but can increase **deadlock** versus raw—the model sometimes executes farther into the puzzle before trapping. Heuristic runs show more **plan_exhausted** (legal but incomplete plans), consistent with generic `reflection_v2` rules that improve wording without always lengthening the plan.*
+*Figure 8. **Failure subtypes stacked by condition.** Compact summary reduces unreachable-standing-cell share versus baseline (~60% vs. ~81% of failed attempts) but can increase **deadlock** versus raw—the model sometimes executes farther into the puzzle before trapping. Heuristic runs show more **plan_exhausted** (legal but incomplete plans), consistent with generic `reflection_v2` rules that improve wording without always lengthening the plan.*
 
-![Invalid-plan subtypes only, by condition](figures/same_level_retry_invalid_plan_subtypes_by_condition.png)
+<img src="figures/same_level_retry_invalid_plan_subtypes_by_condition.png" alt="Invalid-plan subtypes only, by condition" width="720">
 
-*Figure 8. **Invalid-plan subtypes.** Most invalid plans are still unreachable standing cells; compact memory has the lowest share in this slice. Raw memory occasionally helps via context but can also introduce noise (higher invalid-plan count overall in the V3 run).*
+*Figure 9. **Invalid-plan subtypes.** Most invalid plans are still unreachable standing cells; compact memory has the lowest share in this slice. Raw memory occasionally helps via context but can also introduce noise (higher invalid-plan count overall in the V3 run).*
 
 **Unreachable standing cell (approximate share of failed attempts):**
 
@@ -289,9 +299,9 @@ These improve **legality language** but underperformed compact/raw on **full sol
 
 Cross-level memory pools train failures into **global heuristics** rendered on every eval level. Raw trajectories are excluded cross-level by design.
 
-![Eval solve rate for train-to-eval heuristic conditions](figures/train_to_eval_condition_solve_rate.png)
+<img src="figures/train_to_eval_condition_solve_rate.png" alt="Eval solve rate for train-to-eval heuristic conditions" width="480">
 
-*Figure 9. **Train-to-eval solve rate.** Top-3 global heuristics improve from **8/24 to 9/24 (37.5%)**—only one extra level versus no-memory eval. Rendering **all 16** train-derived rules does not help (back to 33.3%), supporting the slide “more heuristics ≠ better performance.”*
+*Figure 10. **Train-to-eval solve rate.** Top-3 global heuristics improve from **8/24 to 9/24 (37.5%)**—only one extra level versus no-memory eval. Rendering **all 16** train-derived rules does not help (back to 33.3%), supporting the slide “more heuristics ≠ better performance.”*
 
 | Condition | Eval solve rate | Levels solved |
 |-----------|----------------:|--------------:|
@@ -299,13 +309,13 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 | Train → eval (top 3 heuristics) | **37.5%** | 9/24 |
 | Train → eval (all 16 heuristics) | 33.3% | 8/24 |
 
-![Train-to-eval best goal completion by condition](figures/train_to_eval_avg_best_goal_completion.png)
+<img src="figures/train_to_eval_avg_best_goal_completion.png" alt="Train-to-eval best goal completion by condition" width="480">
 
-*Figure 10. **Best goal completion (train-to-eval).** Global heuristics raise average partial progress (~51% → ~59% with top-3 rules) even when full solve rate barely moves. Memory is doing useful work—avoiding early catastrophes—without guaranteeing complete solutions.*
+*Figure 11. **Best goal completion (train-to-eval).** Global heuristics raise average partial progress (~51% → ~59% with top-3 rules) even when full solve rate barely moves. Memory is doing useful work—avoiding early catastrophes—without guaranteeing complete solutions.*
 
-![Train-to-eval failure subtype mix](figures/train_to_eval_failure_subtype_mix.png)
+<img src="figures/train_to_eval_failure_subtype_mix.png" alt="Train-to-eval failure subtype mix" width="560">
 
-*Figure 11. **Train-to-eval failure mix.** Unreachable standing cells still dominate; adding more heuristic text does not change the fundamental error mode. Cross-level abstraction lacks the coordinate-specific signal that same-level compact/raw provide.*
+*Figure 12. **Train-to-eval failure mix.** Unreachable standing cells still dominate; adding more heuristic text does not change the fundamental error mode. Cross-level abstraction lacks the coordinate-specific signal that same-level compact/raw provide.*
 
 **Why transfer is limited (interpretation; partly speculative):**
 
@@ -317,10 +327,10 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 
 | Claim | Evidence |
 |-------|----------|
-| Memory helps on **same puzzle** | Figures 3–4: +5–6 levels at K=3 |
-| **Instance-specific** beats **global** rules | 54.2% same-level vs. 37.5% train-to-eval (Figure 9) |
-| **Format matters** | Figures 6–8: compact on legality, raw on complementary rescues, heuristic on partial legality |
-| Bottleneck remains **local validity** | Unreachable standing cell still #1 in Figures 6–7 and 11 |
+| Memory helps on **same puzzle** | Figures 4–5: +5–6 levels at K=3 |
+| **Instance-specific** beats **global** rules | 54.2% same-level vs. 37.5% train-to-eval (Figure 10) |
+| **Format matters** | Figures 7–9: compact on legality, raw on complementary rescues, heuristic on partial legality |
+| Bottleneck remains **local validity** | Unreachable standing cell still #1 in Figures 7–8 and 12 |
 
 ### Limitations and open questions
 
@@ -335,7 +345,7 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 
 **Aditri Patil:** Problem framing and hypotheses; full-path planner + verifier implementation; memory renderers (raw, compact, heuristic); prompt iteration (`full_path_v2_1`); V3 evaluation runs and analysis; figures and final report.
 
-**Kerui Lu:** Architecture and level-suite design; stratified Boxoban selection; evaluation coordination; failure-mode debugging; memory-format design feedback.
+**Kerui Lu:** Designed and built the system architecture, evaluation framework, the memory construction and usage formats and stratified Boxoban suite; drove version iteration from baseline to the final setup; collected experiment results; wrote the final report.
 
 ---
 
@@ -345,24 +355,3 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 2. Google DeepMind. *Boxoban Levels.* https://github.com/google-deepmind/boxoban-levels
 3. Shinn, N., et al. (2023). *Reflexion: Language Agents with Verbal Reinforcement Learning.*
 4. Liang, P., et al. (2024). *Synapse: Trajectory-as-Exemplar Prompting for Robustness.*
-5. CS348K-Project repository: `sokoban_memory/`, `levels/v3_boxoban_balanced.json`, `docs/v3_memory_evaluation_report.md`.
-
----
-
-## Appendix (experimental details)
-
-**Token ablation:** At 8192 max output tokens, `gpt-5.2` often returned no parseable plan (`empty_output`); 16384 was required for visible JSON.
-
-**Full-path vs. one-step:** One-step policies lost long-horizon structure; full-path matches how humans plan Sokoban (sequence of pushes).
-
-**K = 3:** Attempt 2 captures most gains; K=5+ risks context bloat from accumulated memory.
-
-**Figure regeneration** (from repo root):
-
-```bash
-.venv/bin/python scripts/plot_same_level_k3_condition_comparison.py
-.venv/bin/python scripts/plot_failure_subtypes_condition_comparison.py
-.venv/bin/python scripts/plot_train_to_eval_condition_comparison.py
-```
-
-Outputs are written to `docs/figures/`.
