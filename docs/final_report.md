@@ -203,7 +203,7 @@ We report **solve rate** (fraction of eval levels fully solved) and **average be
 
 Failures remain common after memory; the question is whether the **mix** of failure types shifts in a useful way.
 
-<img src="figures/same_level_retry_failure_subtype_mix_k3.png" alt="Failure subtype mix across all K=3 attempts, by condition" width="560">
+<img src="figures/same_level_retry_failure_subtype_mix_k3.png" alt="Failure subtype mix across all K=3 attempts, by condition" width="640">
 
 *Figure 7. **Failure subtype mix** (all K=3 attempts, by condition).*
 
@@ -239,7 +239,7 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 
 *Figure 9. **Best goal completion (train-to-eval).** Global heuristics raise average partial progress (~51% → ~59% with top-3 rules) even when full solve rate barely moves—memory avoids early catastrophes without guaranteeing full solves.*
 
-<img src="figures/train_to_eval_failure_subtype_mix.png" alt="Train-to-eval failure subtype mix" width="560">
+<img src="figures/train_to_eval_failure_subtype_mix.png" alt="Train-to-eval failure subtype mix" width="640">
 
 *Figure 10. **Train-to-eval failure mix.** Unreachable standing cells still dominate; adding more heuristic text does not change the fundamental error mode. Cross-level abstraction lacks the coordinate-specific signal that same-level compact and raw provide.*
 
@@ -265,7 +265,7 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 
 **Aditri Patil:** Problem framing and refining system architecture. Built full-path planner, legal-push scaffolding, push guardrails, and verifier implementation. Failure-analysis and documentation; same-level reflection–heuristic pipeline, evaluation figure scripts, results visualizations (GIF and traces); V3 evaluation analysis; figures and final report.
 
-**Kerui Lu:** Designed and built the system architecture, evaluation framework, the memory construction and usage formats and stratified Boxoban suite; drove version iteration from baseline to the final setup; collected experiment results; wrote the final report.
+**Kerui Lu:** Designed and built the overall system architecture and evaluation framework; implemented the harness upgrade from one-step to full-path planning; designed memory construction and usage formats; built the stratified Boxoban train/eval suite; drove version iteration from baseline to the final setup; collected experiment results; wrote the final report.
 
 ---
 
