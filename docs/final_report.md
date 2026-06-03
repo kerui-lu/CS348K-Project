@@ -41,7 +41,7 @@ For example, in the figure above, a single push can trap a box against a wall or
 
 2. **Coordinate tracking of multiple boxes** — The LLM must track spatial details such as box coordinates, target locations, player position, and walls.
 
-<img src="figures/coordinate_tracking_example.png" alt="Coordinate Tracking Example" width="480">
+<img src="figures/coordinate_tracking_example.png" alt="Coordinate tracking: board grid with row/col labels and coordinate summary" width="720">
 
 The model must keep these coordinates consistent across every push in the plan; a single wrong `[row, col]` invalidates the rest of the plan.
 
@@ -196,7 +196,7 @@ We report **solve rate** (fraction of eval levels fully solved) and **average be
 
 **Interpretation (same-level retry):**
 
-- All three memory conditions beat the **33.3%** single-shot baseline—memory improves performance on the same puzzle under a fixed attempt budget.
+- All three memory conditions beat the **33.3%** single-shot baseline—memory solve rate improves performance on the same puzzle under a fixed attempt budget.
 - Compact summary and raw trajectory **tie at 54.2%** and both outperform same-level heuristic (**50.0%**)—instance-specific trajectory or verifier feedback helps more than distilled rules alone on held-out eval.
 
 ### Same-level retry: failure analysis
@@ -254,8 +254,9 @@ Cross-level memory pools train failures into **global heuristics** rendered on e
 | Claim | Evidence |
 |-------|----------|
 | Memory helps on **same-level retry** | Figures 5–6: solve rate **33.3% → 50–54%** at K=3 |
-| **Instance-specific** beats **global** rules | Figure 5 vs. Figure 8: **54.2%** same-level (compact/raw) vs. **37.5%** train-to-eval (top-3) |
+| **Instance-specific** beats **global** rules | Figure 5-6: both Compact and Raw beat Heuristics |
 | **Format matters** | Figure 7: compact, raw, and heuristic shift failure subtypes differently |
+| **More heuristics aren't better** | Figure 8-9: Using top-16 heuristics performns worse in train-to-eval than top 3 |
 | Bottleneck remains **local validity** | Figures 7 and 10: unreachable standing cell still dominates |
 
 ---
