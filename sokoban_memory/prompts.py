@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from sokoban_memory.v3_trajectory import assert_no_prompt_leakage
+
 
 @dataclass(frozen=True)
 class PromptRenderResult:
@@ -22,20 +24,12 @@ def render_full_path_prompt(
     memory_condition: str,
     memory_text: str,
     repair_feedback: str | None = None,
-    legal_push_candidates: list[dict[str, Any]] | None = None,
 ) -> PromptRenderResult:
     memory_block = (
         "Memory context:\n"
         f"Condition: {memory_condition}\n"
         f"{memory_text}"
     )
-    legal_push_lines = ["Legal push candidates on this board (already locally reachable and valid):"]
-    if legal_push_candidates:
-        for item in legal_push_candidates[:16]:
-            legal_push_lines.append(str(item))
-    else:
-        legal_push_lines.append("None")
-
     sections = [
         "You are playing Sokoban.",
         f"Policy mode: {policy_mode}",
@@ -69,11 +63,9 @@ def render_full_path_prompt(
         "Return a complete high-level push plan that continues until every box is on a target.",
         "Do not stop after one push or after a locally useful partial plan.",
         "Do not output walking moves.",
-        "Each plan item must identify a box and a push direction.",
-        "Prefer using box_id from the legal push candidate list instead of raw coordinates.",
-        "Use raw box coordinates only if box_id is unavailable.",
+        "Each plan item names a box at its current [row, col] at that point in the plan and the direction to push it.",
         "After each push, mentally update the board before choosing the next push.",
-        "If you use coordinates for later pushes of the same box, use the updated coordinate, not the original coordinate.",
+        "For later pushes of the same box, use the box's updated coordinate, not its original coordinate.",
         "The local verifier will check whether the player can reach the required push position and will expand each push into shortest walking moves plus one push.",
         "A box on a target still counts as a box.",
         "",
@@ -91,22 +83,13 @@ def render_full_path_prompt(
         "4) Safety: avoid immediate deadlocks, and avoid moving a box off a target unless necessary.",
         "5) Completion: the final push should leave all boxes on target cells.",
         "",
-        *legal_push_lines,
-        "",
         memory_block,
         "",
         "Output contract:",
         "Return JSON only, with no markdown and no explanation.",
         "The JSON must be an array of objects.",
-        'Preferred object shape: {"box_id": integer, "push": "Up|Down|Left|Right"}.',
-        'Fallback shape if needed: {"box": [row, col], "push": "Up|Down|Left|Right"}.',
-        "Example using stable box_id references:",
-        "[",
-        '  {"box_id": 0, "push": "Down"},',
-        '  {"box_id": 0, "push": "Right"},',
-        '  {"box_id": 0, "push": "Right"}',
-        "]",
-        "Example with updated coordinates (fallback style):",
+        'Each object must have exactly this shape: {"box": [row, col], "push": "Up|Down|Left|Right"}.',
+        "Example with one box moving through updated coordinates:",
         "[",
         '  {"box": [3, 2], "push": "Down"},',
         '  {"box": [4, 2], "push": "Right"},',
@@ -121,6 +104,7 @@ def render_full_path_prompt(
             repair_feedback,
         ])
     prompt = "\n".join(sections)
+    assert_no_prompt_leakage(prompt)
     non_memory_template = prompt.replace(memory_block, "Memory context:\n<MEMORY_BLOCK>")
     return PromptRenderResult(
         prompt=prompt,

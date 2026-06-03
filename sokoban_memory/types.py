@@ -41,6 +41,7 @@ class Level:
     reference_solution: list[Action] | None = None
     source: str | None = None
     grid: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass

@@ -1,0 +1,77 @@
+{
+  "schema_version": "reflection_heuristic_memory_v2",
+  "source_metadata": {
+    "source_raw_memory_hash": "0b1cbea5bd5335caa8bef5f2d26727b77182d16210928998d89e508d1cb4c032",
+    "reflection_model": "gpt-5.2",
+    "reflection_prompt_version": "reflection_v3_global_train_failures_v1",
+    "generated_at_utc": "2026-05-31T22:59:28Z",
+    "source_train_level_ids": [
+      "boxoban_medium_train_000_073",
+      "boxoban_medium_train_000_111",
+      "boxoban_medium_train_000_129",
+      "boxoban_medium_train_000_200",
+      "boxoban_medium_train_000_061",
+      "boxoban_medium_train_000_066",
+      "boxoban_medium_train_000_158",
+      "boxoban_medium_train_000_224",
+      "boxoban_medium_train_000_045",
+      "boxoban_medium_train_000_086",
+      "boxoban_medium_train_000_194",
+      "boxoban_medium_train_000_281",
+      "boxoban_unfiltered_train_000_098",
+      "boxoban_unfiltered_train_000_150",
+      "boxoban_unfiltered_train_000_222",
+      "boxoban_unfiltered_train_000_297",
+      "boxoban_unfiltered_train_000_014",
+      "boxoban_unfiltered_train_000_065",
+      "boxoban_unfiltered_train_000_071",
+      "boxoban_unfiltered_train_000_176",
+      "boxoban_unfiltered_train_000_130",
+      "boxoban_unfiltered_train_000_194",
+      "boxoban_unfiltered_train_000_208",
+      "boxoban_unfiltered_train_000_249"
+    ],
+    "raw_failure_count_used": 16,
+    "failure_subtype_distribution": {
+      "deadlock": 3,
+      "plan_exhausted": 3,
+      "unreachable_standing_cell": 10
+    },
+    "temperature": 0.0,
+    "max_output_tokens": 16384,
+    "cache_namespace": "v3_train_one_shot_global_heuristics_full_failures",
+    "prompt_hash": "2c38aabd7eb361a807e0fa85aa650faff30f0b2adcd1c58cea8038081ebbf402",
+    "cache_hit": false,
+    "cache_key": "f42ab0f7e3752a281cb11a3aad2a1ed7cdc4b47a05ff6a333392a72c362a1098",
+    "memory_caps": {
+      "max_memory_items": 999,
+      "max_steps_per_memory": 999,
+      "max_memory_chars": 30000
+    },
+    "heuristic_scope_counts": {
+      "global_allowed": 16,
+      "same_level_only": 0,
+      "rejected": 0
+    },
+    "schema_version": "reflection_heuristic_memory_v2"
+  },
+  "memory_item_count": 16,
+  "heuristics": [
+    "Before emitting a push intent, ensure the required standing cell (behind the box, opposite the push direction) is reachable by walking in the current state; if not, first plan pushes that open a corridor to that cell or abandon that push direction.",
+    "Treat each push as requiring a 2-cell feasibility check: (1) standing cell is walk-reachable now, and (2) destination cell (in push direction) is empty/goal; reject intents failing either check.",
+    "Do not assume you can \"walk around\" a box later: once a box is pushed into a narrow passage, corner-adjacent to walls, or against another box, it may permanently block access to the standing cells needed for future pushes.",
+    "Prefer pushes that preserve player access to both sides of boxes in tight areas; avoid moves that reduce a box to having only one accessible pushing side unless that box is already effectively finalized on a goal.",
+    "When operating in corridors (1-tile wide paths), recognize that a box becomes direction-locked: you can only push it forward while you can stand behind it; avoid pushing a box deeper if you still need to push it sideways later.",
+    "Avoid pushing boxes into non-goal corners (a cell with two perpendicular walls) or into wall-bounded alcoves unless it is a goal cell; this commonly creates immediate or inevitable deadlock.",
+    "Avoid creating 2x2 blocks of walls/boxes (or box+wall patterns) that prevent any box movement; treat such local patterns as deadlock unless all involved boxes are on goals and do not need to move again.",
+    "Do not push a box flush against a wall if its remaining needed movement would require pulling it away (impossible); only commit to wall-adjacent placements when the goal lies along that wall and the box can be pushed straight to completion.",
+    "In multi-box regions, avoid pushing a box to become adjacent (side-by-side) with another box in a narrow space unless you have confirmed future standing-cell access for separating them; paired boxes often block each other\u2019s required push positions.",
+    "Maintain at least one \u201ccirculation loop\u201d (a walkable cycle) in congested rooms; if your pushes break the loop into a tree-like space, you may lose the ability to reach critical standing cells.",
+    "Treat boxes already on goals as potential obstacles: do not use them as temporary parking in chokepoints if that would block access routes needed to maneuver other boxes.",
+    "Choose an ordering that solves boxes in the most constrained areas first (deep corners, dead-end corridors, narrow pockets) before pushing boxes that will restrict mobility in the central workspace.",
+    "If multiple goals exist in a room, avoid committing a box to a goal that blocks passage to other goals unless you have verified alternate access; a correct placement can still be strategically blocking.",
+    "When a planned push would require standing in a cell that is currently enclosed by walls/boxes (a pocket), treat that pocket as unreachable until explicitly opened by moving a blocking box; do not schedule pushes that depend on entering unopened pockets.",
+    "To prevent plan exhaustion, generate pushes via a goal-directed macro strategy (e.g., pick a target box, select a candidate path of pushes toward an assigned goal, and verify reachability/deadlock at each step) rather than emitting many unverified local pushes.",
+    "In open areas, still apply deadlock screening: a single careless push can freeze a box against boundary walls or create an unsplittable cluster; always run a local deadlock heuristic before accepting a push intent."
+  ]
+}

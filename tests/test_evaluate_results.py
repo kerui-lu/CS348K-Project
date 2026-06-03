@@ -5,7 +5,16 @@ import sys
 from evaluate_results import evaluate_result_dirs, validate_episode_dict
 
 
-def write_episode(path, level_id, agent_type, status, step_count, solved=False, deadlocked=False):
+def write_episode(
+    path,
+    level_id,
+    agent_type,
+    status,
+    step_count,
+    solved=False,
+    deadlocked=False,
+    metadata=None,
+):
     data = {
         "level_id": level_id,
         "agent_type": agent_type,
@@ -16,6 +25,7 @@ def write_episode(path, level_id, agent_type, status, step_count, solved=False, 
         "total_reward": 0.0,
         "llm_call_count": 0,
         "token_cost": 0.0,
+        "metadata": metadata or {},
         "trajectory": [
             {
                 "step": 0,
@@ -86,6 +96,94 @@ def test_evaluate_result_dirs_uses_level_reference_lengths(tmp_path):
 
     assert report["overall"]["average_solution_efficiency"] == 0.5
     assert report["overall"]["steps_over_optimal_average"] == 2.0
+
+
+def test_evaluate_result_dirs_reports_boxoban_strata(tmp_path):
+    results_dir = tmp_path / "results"
+    levels_path = tmp_path / "levels.json"
+    results_dir.mkdir()
+    write_episode(results_dir / "success.json", "boxoban_a", "agent_a", "success", 4, solved=True)
+    levels_path.write_text(
+        json.dumps(
+            {
+                "levels": [
+                    {
+                        "level_id": "boxoban_a",
+                        "split": "eval",
+                        "tags": ["boxoban", "difficulty_open"],
+                        "source_family": "medium",
+                        "source_split": "valid",
+                        "difficulty_bucket": "open",
+                        "grid": [
+                            "##########",
+                            "#@ $.    #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#        #",
+                            "##########",
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = evaluate_result_dirs([results_dir], levels_path=levels_path)
+
+    assert report["by_stratum"]["eval:medium:open"]["solve_rate"] == 1.0
+
+
+def test_evaluate_result_dirs_reports_condition_and_condition_strata(tmp_path):
+    results_dir = tmp_path / "results"
+    levels_path = tmp_path / "levels.json"
+    results_dir.mkdir()
+    write_episode(
+        results_dir / "success.json",
+        "boxoban_a",
+        "raw_trajectory_memory",
+        "success",
+        4,
+        solved=True,
+        metadata={"condition": "raw_same_level_iterative", "iteration_attempt_index": 1},
+    )
+    levels_path.write_text(
+        json.dumps(
+            {
+                "levels": [
+                    {
+                        "level_id": "boxoban_a",
+                        "split": "eval",
+                        "source_family": "medium",
+                        "source_split": "valid",
+                        "difficulty_bucket": "open",
+                        "grid": [
+                            "##########",
+                            "#@ $.    #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#  $ .   #",
+                            "#        #",
+                            "#        #",
+                            "##########",
+                        ],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = evaluate_result_dirs([results_dir], levels_path=levels_path)
+
+    assert report["by_condition"]["raw_same_level_iterative"]["solve_rate"] == 1.0
+    assert report["by_condition_stratum"]["raw_same_level_iterative:eval:medium:open"]["solve_rate"] == 1.0
 
 
 def test_validate_episode_detects_malformed_success(tmp_path):

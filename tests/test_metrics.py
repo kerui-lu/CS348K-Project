@@ -118,29 +118,38 @@ def test_summary_reports_repair_counters():
     assert summary["per_level"]["l1"]["success_after_repair_count"] == 1
 
 
-def test_summary_reports_partial_progress_score():
-    partial = make_result("l1", "invalid_plan", 3)
-    partial.trajectory = [
-        {
-            "state": "######\n#@$$.#\n#  . #\n######",
-            "next_state": "######\n#@*$ #\n#  . #\n######",
-        }
-    ]
-    partial.metadata = {
-        "final_board": "######\n#@*$ #\n#  . #\n######",
+def test_summary_reports_v3_subtypes_progress_and_iterative_rates():
+    first_failure = make_result("l1", "invalid_plan", 0)
+    first_failure.metadata = {
+        "failure_subtype": "blocked_destination",
+        "iteration_attempt_index": 0,
+        "best_goal_completion_rate": 0.25,
+        "final_goal_completion_rate": 0.0,
+        "target_placement_events_before_first_deadlock": 1,
+        "normalized_target_placement_before_first_deadlock": 0.25,
     }
-    stuck = make_result("l2", "timeout", 3)
-    stuck.trajectory = [
-        {
-            "state": "#####\n#@$.#\n#####",
-            "next_state": "#####\n#@$.#\n#####",
-        }
-    ]
-    summary = summarize_results([partial, stuck])
+    repaired = make_result("l1", "success", 4)
+    repaired.metadata = {
+        "iteration_attempt_index": 1,
+        "best_goal_completion_rate": 1.0,
+        "final_goal_completion_rate": 1.0,
+    }
+    unsolved = make_result("l2", "plan_exhausted", 4)
+    unsolved.metadata = {
+        "failure_subtype": "plan_exhausted",
+        "iteration_attempt_index": 0,
+        "best_goal_completion_rate": 0.5,
+        "final_goal_completion_rate": 0.5,
+    }
 
-    assert summary["average_final_goal_completion"] == 0.25
-    assert summary["average_best_goal_completion"] == 0.25
-    assert summary["partial_progress_score"] == 0.25
-    assert summary["partial_progress_rate_25"] == 0.5
-    assert summary["partial_progress_rate_50"] == 0.5
-    assert summary["partial_progress_rate_75"] == 0.0
+    summary = summarize_results([first_failure, repaired, unsolved])
+
+    assert summary["failure_subtype_counts"] == {
+        "blocked_destination": 1,
+        "plan_exhausted": 1,
+    }
+    assert summary["solve_rate_at_1"] == 0.0
+    assert summary["solve_rate_at_k"] == 0.5
+    assert summary["cumulative_solved_by_attempt"]["1"] == 0.0
+    assert summary["cumulative_solved_by_attempt"]["2"] == 0.5
+    assert summary["average_best_goal_completion_rate"] == (0.25 + 1.0 + 0.5) / 3
