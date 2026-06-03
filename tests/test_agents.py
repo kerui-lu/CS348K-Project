@@ -1,10 +1,13 @@
 import os
 
+import pytest
+
 from run_experiment import build_parser
 from sokoban_memory.agents import (
     DEFAULT_LLM_MODEL,
     DEFAULT_MAX_OUTPUT_TOKENS,
     LLMAgent,
+    MIN_MAX_OUTPUT_TOKENS,
     NoMemoryAgent,
     PROMPT_VERSION,
     RawTrajectoryMemoryAgent,
@@ -85,7 +88,14 @@ def test_cli_accepts_llm_model_and_api_key_env_args():
     assert args.api_key_env == "OPENAI_API_KEY"
 
 
+def test_cli_accepts_reasoning_effort_override():
+    args = build_parser().parse_args(["--agent", "llm", "--reasoning_effort", "medium"])
+
+    assert args.reasoning_effort == "medium"
+
+
 def test_cli_accepts_v2_budget_memory_and_cache_args():
+    assert MIN_MAX_OUTPUT_TOKENS == 16384
     args = build_parser().parse_args(
         [
             "--agent",
@@ -105,7 +115,7 @@ def test_cli_accepts_v2_budget_memory_and_cache_args():
             "--temperature",
             "0",
             "--max_output_tokens",
-            "8",
+            str(MIN_MAX_OUTPUT_TOKENS),
             "--cache_namespace",
             "main",
         ]
@@ -119,8 +129,30 @@ def test_cli_accepts_v2_budget_memory_and_cache_args():
     assert args.max_memory_chars == 500
     assert args.llm_cache_path == ".llm_cache/test"
     assert args.temperature == 0
-    assert args.max_output_tokens == 8
+    assert args.max_output_tokens == MIN_MAX_OUTPUT_TOKENS
     assert args.cache_namespace == "main"
+
+
+def test_cli_rejects_output_token_cap_below_minimum():
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["--agent", "llm", "--max_output_tokens", "8192"])
+
+
+def test_cli_accepts_same_level_iterative_mode():
+    args = build_parser().parse_args(
+        [
+            "--experiment_mode",
+            "same_level_iterative",
+            "--condition",
+            "raw_same_level_iterative",
+            "--attempt_budget",
+            "5",
+        ]
+    )
+
+    assert args.experiment_mode == "same_level_iterative"
+    assert args.condition == "raw_same_level_iterative"
+    assert args.attempt_budget == 5
 
 
 def test_cli_defaults_to_low_cost_llm_model():
@@ -189,16 +221,19 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert "Planning checklist:" in no_memory_prompt
     assert "until every box is on a target" in no_memory_prompt
     assert "Do not stop after one push" in no_memory_prompt
-    assert "updated coordinate" in no_memory_prompt
-    assert '"box_id": integer' in no_memory_prompt
+    assert "use the box's updated coordinate" in no_memory_prompt
     assert "boxes are interchangeable" in no_memory_prompt
     assert "any box may go to any target" in no_memory_prompt
     assert "avoid moving a box off a target unless necessary" in no_memory_prompt
     assert '"box": [row, col]' in no_memory_prompt
+    assert '"box_id": 0' not in no_memory_prompt
     assert '"player_after": [row, col]' not in no_memory_prompt
     assert '"box_after": [row, col]' not in no_memory_prompt
     assert "Return JSON only" in no_memory_prompt
-    assert '{"box_id": 0, "push": "Down"}' in no_memory_prompt
+    assert "reference_solution" not in no_memory_prompt
+    assert "solver_min_pushes" not in no_memory_prompt
+    assert "solver_min_steps" not in no_memory_prompt
+    assert '{"box": [4, 4], "push": "Right"}' in no_memory_prompt
     assert "Prior trajectory records" in raw_prompt
     assert "executed_action: Right" in raw_prompt
     assert "raw_action" not in raw_prompt.split("Memory context:", 1)[1]
@@ -209,6 +244,45 @@ def test_v2_agent_prompts_differ_only_by_memory_condition():
     assert "temperature" not in no_memory_client.responses.calls[0]
     assert no_memory_client.responses.calls[0]["reasoning"] == {"effort": "minimal"}
     assert no_memory_client.responses.calls[0]["max_output_tokens"] == DEFAULT_MAX_OUTPUT_TOKENS
+
+
+def test_gpt52_defaults_to_low_reasoning_effort():
+    client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    agent = LLMAgent(client=client, model="gpt-5.2")
+
+    agent.select_plan(
+        "#####\n#@$.#\n#####",
+        {
+            "rules": "Move Up/Down/Left/Right.",
+            "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+            "max_steps": 20,
+            "memory": None,
+        },
+    )
+
+    assert client.responses.calls[0]["reasoning"] == {"effort": "low"}
+    assert agent.last_call_metadata["reasoning_effort"] == "low"
+
+
+def test_explicit_reasoning_effort_changes_request_and_cache_key():
+    low_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    medium_client = FakeClient('[{"box": [1, 2], "push": "Right"}]')
+    low_agent = LLMAgent(client=low_client, model="gpt-5.2")
+    medium_agent = LLMAgent(client=medium_client, model="gpt-5.2", reasoning_effort="medium")
+    context = {
+        "rules": "Move Up/Down/Left/Right.",
+        "state_summary": {"player": [1, 1], "boxes": [[1, 2]], "targets": [[1, 3]]},
+        "max_steps": 20,
+        "memory": None,
+    }
+
+    low_agent.select_plan("#####\n#@$.#\n#####", context)
+    medium_agent.select_plan("#####\n#@$.#\n#####", context)
+
+    assert low_client.responses.calls[0]["reasoning"] == {"effort": "low"}
+    assert medium_client.responses.calls[0]["reasoning"] == {"effort": "medium"}
+    assert medium_agent.last_call_metadata["reasoning_effort"] == "medium"
+    assert low_agent.last_call_metadata["cache_key"] != medium_agent.last_call_metadata["cache_key"]
 
 
 def test_non_gpt5_llm_agent_sends_temperature():

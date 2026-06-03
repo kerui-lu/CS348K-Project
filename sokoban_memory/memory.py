@@ -7,6 +7,7 @@ from typing import Any
 
 from sokoban_memory.llm_cache import stable_hash
 from sokoban_memory.types import EpisodeResult, Level
+from sokoban_memory.v3_trajectory import MEMORY_RENDERER_VERSION, heuristic_scope
 
 RAW_MEMORY_SCHEMA_VERSION = "full_path_raw_trajectory_memory_v1"
 HEURISTIC_MEMORY_SCHEMA_VERSION = "reflection_heuristic_memory_v2"
@@ -85,6 +86,44 @@ class RawTrajectoryMemory:
         assert_raw_render_has_no_strategic_words(rendered)
         return rendered
 
+    def records_for_level(self, level_id: str) -> list[dict[str, Any]]:
+        return [episode for episode in self.episodes if str(episode.get("level_id")) == level_id]
+
+    def render_for_level(self, level_id: str, config: MemoryRenderConfig) -> str:
+        selected = _select_compact_same_level_records(
+            self.records_for_level(level_id),
+            max_items=min(config.max_memory_items, 2),
+        )
+        if not selected:
+            return f"No same-level trajectory records are available for {level_id}."
+        sections = [
+            "Same-level compact raw failure evidence:",
+            f"memory_renderer_version: {MEMORY_RENDERER_VERSION}",
+            f"level_id: {level_id}",
+        ]
+        for idx, episode in enumerate(selected, start=1):
+            sections.append(_render_compact_same_level_evidence(idx, episode))
+        rendered = truncate_text("\n\n".join(sections), config.max_memory_chars)
+        assert_raw_render_has_no_strategic_words(rendered)
+        return rendered
+
+    def render_verifier_summary_for_level(self, level_id: str, config: MemoryRenderConfig) -> str:
+        selected = _select_compact_same_level_records(
+            self.records_for_level(level_id),
+            max_items=1,
+        )
+        if not selected:
+            return f"No same-level verifier feedback is available for {level_id}."
+        episode = selected[-1]
+        lines = [
+            "Verifier summary from the previous same-level attempt:",
+            f"level_id: {level_id}",
+            f"failed_push_index: {episode.get('failure_push_index')}",
+            f"failure_subtype: {episode.get('failure_subtype') or episode.get('failure_reason')}",
+            f"verifier_reason: {episode.get('failure_reason')}",
+        ]
+        return truncate_text("\n".join(lines), config.max_memory_chars)
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "schema_version": RAW_MEMORY_SCHEMA_VERSION,
@@ -141,12 +180,47 @@ class HeuristicMemory:
             json.dump(self.to_dict(), f, indent=2)
 
     def render(self, config: MemoryRenderConfig) -> str:
-        selected = self.heuristics[: config.max_memory_items]
+        selected = [
+            heuristic
+            for heuristic in self.heuristics
+            if classify_heuristic(heuristic)["scope"] == "global_allowed"
+        ][: config.max_memory_items]
         if not selected:
             return "No reflection heuristics are available."
         lines = ["Reflection heuristics distilled from previous failures:"]
         lines.extend(f"{idx}. {heuristic}" for idx, heuristic in enumerate(selected, start=1))
         return truncate_text("\n".join(lines), config.max_memory_chars)
+
+    def render_for_level(self, level_id: str, config: MemoryRenderConfig) -> str:
+        source_level_ids = {
+            str(item)
+            for item in (
+                self.source_metadata.get("source_level_ids")
+                or self.source_metadata.get("source_train_level_ids")
+                or []
+            )
+        }
+        allow_same_level_rules = not source_level_ids or level_id in source_level_ids
+        selected = [
+            heuristic
+            for heuristic in self.heuristics
+            if classify_heuristic(heuristic)["scope"] == "global_allowed"
+            or (
+                allow_same_level_rules
+                and classify_heuristic(heuristic)["scope"] == "same_level_only"
+            )
+        ][: config.max_memory_items]
+        if not selected:
+            return f"No same-level reflection heuristics are available for {level_id}."
+        lines = [
+            "Same-level reflection heuristics distilled from previous failures:",
+            f"level_id: {level_id}",
+        ]
+        lines.extend(f"{idx}. {heuristic}" for idx, heuristic in enumerate(selected, start=1))
+        return truncate_text("\n".join(lines), config.max_memory_chars)
+
+    def classified_heuristics(self) -> list[dict[str, str]]:
+        return [classify_heuristic(heuristic) for heuristic in self.heuristics]
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -189,12 +263,22 @@ def compress_episode(episode: EpisodeResult | dict[str, Any], max_steps: int | N
         "step_count": data.get("step_count", len(trajectory)),
         "total_reward": data.get("total_reward"),
         "policy_mode": data.get("policy_mode"),
+        "schema_version": metadata.get("schema_version"),
+        "run_id": metadata.get("run_id"),
+        "code_commit": metadata.get("code_commit"),
+        "level_suite_hash": metadata.get("level_suite_hash"),
         "raw_plan_response": metadata.get("raw_plan_response"),
         "planned_pushes": metadata.get("planned_pushes", []),
         "expanded_actions": metadata.get("expanded_actions", []),
         "push_execution_log": metadata.get("push_execution_log", []),
         "failure_reason": metadata.get("failure_reason"),
+        "failure_subtype": metadata.get("failure_subtype"),
         "failure_push_index": metadata.get("failure_push_index"),
+        "initial_board": metadata.get("initial_board"),
+        "final_board": metadata.get("final_board"),
+        "board_before_failed_push": metadata.get("board_before_failed_push"),
+        "board_after_last_successful_push": metadata.get("board_after_last_successful_push"),
+        "v3_attempt_trace": metadata.get("v3_attempt_trace"),
         "steps": [_compress_step(step) for step in selected_steps],
     }
 
@@ -276,6 +360,9 @@ def get_memory_source_level_ids(memory: RawTrajectoryMemory | HeuristicMemory) -
 
 
 def validate_no_eval_memory_leak(levels: list[Level], memory: RawTrajectoryMemory | HeuristicMemory) -> None:
+    metadata = getattr(memory, "source_metadata", {})
+    if metadata.get("memory_scope") == "same_level":
+        return
     eval_level_ids = {level.level_id for level in levels if level.split == "eval"}
     if not eval_level_ids:
         return
@@ -297,3 +384,81 @@ def assert_raw_render_has_no_strategic_words(rendered: str) -> None:
     found = [word for word in RAW_RENDER_BANNED_WORDS if word in lowered]
     if found:
         raise ValueError(f"Raw trajectory render contains strategic words: {found}")
+
+
+def classify_heuristic(heuristic: str) -> dict[str, str]:
+    return {"heuristic": heuristic, "scope": heuristic_scope(heuristic)}
+
+
+def _select_compact_same_level_records(records: list[dict[str, Any]], max_items: int) -> list[dict[str, Any]]:
+    if max_items <= 0 or not records:
+        return []
+    if len(records) <= max_items:
+        return records
+    by_subtype: dict[str, dict[str, Any]] = {}
+    for record in reversed(records):
+        subtype = str(record.get("failure_subtype") or record.get("failure_reason") or record.get("status"))
+        by_subtype.setdefault(subtype, record)
+    if len(by_subtype) >= max_items:
+        return list(by_subtype.values())[:max_items]
+    return [records[0], records[-1]][:max_items]
+
+
+def _render_compact_same_level_evidence(index: int, episode: dict[str, Any]) -> str:
+    failed_log = _failed_push_log(episode)
+    lines = [
+        f"evidence_index: {index}",
+        f"final_status: {episode.get('status')}",
+        f"failure_subtype: {episode.get('failure_subtype') or episode.get('failure_reason')}",
+        f"verifier_reason: {episode.get('failure_reason')}",
+        f"failure_push_index: {episode.get('failure_push_index')}",
+        "initial_board:",
+        str(episode.get("initial_board")),
+        "board_before_failed_push:",
+        str(episode.get("board_before_failed_push")),
+        "failed_push:",
+        str(failed_log.get("model_intent") or failed_log.get("intent") if failed_log else None),
+        f"resolved_box_before_push: {failed_log.get('resolved_box_before_push') if failed_log else None}",
+        f"standing_cell_required: {failed_log.get('standing_cell_required') if failed_log else None}",
+        f"destination_cell: {failed_log.get('destination_cell') if failed_log else None}",
+        "board_after_last_successful_push:",
+        str(episode.get("board_after_last_successful_push")),
+    ]
+    concise_log = _concise_push_log(episode)
+    if concise_log:
+        lines.append(f"concise_push_log: {concise_log}")
+    return "\n".join(lines)
+
+
+def _failed_push_log(episode: dict[str, Any]) -> dict[str, Any] | None:
+    logs = episode.get("push_execution_log")
+    if not isinstance(logs, list):
+        return None
+    failure_push_index = episode.get("failure_push_index")
+    if isinstance(failure_push_index, int):
+        for log in logs:
+            if isinstance(log, dict) and log.get("push_index") == failure_push_index:
+                return log
+    for log in reversed(logs):
+        if isinstance(log, dict) and log.get("status") == "failed":
+            return log
+    return logs[-1] if logs and isinstance(logs[-1], dict) else None
+
+
+def _concise_push_log(episode: dict[str, Any]) -> list[dict[str, Any]]:
+    logs = episode.get("push_execution_log")
+    if not isinstance(logs, list):
+        return []
+    concise = []
+    for log in logs[-4:]:
+        if not isinstance(log, dict):
+            continue
+        concise.append(
+            {
+                "push_index": log.get("push_index"),
+                "model_intent": log.get("model_intent") or log.get("intent"),
+                "status": log.get("status") or log.get("result"),
+                "failure_subtype": log.get("failure_subtype"),
+            }
+        )
+    return concise

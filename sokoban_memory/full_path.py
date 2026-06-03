@@ -140,6 +140,8 @@ def execute_push_plan(
         log_entry = {
             "push_index": push_index,
             "intent": intent.to_dict(),
+            "model_intent": intent.to_dict(),
+            "board_before_push": env.render_text(),
             "player_before": _position_dict(env.player),
             "boxes_before": [_position_dict(pos) for pos in sorted(env.boxes)],
             "box_positions_by_id_before": _box_positions_by_id_dict(box_positions_by_id),
@@ -150,7 +152,9 @@ def execute_push_plan(
         if resolved_box is None:
             failure_reason = "unknown_box_id"
             log_entry["result"] = "invalid_plan"
+            log_entry["status"] = "failed"
             log_entry["failure_reason"] = failure_reason
+            log_entry["failure_subtype"] = "wrong_box_reference"
             return _result(
                 "invalid_plan",
                 trajectory,
@@ -162,6 +166,7 @@ def execute_push_plan(
                 push_index,
             )
         log_entry["resolved_box"] = _position_dict(resolved_box)
+        log_entry["resolved_box_before_push"] = _position_list(resolved_box)
         resolved_box_id = (
             intent.box_id
             if intent.box_id is not None
@@ -175,11 +180,23 @@ def execute_push_plan(
         destination = resolved_box.moved(dr, dc)
         log_entry["required_player_position"] = _position_dict(required_player)
         log_entry["box_destination"] = _position_dict(destination)
+        log_entry["standing_cell_required"] = _position_list(required_player)
+        log_entry["destination_cell"] = _position_list(destination)
+        log_entry["box_after_push_if_success"] = _position_list(destination)
+        log_entry["destination_free"] = not env._is_blocked_cell(destination) and destination not in env.boxes
+        log_entry["standing_cell_free"] = not env._is_blocked_cell(required_player) and required_player not in env.boxes
 
         validation_error = _validate_push_intent(env, resolved_box, intent.push)
         if validation_error is not None:
             log_entry["result"] = "invalid_plan"
+            log_entry["status"] = "failed"
             log_entry["failure_reason"] = validation_error
+            log_entry["failure_subtype"] = _failure_subtype_from_reason(validation_error)
+            log_entry["player_reachable_to_standing"] = (
+                shortest_player_path(env, required_player) is not None
+                if log_entry["standing_cell_free"]
+                else False
+            )
             return _result(
                 "invalid_plan",
                 trajectory,
@@ -195,7 +212,10 @@ def execute_push_plan(
         if path_to_push is None:
             failure_reason = "required_push_position_unreachable"
             log_entry["result"] = "invalid_plan"
+            log_entry["status"] = "failed"
             log_entry["failure_reason"] = failure_reason
+            log_entry["failure_subtype"] = "unreachable_standing_cell"
+            log_entry["player_reachable_to_standing"] = False
             return _result(
                 "invalid_plan",
                 trajectory,
@@ -207,6 +227,7 @@ def execute_push_plan(
                 push_index,
             )
         log_entry["path_to_push"] = path_to_push
+        log_entry["player_reachable_to_standing"] = True
 
         for action in path_to_push:
             if len(trajectory) >= max_steps:
@@ -235,10 +256,11 @@ def execute_push_plan(
                     intent=intent,
                     invalid_reason=None,
                 )
-            )
+                )
             terminal = _terminal_status(env)
             if terminal is not None:
                 log_entry["result"] = terminal
+                log_entry["status"] = terminal
                 return _result(
                     terminal,
                     trajectory,
@@ -279,7 +301,9 @@ def execute_push_plan(
         )
         if invalid_reason is not None:
             log_entry["result"] = "invalid_plan"
+            log_entry["status"] = "failed"
             log_entry["failure_reason"] = invalid_reason
+            log_entry["failure_subtype"] = _failure_subtype_from_reason(invalid_reason)
             return _result(
                 "invalid_plan",
                 trajectory,
@@ -295,12 +319,17 @@ def execute_push_plan(
         if resolved_box_id is not None:
             box_positions_by_id[resolved_box_id] = destination
         log_entry["result"] = "executed"
+        log_entry["status"] = "executed"
         log_entry["player_after"] = _position_dict(env.player)
         log_entry["boxes_after"] = [_position_dict(pos) for pos in sorted(env.boxes)]
         log_entry["box_positions_by_id_after"] = _box_positions_by_id_dict(box_positions_by_id)
+        log_entry["board_after_push"] = env.render_text()
         terminal = _terminal_status(env)
         if terminal is not None:
             log_entry["result"] = terminal
+            log_entry["status"] = terminal
+            failure_reason = terminal if terminal == "deadlock" else None
+            failure_push_index = push_index if terminal == "deadlock" else None
             return _result(
                 terminal,
                 trajectory,
@@ -308,6 +337,8 @@ def execute_push_plan(
                 expanded_actions,
                 push_execution_log,
                 executed_push_count,
+                failure_reason,
+                failure_push_index,
             )
 
     if env.is_solved():
@@ -433,6 +464,10 @@ def _position_dict(position: Position) -> dict[str, int]:
     return asdict(position)
 
 
+def _position_list(position: Position) -> list[int]:
+    return [position.row, position.col]
+
+
 def _box_positions_by_id_dict(box_positions_by_id: dict[int, Position]) -> dict[str, list[int]]:
     return {
         f"B{box_id}": [position.row, position.col]
@@ -445,3 +480,17 @@ def _box_id_for_position(box_positions_by_id: dict[int, Position], position: Pos
         if box_position == position:
             return box_id
     return None
+
+
+def _failure_subtype_from_reason(reason: str) -> str:
+    if reason in {"box_coordinate_missing", "unknown_box_id"}:
+        return "wrong_box_reference"
+    if reason.startswith("box_destination_blocked"):
+        return "blocked_destination"
+    if reason.startswith("required_push_position_blocked"):
+        return "blocked_standing_cell"
+    if reason == "required_push_position_unreachable":
+        return "unreachable_standing_cell"
+    if reason == "push_did_not_move_box":
+        return "schema_error"
+    return reason

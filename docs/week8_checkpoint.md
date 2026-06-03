@@ -2,27 +2,37 @@
 
 ## Summary
 
-This checkpoint updates the earlier Week 8 `main` narrative with the additional work that happened afterward on top of `full_path_kerui`. The core setup remains full-path push-intent planning: the LLM proposes semantic pushes, and local code verifies legality/reachability before executing primitive moves. During this cycle we tightened legal-push/box-id planning guidance, improved failure observability with annotated GIFs and cleaner deadlock short-circuit logging, fixed a deadlock false positive, and added partial-progress metrics.
+This checkpoint updates the Week 6 evaluation scaffold with real intermediate results from the `full_path_kerui` branch. The project has moved from one-step LLM actions to full-path push-intent planning: the LLM proposes a complete JSON push plan, and the local executor verifies each push with Sokoban rules and BFS reachability before executing primitive moves.
 
-The core conclusion is still diagnostic: infrastructure and measurement improved substantially, but strict solve performance on hard eval levels remains constrained by semantic planning errors (`invalid_plan`, `deadlock`) rather than JSON-format failures.
+The main result is diagnostic rather than performance-positive: the full-path infrastructure works, but prompt-only full-plan generation is not yet reliable enough for Sokoban. The dominant failure mode is semantic invalidity, not JSON formatting.
 
 ## Evaluation Template
 
-The final memory comparison still uses matched settings across:
+The final evaluation will compare memory conditions under matched settings:
 
 - `no_memory`
 - `raw_trajectory_memory`
 - `reflection_heuristic`
 
-Each run uses fixed levels/settings with the same model, seed, output budget, step budget, and memory budget.
+Each run uses the same levels, model, seed, temperature, output cap, step cap, memory budget, and prompt version. `levels/v2_pilot.json` remains a 12-train/12-eval debugging suite, but it is no longer the final generalization benchmark.
+
+The final train-to-eval benchmark is `levels/v3_boxoban_balanced.json`:
+
+- 24 train levels: 12 `unfiltered/train` and 12 `medium/train`
+- 24 eval levels: 12 `unfiltered/valid` and 12 `medium/valid`
+- No hand-written calibration levels in the aggregate benchmark
+- Each source family has 4 open, 4 middle, and 4 constrained levels per split
+- Each level includes structural metadata: wall density, reachable ratio, initial legal push count, solver estimate, source split, difficulty bucket, and canonical grid hash
+
+`levels/v3_boxoban_ood.json` is optional and reported separately. It contains 8 held-out `medium/valid` levels and 8 `hard` levels, with hard levels marked as OOD because the official hard set has no train/eval split.
 
 Primary metrics:
 
 - `solve_rate`
-- `invalid_plan_count`
-- `deadlock_count`
-- `plan_exhausted_count`
-- `timeout_count`
+- `invalid_plan_rate`
+- `deadlock_rate`
+- `plan_exhausted_rate`
+- `timeout_rate`
 
 Secondary diagnostics:
 
@@ -31,92 +41,38 @@ Secondary diagnostics:
 - `expanded_primitive_step_count`
 - `repair_attempt_count`
 - `success_after_repair_count`
-- failure reason counts (blocked destination, unreachable stand position, missing box coordinate, etc.)
+- failure reason counts such as blocked destination, unreachable standing cell, and missing box coordinate
 
-Week 8 additions on top of earlier checkpoint template:
+Planned presentation artifacts:
 
-- `partial_progress_score`
-- `average_best_goal_completion`
+- Outcome table comparing prompt variants and memory conditions
+- Failure-reason table for invalid plans
+- Stratum table for `unfiltered`/`medium` and `open`/`middle`/`constrained`
+- Board examples showing a successful plan and representative invalid pushes
+- Trajectory logs for success and failure case studies
 
 ## Intermediate Results
 
-### A) Earlier prompt-sweep baseline (from previous `main` week8 checkpoint)
-
-All runs in this table used 12 train levels, `no_memory`, `gpt-5-nano`, temperature 0.
+All runs below used the 12 train levels, `no_memory`, `gpt-5-nano`, temperature 0, and local full-path validation.
 
 | Run | Prompt / scaffold | Success | Invalid plan | Deadlock | Plan exhausted | Notes |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| `full_path_v2_train_prompt_check` | coordinate push plan | 2/12 | 9/12 | 1/12 | 0/12 | Best simple baseline in this sweep |
-| `full_path_v3_train_prompt_check` | v2 + legality self-check wording | 1/12 | 11/12 | 0/12 | 0/12 | More legality text did not help |
-| `full_path_v4_trace_prompt_check` | v2 + structured trace fields | 2/12 | 9/12 | 1/12 | 0/12 | No valid-rate gain |
-| `full_path_v5_indexed_trace_prompt_check` | indexed boxes + compact trace | 1/12 | 10/12 | 0/12 | 1/12 | Less coordinate burden, still many illegal pushes |
-| `full_path_v5_repair1_train_check` | v5 + one repair attempt | 1/12 | 10/12 | 1/12 | 0/12 | 11 repairs, 0 success-after-repair |
-| `full_path_v2_1_rules_prompt_check` | v2 + clearer push-legality examples | 1/12 | 11/12 | 0/12 | 0/12 | Better grounding, no solve lift |
+| `full_path_v2_train_prompt_check` | coordinate push plan | 2/12 | 9/12 | 1/12 | 0/12 | Best simple baseline so far |
+| `full_path_v3_train_prompt_check` | v2 plus explicit legality self-check wording | 1/12 | 11/12 | 0/12 | 0/12 | More legality text did not help |
+| `full_path_v4_trace_prompt_check` | v2 plus structured state trace fields | 2/12 | 9/12 | 1/12 | 0/12 | No valid-rate gain; more parse risk |
+| `full_path_v5_indexed_trace_prompt_check` | indexed boxes plus compact trace | 1/12 | 10/12 | 0/12 | 1/12 | Reduced coordinate burden but still illegal pushes |
+| `full_path_v5_repair1_train_check` | v5 plus one verifier-guided repair attempt | 1/12 | 10/12 | 1/12 | 0/12 | 11 repairs, 0 success-after-repair |
+| `full_path_v2_1_rules_prompt_check` | v2 plus clearer rules and push-legality examples | 1/12 | 11/12 | 0/12 | 0/12 | Better prompt grounding did not improve success |
 
-Interpretation carried forward:
-
-- Prompt wording alone was insufficient to fix semantic Sokoban validity.
-
-### B) Later matched memory comparisons and on-top changes
-
-Short run IDs:
-
-- `W6_STEP_BASE` -> `results/v2_task3_post_evaluation_summary.json`
-- `W7_FP_BOXID` -> `results/lmgame_closer_eval_boxid_20260522_132732/evaluation_summary.json`
-- `W7_FP_BOXID_DLOOK` -> `results/deadlock_lookahead_eval_20260522_2109/evaluation_summary.json`
-
-| Run ID | Agent | Episodes | Solve Rate | Invalid Plan | Deadlock | Plan Exhausted | Timeout |
-|---|---|---:|---:|---:|---:|---:|---:|
-| `W6_STEP_BASE` | `no_memory` | 6 | 0.000 | 0 | 2 | 0 | 4 |
-| `W6_STEP_BASE` | `raw_trajectory_memory` | 6 | 0.000 | 0 | 1 | 0 | 5 |
-| `W6_STEP_BASE` | `reflection_heuristic` | 6 | 0.000 | 0 | 1 | 0 | 5 |
-| `W7_FP_BOXID` | `no_memory` | 12 | 0.083 | 3 | 7 | 1 | 0 |
-| `W7_FP_BOXID` | `raw_trajectory_memory` | 12 | 0.083 | 3 | 8 | 0 | 0 |
-| `W7_FP_BOXID` | `reflection_heuristic` | 12 | 0.083 | 4 | 7 | 0 | 0 |
-| `W7_FP_BOXID_DLOOK` | `no_memory` | 12 | 0.000 | 5 | 5 | 2 | 0 |
-| `W7_FP_BOXID_DLOOK` | `raw_trajectory_memory` | 12 | 0.083 | 5 | 3 | 3 | 0 |
-| `W7_FP_BOXID_DLOOK` | `reflection_heuristic` | 12 | 0.083 | 5 | 4 | 2 | 0 |
-
-| Run ID | Agent | Solve Rate | Partial Progress Score | Avg Best Goal Completion |
-|---|---|---:|---:|---:|
-| `W7_FP_BOXID` | `no_memory` | 0.083 | 0.208 | 0.208 |
-| `W7_FP_BOXID` | `raw_trajectory_memory` | 0.083 | 0.188 | 0.188 |
-| `W7_FP_BOXID` | `reflection_heuristic` | 0.083 | 0.208 | 0.208 |
-| `W7_FP_BOXID_DLOOK` | `no_memory` | 0.000 | 0.271 | 0.271 |
-| `W7_FP_BOXID_DLOOK` | `raw_trajectory_memory` | 0.083 | 0.333 | 0.333 |
-| `W7_FP_BOXID_DLOOK` | `reflection_heuristic` | 0.083 | 0.375 | 0.375 |
-
-Interpretation:
-
-- Relative to old Week 6 one-step baseline, full-path + box-id era reached non-zero solve rate.
-- In the direct on-top comparison (`W7_FP_BOXID` -> `W7_FP_BOXID_DLOOK`), strict solve stayed flat while partial progress improved.
-- Memory-enabled variants currently look better than `no_memory` overall, but `raw_trajectory_memory` vs `reflection_heuristic` remains unresolved on strict solve rate.
-- The tried-and-reverted unstuck fallback is excluded from this evidence because it increased noisy behavior without solve-rate lift on target reruns.
-
-### C) Artifacts and tooling produced during this cycle
-
-The checkpoint evidence is backed by concrete artifacts generated during these runs:
-
-- Failure comparison GIF panels:
-  - `docs/failure_gifs/lmgame_boxid_20260522/`
-  - `docs/failure_gifs/deadlock_lookahead_eval_20260522_2109/`
-  - `docs/failure_gifs/deadlock_fix_retest_20260522/`
-- Reference replay GIF set:
-  - `docs/reference_gifs/`
-- Supporting scripts used to generate/verify these outputs:
-  - `scripts/render_episode_gifs.py`
-  - `scripts/render_reference_gifs.py`
-  - `scripts/verify_reference_solutions.py`
-  - `scripts/build_secondary_references.py`
-  - `scripts/verify_secondary_references.py`
+The most useful finding is that simply adding prompt wording is not enough. The model often understands the output format, but still fails local Sokoban validity checks.
 
 ## Representative Failures
 
-`simple_001` can be solved, but hard levels still expose repeated semantic invalid-plan patterns.
+`simple_001` is solved, but the harder train levels expose consistent invalid-plan patterns.
 
-- early pushes into blocked destinations
-- required standing cell blocked or unreachable
-- stale or missing box coordinate during longer plans
+- `two_box_basic_001`: the first push tries to push a box into another box. The model proposes `{"box": [2, 3], "push": "Right"}` even though `[2, 4]` already contains a box.
+- `corner_trap_001`: after several legal pushes, the model refers to a box coordinate that no longer contains a box. This shows that dynamic coordinate tracking is unreliable.
+- Boxoban train/medium levels: many first or early pushes use a blocked destination, a blocked player standing cell, or a standing cell that BFS says is unreachable.
 
 Common failure reasons:
 
@@ -128,21 +84,27 @@ Common failure reasons:
 
 ## What This Answers
 
-This updated checkpoint now supports the following claims:
+The current branch answers several evaluation and system-design questions:
 
-- Full-path executor + verifier + failure taxonomy are stable and reproducible.
-- Week 8 added stronger observability (annotated GIFs), deadlock-heuristic correction, and partial-progress metrics.
-- Memory-enabled modes currently outperform no-memory on combined signals, but strict winner between raw vs reflection memory is not yet established.
-- Unstuck fallback is excluded from final evidence because it was tested and reverted.
+- The full-path local verifier and BFS executor are implemented and catch invalid LLM plans.
+- Evaluation no longer depends on reference solutions; solve and failure rates apply to every level.
+- Raw trajectory and reflection memory can be evaluated under the same full-path runner once the base planner is valid enough.
+- Prompt-only full-path planning is currently not reliable enough to support a fair memory comparison.
+- Verifier feedback alone, with one repair attempt, did not recover failed plans in the latest sanity run.
 
 ## Remaining Problems and Next Step
 
-The main unresolved issue remains semantic legality and long-horizon consistency, not JSON shape. Prompt wording iterations alone were not enough; legality scaffolding and box-id guidance improved diagnostics and partial progress but did not yet produce robust hard-level solve gains.
+The main unresolved problem is that the LLM is asked to perform too much grid-level legality reasoning internally. It often proposes impossible pushes even when the prompt states the rules.
 
-Next steps should prioritize memory-winner resolution under matched seeds:
+The next implementation step should expose locally computed legal push options to the LLM. Instead of asking the model to infer all legal pushes from the grid, the local code should provide a compact list such as:
 
-1. Run expanded seed-matched eval for all three memory modes on same level list.
-2. Report strict winner by `solve_rate`; break ties with `deadlock_count`, then `partial_progress_score`.
-3. Keep per-mode failure slicing to show which memory representation reduces which failure class.
+```json
+[
+  {"box": [2, 4], "push": "Down", "stand": [1, 4], "dest": [3, 4]},
+  {"box": [3, 2], "push": "Right", "stand": [3, 1], "dest": [3, 3]}
+]
+```
 
-Until that is complete, results should be framed as a strong evaluation/failure-analysis milestone rather than final proof of best memory representation.
+Then the LLM can plan over verified legal push choices. This should directly target the current invalid-plan bottleneck and make the later memory comparison more meaningful.
+
+Until then, full-path results should be presented as an evaluation-pipeline and failure-analysis milestone, not as final evidence that one memory representation is better than another.

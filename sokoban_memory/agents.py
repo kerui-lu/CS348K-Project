@@ -15,7 +15,8 @@ from sokoban_memory.types import Action
 DEFAULT_LLM_MODEL = "gpt-5-nano"
 DEFAULT_API_KEY_ENV = "OPENAI_API_KEY"
 DEFAULT_TEMPERATURE = 0.0
-DEFAULT_MAX_OUTPUT_TOKENS = 4096
+MIN_MAX_OUTPUT_TOKENS = 16384
+DEFAULT_MAX_OUTPUT_TOKENS = MIN_MAX_OUTPUT_TOKENS
 DEFAULT_CACHE_NAMESPACE = "main"
 PLACEHOLDER_OPENAI_API_KEY = "PLACEHOLDER_OPENAI_API_KEY"
 DEFAULT_DOTENV_PATH = Path(__file__).resolve().parents[1] / ".env"
@@ -94,6 +95,7 @@ class FullPathLLMAgent(BaseAgent):
         llm_cache_path: str | Path | None = None,
         temperature: float = DEFAULT_TEMPERATURE,
         max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+        reasoning_effort: str | None = None,
         cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
         memory_path: str | Path | None = None,
     ):
@@ -105,6 +107,8 @@ class FullPathLLMAgent(BaseAgent):
         self.max_llm_calls = max_llm_calls
         self.temperature = temperature
         self.max_output_tokens = max_output_tokens
+        self.reasoning_effort = reasoning_effort
+        self.effective_reasoning_effort = _reasoning_effort_value(self.model, self.reasoning_effort)
         self.cache_namespace = cache_namespace
         self.memory_path = str(memory_path) if memory_path else None
         self.memory_hash = getattr(memory_store, "memory_hash", None)
@@ -126,7 +130,7 @@ class FullPathLLMAgent(BaseAgent):
             "policy_mode": self.policy_mode,
             "cache_namespace": self.cache_namespace,
         }
-        reasoning = reasoning_config(self.model)
+        reasoning = reasoning_config(self.model, self.reasoning_effort)
         if reasoning is not None:
             request["reasoning"] = reasoning
         cache_key = self.cache.make_key(request)
@@ -156,6 +160,7 @@ class FullPathLLMAgent(BaseAgent):
                 input_text=prompt,
                 temperature=self.temperature,
                 max_output_tokens=self.max_output_tokens,
+                reasoning_effort=self.reasoning_effort,
             )
         )
         self.llm_call_count += 1
@@ -168,6 +173,7 @@ class FullPathLLMAgent(BaseAgent):
                 "model": self.model,
                 "temperature": self.temperature,
                 "max_output_tokens": self.max_output_tokens,
+                "reasoning_effort": reasoning["effort"] if reasoning else None,
                 "cache_namespace": self.cache_namespace,
                 "prompt_hash": prompt_hash,
                 "output_text": output_text,
@@ -189,7 +195,7 @@ class FullPathLLMAgent(BaseAgent):
         return self.memory_config.to_dict()
 
     def _build_prompt(self, state_text: str, context: dict[str, Any]) -> tuple[str, str, str]:
-        memory_text = self._render_memory()
+        memory_text = self._render_memory(context)
         rendered = render_full_path_prompt(
             policy_mode=self.policy_mode,
             prompt_version=self.prompt_version,
@@ -200,13 +206,35 @@ class FullPathLLMAgent(BaseAgent):
             memory_condition=self.memory_condition,
             memory_text=memory_text,
             repair_feedback=context.get("repair_feedback"),
-            legal_push_candidates=context.get("legal_push_candidates", []),
         )
         return rendered.prompt, rendered.memory_text, rendered.non_memory_template
 
-    def _render_memory(self) -> str:
+    def _render_memory(self, context: dict[str, Any] | None = None) -> str:
         if self.memory_condition == "none" or self.memory_store is None:
             return "No past experience is available for this condition."
+        if self.memory_condition == "generic_retry_feedback":
+            attempt_index = context.get("iteration_attempt_index") if context else None
+            if isinstance(attempt_index, int) and attempt_index > 0:
+                return (
+                    "Previous same-level attempt failed. Regenerate a complete plan "
+                    "from the original board and try a different solution."
+                )
+            return "No previous same-level attempt is available yet."
+        level_id = str(context.get("level_id")) if context and context.get("level_id") else None
+        if level_id and self.memory_condition == "raw_trajectory_memory" and hasattr(self.memory_store, "render_for_level"):
+            return self.memory_store.render_for_level(level_id, self.memory_config)
+        if (
+            level_id
+            and self.memory_condition == "verifier_summary_retry"
+            and hasattr(self.memory_store, "render_verifier_summary_for_level")
+        ):
+            return self.memory_store.render_verifier_summary_for_level(level_id, self.memory_config)
+        if (
+            level_id
+            and self.memory_condition == "heuristic_same_level_iterative"
+            and hasattr(self.memory_store, "render_for_level")
+        ):
+            return self.memory_store.render_for_level(level_id, self.memory_config)
         if hasattr(self.memory_store, "render"):
             return self.memory_store.render(self.memory_config)
         return str(self.memory_store)
@@ -226,6 +254,7 @@ class FullPathLLMAgent(BaseAgent):
             "model": self.model,
             "temperature": self.temperature,
             "max_output_tokens": self.max_output_tokens,
+            "reasoning_effort": self.effective_reasoning_effort,
             "prompt_version": self.prompt_version,
             "prompt_hash": prompt_hash,
             "non_memory_template_hash": text_hash(non_memory_template),
@@ -284,9 +313,27 @@ class RawTrajectoryMemoryAgent(FullPathLLMAgent):
     memory_condition = "raw_trajectory_memory"
 
 
+class GenericRetryFeedbackAgent(FullPathLLMAgent):
+    agent_type = "generic_retry_feedback"
+    memory_condition = "generic_retry_feedback"
+
+    def __init__(self, **kwargs: Any):
+        super().__init__(memory_store={}, **kwargs)
+
+
+class VerifierSummaryRetryAgent(FullPathLLMAgent):
+    agent_type = "verifier_summary_retry"
+    memory_condition = "verifier_summary_retry"
+
+
 class ReflectionHeuristicAgent(FullPathLLMAgent):
     agent_type = "reflection_heuristic"
     memory_condition = "reflection_heuristic"
+
+
+class SameLevelHeuristicAgent(FullPathLLMAgent):
+    agent_type = "heuristic_same_level_iterative"
+    memory_condition = "heuristic_same_level_iterative"
 
 
 class LLMAgent(NoMemoryAgent):
@@ -329,6 +376,7 @@ def responses_create_kwargs(
     input_text: str,
     temperature: float,
     max_output_tokens: int,
+    reasoning_effort: str | None = None,
 ) -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "model": model,
@@ -337,16 +385,25 @@ def responses_create_kwargs(
     }
     if not model.startswith("gpt-5"):
         kwargs["temperature"] = temperature
-    reasoning = reasoning_config(model)
+    reasoning = reasoning_config(model, reasoning_effort)
     if reasoning is not None:
         kwargs["reasoning"] = reasoning
     return kwargs
 
 
-def reasoning_config(model: str) -> dict[str, str] | None:
+def reasoning_config(model: str, reasoning_effort: str | None = None) -> dict[str, str] | None:
+    if reasoning_effort:
+        return {"effort": reasoning_effort}
+    if model.startswith("gpt-5.2"):
+        return {"effort": "low"}
     if model.startswith("gpt-5"):
         return {"effort": "minimal"}
     return None
+
+
+def _reasoning_effort_value(model: str, reasoning_effort: str | None = None) -> str | None:
+    reasoning = reasoning_config(model, reasoning_effort)
+    return reasoning["effort"] if reasoning else None
 
 
 def make_agent(
@@ -361,6 +418,7 @@ def make_agent(
     llm_cache_path: str | Path | None = None,
     temperature: float = DEFAULT_TEMPERATURE,
     max_output_tokens: int = DEFAULT_MAX_OUTPUT_TOKENS,
+    reasoning_effort: str | None = None,
     cache_namespace: str = DEFAULT_CACHE_NAMESPACE,
     memory_path: str | Path | None = None,
 ) -> BaseAgent:
@@ -376,7 +434,36 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
+        )
+    if agent_name == "generic_retry_feedback":
+        return GenericRetryFeedbackAgent(
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
+            cache_namespace=cache_namespace,
+        )
+    if agent_name == "verifier_summary_retry":
+        return VerifierSummaryRetryAgent(
+            memory_store=memory,
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
+            cache_namespace=cache_namespace,
+            memory_path=memory_path,
         )
     if agent_name in {"raw", "raw_trajectory", "raw_trajectory_memory"}:
         return RawTrajectoryMemoryAgent(
@@ -389,6 +476,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -403,6 +491,22 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
+            cache_namespace=cache_namespace,
+            memory_path=memory_path,
+        )
+    if agent_name == "heuristic_same_level_iterative":
+        return SameLevelHeuristicAgent(
+            memory_store=memory,
+            model=model,
+            api_key_env=api_key_env,
+            client=client,
+            max_llm_calls=max_llm_calls,
+            memory_config=memory_config,
+            llm_cache_path=llm_cache_path,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
             memory_path=memory_path,
         )
@@ -416,6 +520,7 @@ def make_agent(
             llm_cache_path=llm_cache_path,
             temperature=temperature,
             max_output_tokens=max_output_tokens,
+            reasoning_effort=reasoning_effort,
             cache_namespace=cache_namespace,
         )
     raise ValueError(f"Unknown agent: {agent_name}")

@@ -6,6 +6,16 @@ from typing import Any
 
 from sokoban_memory.types import Level, Position
 
+LEVEL_FIELDS = {
+    "level_id",
+    "grid",
+    "tags",
+    "split",
+    "optimal_steps",
+    "reference_solution",
+    "source",
+}
+
 
 def load_levels(path: str | Path) -> list[Level]:
     with Path(path).open("r", encoding="utf-8") as f:
@@ -89,6 +99,7 @@ def _parse_level(raw: dict[str, Any]) -> Level:
         reference_solution=reference_solution,
         source=str(source) if source is not None else None,
         grid=list(grid),
+        metadata={key: value for key, value in raw.items() if key not in LEVEL_FIELDS},
     )
 
 
